@@ -4,7 +4,7 @@ import server from './server';
 
 // Constants
 const serverStartMsg = 'Express server started on port: ',
-        port = 5000;
+        port = 5001;
 
 // Start server
 server.listen(port, () => {

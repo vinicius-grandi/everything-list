@@ -11,7 +11,6 @@ import { ParamMissingError, UserNotFoundError } from '@shared/errors';
 
 type TReqBody = string | object | undefined;
 
-
 describe('user-router', () => {
 
     const usersPath = '/api/users';
@@ -172,7 +171,7 @@ describe('user-router', () => {
                 });
         });
 
-        it(`should return a JSON object with the error message of ${UserNotFoundError.Msg} 
+        it(`should return a JSON object with the error message of ${UserNotFoundError.Msg}
             and a status code of "${StatusCodes.NOT_FOUND}" if the id was not found.`, (done) => {
             // Call api
             callApi(userData)
@@ -226,7 +225,7 @@ describe('user-router', () => {
                 });
         });
 
-        it(`should return a JSON object with the error message of ${UserNotFoundError.Msg} 
+        it(`should return a JSON object with the error message of ${UserNotFoundError.Msg}
             and a status code of "${StatusCodes.NOT_FOUND}" if the id was not found.`, (done) => {
             // Call api
             callApi(-1)

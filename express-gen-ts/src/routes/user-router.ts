@@ -16,8 +16,6 @@ export const p = {
     delete: '/delete/:id',
 } as const;
 
-
-
 /**
  * Get all users.
  */

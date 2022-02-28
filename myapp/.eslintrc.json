@@ -8,6 +8,7 @@
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
+    "tsconfigRootDir": "C:/Users/breno/OneDrive/Documentos/everything-list/myapp/",
     "ecmaFeatures": {
       "jsx": true
     },
@@ -24,6 +25,8 @@
   "rules": {
     "prettier/prettier": "error",
     "react-hooks/rules-of-hooks": "error",
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": ["error"],
     "react-hooks/exhaustive-deps": "warn",
     "react/jsx-filename-extension": [ 1, {"extensions": [".tsx"]} ],
     "import/prefer-default-export": "off",
