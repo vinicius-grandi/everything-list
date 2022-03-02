@@ -4,7 +4,7 @@ import { Router } from 'express';
 const baseRouter = Router();
 
 // Setup routers
-baseRouter.use('/message', (req, res) => {
+baseRouter.get('/message', (req, res) => {
   res.send('Salve');
 });
 

@@ -7,7 +7,6 @@ import express, { NextFunction, Request, Response } from 'express';
 import StatusCodes from 'http-status-codes';
 import 'express-async-errors';
 
-import apiRouter from './routes/api';
 import messageRouter from './routes/message';
 import logger from 'jet-logger';
 import { CustomError } from '@shared/errors';
@@ -34,13 +33,11 @@ if (process.env.NODE_ENV === 'production') {
     app.use(helmet());
 }
 
-
 /***********************************************************************************
  *                         API routes and error handling
  **********************************************************************************/
 
 // Add api router
-app.use('/api', apiRouter);
 app.use('/', messageRouter);
 
 // Error handling
@@ -69,8 +66,6 @@ app.use(express.static(staticDir));
 app.get('*', (_: Request, res: Response) => {
     res.sendFile('index.html', {root: viewsDir});
 });
-
-
 
 // Export here and start in a diff file (for testing).
 export default app;
