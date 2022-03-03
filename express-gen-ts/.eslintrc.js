@@ -1,4 +1,6 @@
-{
+const { resolve } = require('path');
+
+module.exports = {
   "env": {
     "es6": true,
     "node": true
@@ -15,6 +17,7 @@
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
+    "tsconfigRootDir": resolve(__dirname),
     "ecmaVersion": 2018,
     "sourceType": "module"
   },

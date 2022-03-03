@@ -1,4 +1,6 @@
-{
+const { resolve } = require('path');
+
+module.exports = {
   "extends": [
     "plugin:react/recommended",
     "airbnb",
@@ -8,7 +10,7 @@
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "tsconfigRootDir": "C:/Users/breno/OneDrive/Documentos/everything-list/myapp/",
+    "tsconfigRootDir": resolve(__dirname),
     "ecmaFeatures": {
       "jsx": true
     },
@@ -49,5 +51,8 @@
     "import/resolver": {
       "typescript": {}
     }
+  },
+  "include": {
+    ignorePatterns: ['.eslintrc.js'],
   }
 }
