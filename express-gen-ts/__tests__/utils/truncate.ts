@@ -1,4 +1,5 @@
-import sequelize from '../../src/database';
+import db from '../../src/app/models';
+const { sequelize } = db;
 
 export default () => {
   return Promise.all(Object.keys(

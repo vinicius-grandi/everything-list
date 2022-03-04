@@ -13,10 +13,12 @@ module.exports = {
   database: 'everyting-list',
   username: process.env.DB_USER!,
   password: process.env.DB_PASS!,
+  logging: false,
   host: process.env.DB_HOST!,
   dialect,
   define: {
     timestamps: true,
     underscored: true,
+    underscoredAll: true
   }
 };

@@ -1,17 +1,25 @@
 import {
   Model,
-  Sequelize,
-  DataTypes,
 } from 'sequelize';
 import bcrypt from 'bcryptjs';
 
-class User extends Model {
-  declare username: string;
-  declare password: string;
-  declare email: string;
-  declare password_hash: string;
+export interface UserAttributes {
+  id: number;
+  username: string;
+  password: string;
+  email: string;
+  password_hash: string;
+}
 
-  public static initializate(sequelize: Sequelize) {
+module.exports = (sequelize: any, DataTypes: any) => {
+  class User extends Model<UserAttributes> implements UserAttributes {
+    id!: number;
+    username!: string;
+    password!: string;
+    email!: string;
+    password_hash!: string;
+  }
+
     const attributes = {
       username: DataTypes.STRING,
       email: DataTypes.STRING,
@@ -19,17 +27,16 @@ class User extends Model {
       password_hash: DataTypes.STRING
     };
 
-    return this.init(attributes, {
+    User.init(attributes, {
         sequelize,
+        tableName: "users",
         hooks: {
-          beforeSave: async (user: User) => {
+          beforeSave: async (user: any) => {
             if (user.password) {
               const passwordHash = await bcrypt.hash(user.password, 8);
               user.password_hash = passwordHash;
             }
           },
     }});
-  }
+  return User;
 }
-
-export default User;

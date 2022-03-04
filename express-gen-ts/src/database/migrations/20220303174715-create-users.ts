@@ -2,11 +2,12 @@ import { QueryInterface, DataTypes } from 'sequelize';
 
 module.exports = {
   async up (queryInterface: QueryInterface, Sequelize: typeof DataTypes) {
-     await queryInterface.createTable('users', {
+     await queryInterface.createTable("users", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
-        allowNull: false,
+        autoIncrement: true,
+        allowNull: false
       },
       username: {
         type: Sequelize.STRING,
@@ -15,8 +16,9 @@ module.exports = {
       email: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true,
       },
-      pasword_hash: {
+      password_hash: {
         type: Sequelize.STRING,
         allowNull: false,
       },
@@ -32,6 +34,6 @@ module.exports = {
   },
 
   async down (queryInterface: QueryInterface) {
-     await queryInterface.dropTable('users');
+     await queryInterface.dropTable("users");
   }
 };

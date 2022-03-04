@@ -1,6 +1,5 @@
 import express from 'express';
 import loginRouter from './routes/login';
-import './database'
 
 const app = express();
 
