@@ -2,22 +2,26 @@ import {
   Model,
   Sequelize,
   DataTypes,
-  ModelStatic,
-  ModelAttributes,
-  Attributes,
 } from 'sequelize';
+import bcrypt from 'bcryptjs';
 
 class User extends Model {
-  declare id: number;
   declare username: string;
-  declare pasword_hash: string;
+  declare password: string;
+  declare email: string;
+  declare password_hash: string;
 
-  public static init(sequelize: Sequelize) {
+  public static initializate(sequelize: Sequelize) {
     const attributes = {
       username: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.VIRTUAL,
     };
+
+    this.beforeCreate(async (user: User) => {
+     const passwordHash = await bcrypt.hash(user.password, 8);
+      user.password_hash = passwordHash;
+    });
 
     return this.init(attributes, {
         sequelize
