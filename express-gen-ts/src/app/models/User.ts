@@ -16,16 +16,19 @@ class User extends Model {
       username: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.VIRTUAL,
+      password_hash: DataTypes.STRING
     };
 
-    this.beforeCreate(async (user: User) => {
-     const passwordHash = await bcrypt.hash(user.password, 8);
-      user.password_hash = passwordHash;
-    });
-
     return this.init(attributes, {
-        sequelize
-    });
+        sequelize,
+        hooks: {
+          beforeSave: async (user: User) => {
+            if (user.password) {
+              const passwordHash = await bcrypt.hash(user.password, 8);
+              user.password_hash = passwordHash;
+            }
+          },
+    }});
   }
 }
 

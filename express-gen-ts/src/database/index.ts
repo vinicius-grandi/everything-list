@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
-import dbConfig from './config/config';
-import User from 'src/app/models/User';
+import User from '../app/models/User';
+const dbConfig = require('./config/config');
 
 const connection = new Sequelize(dbConfig);
 
