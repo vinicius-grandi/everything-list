@@ -1,45 +1,38 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { resolve } = require('path');
 
 module.exports = {
-  "env": {
-    "es6": true,
-    "node": true
+  env: {
+    es6: true,
+    node: true,
   },
-  "extends": [
-    "airbnb-base",
-    "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
-    "plugin:prettier/recommended"
-  ],
-  "globals": {
-    "Atomics": "readonly",
-    "SharedArrayBuffer": "readonly"
+  extends: ['airbnb-base', 'plugin:@typescript-eslint/recommended', 'prettier'],
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
   },
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "tsconfigRootDir": resolve(__dirname),
-    "ecmaVersion": 2018,
-    "sourceType": "module"
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    tsconfigRootDir: resolve(__dirname),
+    ecmaVersion: 2018,
+    sourceType: 'module',
   },
-  "plugins": [
-    "@typescript-eslint",
-    "prettier"
-  ],
-  "rules": {
-    "prettier/prettier": "error",
-    "import/extensions": [
-      "error",
-      "ignorePackages",
+  plugins: ['@typescript-eslint', 'prettier'],
+  rules: {
+    '@typescript-eslint/no-non-null-assertion': 'off',
+    'prettier/prettier': 'error',
+    'import/extensions': [
+      'error',
+      'ignorePackages',
       {
-        "ts": "never"
-      }
-    ]
+        ts: 'never',
+      },
+    ],
+    complexity: ['error', 5],
   },
-  "settings": {
-    "import/resolver": {
-      "typescript": {
-
-      }
-    }
-  }
-}
+  settings: {
+    'import/resolver': {
+      typescript: {},
+    },
+  },
+};

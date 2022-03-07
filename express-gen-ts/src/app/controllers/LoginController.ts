@@ -1,6 +1,7 @@
-import { Request, Response } from "express";
-import db from "../models";
-import { UserAttributes } from "../models/User";
+import { Request, Response } from 'express';
+import db from '../models';
+import { UserAttributes } from '../models/User';
+
 const { User } = db;
 
 const LoginController = {
@@ -20,43 +21,39 @@ const LoginController = {
         return res.status(409).send({ msg: 'User Already Exists' });
       }
 
-      const session = req.session;
+      const { session } = req;
       session.userId = user.id;
 
       return res.json({ user, session });
     } catch (err) {
-        console.error(err.message)
-        return res.status(400).send({ msg: 'Bad Request' });
+      return res.status(400).send({ msg: 'Bad Request' });
     }
   },
 
   async login(req: Request, res: Response) {
     const { email, password } = req.body;
     const user: UserAttributes = await User.findOne({
-      where: { email }
+      where: { email },
     });
 
-    console.log(req.session)
-
     if (req.session.userId) {
-      console.log('jojoj')
       return res.redirect('/');
     }
 
     if (!user) {
-      return res.status(401).json({ message: 'Invalid Username/Password' })
+      return res.status(401).json({ message: 'Invalid Username/Password' });
     }
 
     const isPasswordValid = await user.checkPassword(password);
 
     if (email === user.email && isPasswordValid) {
-      const session = req.session;
+      const { session } = req;
       session.userId = user.id;
       return res.json(user);
     }
 
     return res.status(401).json({ message: 'Invalid Username/Password' });
   },
-}
+};
 
 export default LoginController;
