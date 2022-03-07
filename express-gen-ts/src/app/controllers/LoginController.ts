@@ -6,7 +6,6 @@ const { User } = db;
 const LoginController = {
   async createUser(req: Request, res: Response) {
     const { username, email, password } = req.body;
-    console.log(username, email, password)
     try {
       const [user, created] = await User.findOrCreate({
         where: { email },
@@ -33,15 +32,23 @@ const LoginController = {
 
   async login(req: Request, res: Response) {
     const { email, password } = req.body;
-    const user: UserAttributes = User.findOne({
-      where: { email, password }
+    const user: UserAttributes = await User.findOne({
+      where: { email }
     });
 
-    if (email === user.email && password === user.password) {
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid Username/Password' })
+    }
+
+    const isPasswordValid = await user.checkPassword(password);
+
+    if (email === user.email && isPasswordValid) {
       const session = req.session;
       session.userId = user.id;
       return res.json(user);
     }
+
+    return res.status(401).json({ message: 'Invalid Username/Password' });
   },
 }
 

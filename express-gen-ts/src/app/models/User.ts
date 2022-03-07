@@ -9,6 +9,7 @@ export interface UserAttributes {
   password: string;
   email: string;
   password_hash: string;
+  checkPassword(password: string): Promise<Boolean>;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -18,6 +19,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
     password!: string;
     email!: string;
     password_hash!: string;
+
+    checkPassword(password: string) {
+      return bcrypt.compare(password, this.password_hash);
+    }
   }
 
     const attributes = {

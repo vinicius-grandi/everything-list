@@ -81,4 +81,32 @@ describe('Login', () => {
 
     expect(response.body).not.toBeUndefined();
   });
+
+  it('should not login if email is invalid', async () => {
+    const user = userInputs();
+
+    await request(app)
+      .post('/signup')
+      .send(user);
+
+    const response = await request(app)
+      .post('/login')
+      .send({ email: 'jojo', password: user.password });
+
+    expect(response.status).toBe(401);
+  });
+
+  it('should not login if password is invalid', async () => {
+    const user = userInputs();
+
+    await request(app)
+      .post('/signup')
+      .send(user);
+
+    const response = await request(app)
+      .post('/login')
+      .send({ email: user.email, password: 'jojf' });
+
+    expect(response.status).toBe(401);
+  });
 });
