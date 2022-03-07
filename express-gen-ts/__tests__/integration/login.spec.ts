@@ -60,12 +60,6 @@ describe('Login', () => {
     expect(response.body.session).not.toBeUndefined();
   });
 
-  it('should redirect to profile route after signup', async () => {
-    const response = await request(app).post('/signup').send(userInputs());
-
-    expect(response.redirect).toBe(true);
-  });
-
   it('should login when info is valid', async () => {
     const user: UserAttributes = await factories.create('User');
 
