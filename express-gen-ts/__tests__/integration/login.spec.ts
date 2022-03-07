@@ -69,11 +69,7 @@ describe('Login', () => {
   });
 
   it('should login when info is valid', async () => {
-    const user = userInputs();
-
-    await request(app)
-      .post('/signup')
-      .send(user);
+    const user: UserAttributes = await factories.create('User');
 
     const response = await request(app)
       .post('/login')
@@ -83,11 +79,7 @@ describe('Login', () => {
   });
 
   it('should not login if email is invalid', async () => {
-    const user = userInputs();
-
-    await request(app)
-      .post('/signup')
-      .send(user);
+    const user: UserAttributes = await factories.create('User');
 
     const response = await request(app)
       .post('/login')
@@ -97,16 +89,27 @@ describe('Login', () => {
   });
 
   it('should not login if password is invalid', async () => {
-    const user = userInputs();
-
-    await request(app)
-      .post('/signup')
-      .send(user);
+    const user: UserAttributes = await factories.create('User');
 
     const response = await request(app)
       .post('/login')
       .send({ email: user.email, password: 'jojf' });
 
     expect(response.status).toBe(401);
+  });
+
+  it('/login should redirect to index if already logged in', async () => {
+    const user = userInputs();
+    const agent = request.agent(app)
+
+      await agent
+        .post('/signup')
+        .send(user)
+
+      const response = await agent
+        .post('/login')
+        .send({ email: user.email, password: user.password })
+
+    expect(response.redirect).toBe(true);
   });
 });

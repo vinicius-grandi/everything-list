@@ -36,6 +36,13 @@ const LoginController = {
       where: { email }
     });
 
+    console.log(req.session)
+
+    if (req.session.userId) {
+      console.log('jojoj')
+      return res.redirect('/');
+    }
+
     if (!user) {
       return res.status(401).json({ message: 'Invalid Username/Password' })
     }
