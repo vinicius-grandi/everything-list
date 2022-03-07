@@ -1,5 +1,5 @@
 import truncate from '../utils/truncate';
-import userFactory from '../utils/factories';
+import factories, { userInputs } from '../utils/factories';
 import request from 'supertest';
 import app from '../../src/app';
 import db from '../../src/app/models';
@@ -8,42 +8,36 @@ import { UserAttributes } from '../../src/app/models/User'
 describe('Login', () => {
   beforeEach(async () => await truncate(), 15000);
   it('should return info from model instance/save', async () => {
-    const user: UserAttributes = await userFactory.create('User');
+    const user: UserAttributes = await factories.create('User');
 
     expect(typeof user.username).toBe('string');
   });
 
-  it('should return status 200 from route /register', async () => {
+  it('should return status 200 from route /signup', async () => {
     const response = await request(app)
-      .post('/register')
-      .send({
-        username: 'jaimin',
-        email: 'jungcook',
-        password: 'jimin',
-      });
+      .post('/signup')
+      .send(userInputs());
 
       expect(response.status).toBe(200);
   });
 
-  it('should create a new user from route /register', async () => {
-    await request(app)
-      .post('/register')
-      .send({
-        username: 'jaimin',
-        email: 'jungcook',
-        password: 'jimin',
-      });
+  it('should create a new user from route /signup', async () => {
+    const user = userInputs();
 
-    const user = await db.User.findOne({
-      where: { username: 'jaimin' }
+    await request(app)
+      .post('/signup')
+      .send(user);
+
+    const getUser = await db.User.findOne({
+      where: { username: user.username },
     });
 
-    expect(user).not.toBeNull();
+    expect(getUser).not.toBeNull();
   });
 
-  it('should not create a new user from route /register when is a bad request', async () => {
+  it('should not create a new user from route /signup when is a bad request', async () => {
     const response = await request(app)
-      .post('/register')
+      .post('/signup')
       .send({
         username: 'jaimin',
         email: 'jungcook@gmail.com',
@@ -53,21 +47,38 @@ describe('Login', () => {
   });
 
   it('should not create two users with the same email', async () => {
+    const user = userInputs();
+
     await request(app)
-      .post('/register')
-      .send({
-        username: 'jaimin',
-        email: 'jungcook@gmail.com',
-        password: 'bobobo',
-      });
+      .post('/signup')
+      .send(user);
 
     const response = await request(app)
-      .post('/register')
-      .send({
-        username: 'jaimin',
-        email: 'jungcook@gmail.com',
-      });
+      .post('/signup')
+      .send({ username: 'jo', email: user.email, password: 'o' });
 
     expect(response.status).toBe(409);
+  });
+
+  it('should login after signup', async () => {
+    const response = await request(app)
+      .post('/signup')
+      .send(userInputs());
+
+    expect(response.body.session).not.toBeUndefined();
+  });
+
+  it('should login when info is valid', async () => {
+    const user = userInputs();
+
+    await request(app)
+      .post('/signup')
+      .send(user);
+
+    const response = await request(app)
+      .post('/login')
+      .send({ email: user.email, password: user.password });
+
+    expect(response.body).not.toBeUndefined();
   });
 });
