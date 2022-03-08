@@ -15,7 +15,7 @@ module.exports = {
       "jsx": true
     },
     "ecmaVersion": 2018,
-    "project": "./tsconfig.json",
+    // "project": ["./tsconfig.json"],
     "sourceType": "module"
   },
   "plugins": [
@@ -24,7 +24,7 @@ module.exports = {
     "@typescript-eslint",
     "prettier"
   ],
-  "ignorePatterns": ["temp.js", "**/*.js", "/node_modules"],
+  "ignorePatterns": ["temp.js", ".eslintrc.js", "**/*.js", "/node_modules"],
   "rules": {
     "prettier/prettier": "error",
     "react-hooks/rules-of-hooks": "error",
@@ -51,7 +51,7 @@ module.exports = {
       "error",
       {
         "devDependencies":
-        ["**/*.test.ts", "**/*.test.tsx"]
+        ["**/*.spec.ts", "**/*.spec.tsx"]
       }
     ],
     "import/no-extraneous-dependencies": [
