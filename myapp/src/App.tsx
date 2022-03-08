@@ -1,11 +1,10 @@
 import React from 'react';
 import './index.css';
-import Home from './views/Home';
+import Weapons from './views/Weapons';
 
 const App = (): JSX.Element => (
   <div className="App">
-    <h1>Teste</h1>
-    <Home />
+    <Weapons />
   </div>
 );
 
