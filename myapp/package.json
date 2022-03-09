@@ -11,10 +11,14 @@
     "test": "react-scripts test"
   },
   "dependencies": {
+    "history": "^5.3.0",
     "http-proxy-middleware": "^2.0.3",
+    "querystring": "^0.2.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-router-dom": "^6.2.2",
     "react-scripts": "^5.0.0",
+    "stream": "^0.0.2",
     "web-vitals": "^2.1.2",
     "wikijs": "^6.3.3"
   },

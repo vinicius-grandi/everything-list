@@ -6,7 +6,12 @@ export type ContentType = {
   items?: ContentType[];
 };
 
-const getContent = async (
+export type WeaponInfo = {
+  name: string;
+  imagePath: string;
+};
+
+export const getContent = async (
   title: string,
   filter = '.*',
 ): Promise<ContentType[]> => {
@@ -18,8 +23,8 @@ const getContent = async (
   return contents;
 };
 
-const getWeaponsList = async (weapons: string[]): Promise<object[]> => {
-  const weaponsList: object[] = [];
+const getWeaponsList = async (weapons: string[]): Promise<WeaponInfo[]> => {
+  const weaponsList: WeaponInfo[] = [];
 
   const promises = weapons.map(async (weapon) => {
     const search = weapon.match(/[^,]*/) ?? [''];
@@ -61,7 +66,7 @@ const deepValues = (
   return item.flatMap((i) => deepValues(i.items, [...res, i.content]));
 };
 
-async function getAllWeapons(p: number): Promise<object> {
+async function getAllWeapons(p: number): Promise<WeaponInfo[]> {
   let res: string[] = [];
   const contents = await getContent(
     'List_of_premodern_combat_weapons',
@@ -76,9 +81,7 @@ async function getAllWeapons(p: number): Promise<object> {
       );
       const weapons = filteredWeapons
         .map((val) => {
-          return `${val
-            .replaceAll(/^.*\./gi, '')
-            .replaceAll(/ \(.+\)/gi, '')}\n`;
+          return `${val.replace(/^.*\./gi, '').replace(/ \(.+\)/gi, '')}\n`;
         })
         .join('')
         .split('\n')
@@ -88,7 +91,7 @@ async function getAllWeapons(p: number): Promise<object> {
   });
   // 20(p - 1) => generating function => 0, 20, 40, 60, 80, 100...
   res = res.filter((_v, i) => i >= 20 * (p - 1) && i <= 20 * (p + 1 - 1));
-  const weaponsList = await getWeaponsList(res);
+  const weaponsList: WeaponInfo[] = await getWeaponsList(res);
   return weaponsList;
 }
 
