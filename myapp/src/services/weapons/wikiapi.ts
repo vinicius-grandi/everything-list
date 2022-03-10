@@ -1,14 +1,14 @@
 import wiki from 'wikijs';
+import type { ContentType, WeaponInfo } from './wikiapi.d';
 
-export type ContentType = {
-  title: string;
-  content: string;
-  items?: ContentType[];
-};
-
-export type WeaponInfo = {
-  name: string;
-  imagePath: string;
+const deepValues = (
+  item?: ContentType[] | undefined,
+  res: string[] = [],
+): string[] => {
+  if (!item) {
+    return res;
+  }
+  return item.flatMap((i) => deepValues(i.items, [...res, i.content]));
 };
 
 export const getContent = async (
@@ -23,51 +23,15 @@ export const getContent = async (
   return contents;
 };
 
-const getWeaponsList = async (weapons: string[]): Promise<WeaponInfo[]> => {
-  const weaponsList: WeaponInfo[] = [];
-
-  const promises = weapons.map(async (weapon) => {
-    const search = weapon.match(/[^,]*/) ?? [''];
-    if (search[0] === '') return;
-    const page = await wiki().page('List_of_premodern_combat_weapons');
-    const links = await page.links();
-
-    const query =
-      links.find((val) => {
-        const regex = new RegExp(`${weapon}`, 'gi');
-        return regex.test(val);
-      }) ?? '';
-
-    if (query === '') {
-      weaponsList.push({
-        name: weapon,
-        imagePath: 'https://via.placeholder.com/500x500.png',
-      });
-      return;
-    }
-    const weaponImage = await (await wiki().page(query)).mainImage();
-    weaponsList.push({
-      name: weapon,
-      imagePath: weaponImage,
-    });
-  });
-
-  await Promise.all(promises);
-  return weaponsList;
-};
-
-const deepValues = (
-  item?: ContentType[] | undefined,
-  res: string[] = [],
-): string[] => {
-  if (!item) {
-    return res;
-  }
-  return item.flatMap((i) => deepValues(i.items, [...res, i.content]));
-};
-
-async function getAllWeapons(p: number): Promise<WeaponInfo[]> {
+export const getWeaponsName = async (p: number): Promise<WeaponInfo> => {
   let res: string[] = [];
+  const weaponList: WeaponInfo = {
+    pagination: {
+      lastVisiblePage: 0,
+      hasNextPage: false,
+    },
+    data: [],
+  };
   const contents = await getContent(
     'List_of_premodern_combat_weapons',
     '(weapons | weapon)',
@@ -81,17 +45,63 @@ async function getAllWeapons(p: number): Promise<WeaponInfo[]> {
       );
       const weapons = filteredWeapons
         .map((val) => {
-          return `${val.replace(/^.*\./gi, '').replace(/ \(.+\)/gi, '')}\n`;
+          return `${val
+            .replaceAll(/^.*\./gi, '')
+            .replaceAll(/ \(.+\)/gi, '')}\n`;
         })
         .join('')
         .split('\n')
         .filter((weapon) => weapon.length >= 1);
+      weaponList.pagination.lastVisiblePage = Math.ceil(weapons.length / 21);
       res.sort().push(...weapons);
     }
   });
   // 20(p - 1) => generating function => 0, 20, 40, 60, 80, 100...
   res = res.filter((_v, i) => i >= 20 * (p - 1) && i <= 20 * (p + 1 - 1));
-  const weaponsList: WeaponInfo[] = await getWeaponsList(res);
+  res.forEach((weapon) => {
+    const w = weapon.match(/[^,]*/) ?? [''];
+    const weaponSynonyms = weapon.split(',');
+    weaponSynonyms.shift();
+    weaponList.data.push({
+      name: w[0],
+      imagePath: undefined,
+      synonyms: [...weaponSynonyms],
+    });
+  });
+  return weaponList;
+};
+
+const getWeaponsList = async (weapons: WeaponInfo): Promise<WeaponInfo> => {
+  const weaponsList = [...weapons.data];
+
+  const promises = weaponsList.map(async (weapon, i) => {
+    const page = await wiki().page('List_of_premodern_combat_weapons');
+    const links = await page.links();
+
+    const query =
+      links.find((val: string) => {
+        const regex = new RegExp(`${weapon.name}`, 'gi');
+        return regex.test(val);
+      }) ?? '';
+    if (query !== '') {
+      const weaponImage = await (await wiki().page(query)).mainImage();
+      weaponsList[i].imagePath = weaponImage;
+    }
+  });
+
+  await Promise.all(promises);
+  return {
+    pagination: {
+      lastVisiblePage: weapons.pagination.lastVisiblePage,
+      hasNextPage: weapons.pagination.hasNextPage,
+    },
+    data: weaponsList,
+  };
+};
+
+async function getAllWeapons(p: number): Promise<WeaponInfo> {
+  const res = await getWeaponsName(p);
+  const weaponsList: WeaponInfo = await getWeaponsList(res);
   return weaponsList;
 }
 

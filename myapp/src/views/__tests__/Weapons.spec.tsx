@@ -1,7 +1,6 @@
+import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { render, RenderResult, screen } from '@testing-library/react';
-import React from 'react';
-import Weapon from '../Weapons';
 import App from '../../App';
 
 describe('App', () => {

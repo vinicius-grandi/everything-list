@@ -6,9 +6,6 @@
     "server": "cd express-gen-ts/src && npm run start:dev",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
-  "dependencies": {
-    "express": "^4.16.2"
-  },
   "devDependencies": {
     "concurrently": "^3.5.0",
     "ts-jest": "^27.1.3"
