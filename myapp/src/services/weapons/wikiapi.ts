@@ -24,7 +24,7 @@ export const getContent = async (
 };
 
 export const getWeaponsName = async (p: number): Promise<WeaponInfo> => {
-  let res: string[] = [];
+  const res: string[] = [];
   const weaponList: WeaponInfo = {
     pagination: {
       lastVisiblePage: 0,
@@ -57,7 +57,7 @@ export const getWeaponsName = async (p: number): Promise<WeaponInfo> => {
     }
   });
   // 20(p - 1) => generating function => 0, 20, 40, 60, 80, 100...
-  res = res.filter((_v, i) => i >= 20 * (p - 1) && i <= 20 * (p + 1 - 1));
+  // res = res.filter((_v, i) => i >= 20 * (p - 1) && i <= 20 * (p + 1 - 1));
   res.forEach((weapon) => {
     const w = weapon.match(/[^,]*/) ?? [''];
     const weaponSynonyms = weapon.split(',');
@@ -78,14 +78,17 @@ const getWeaponsList = async (weapons: WeaponInfo): Promise<WeaponInfo> => {
     const page = await wiki().page('List_of_premodern_combat_weapons');
     const links = await page.links();
 
-    const query =
-      links.find((val: string) => {
-        const regex = new RegExp(`${weapon.name}`, 'gi');
-        return regex.test(val);
-      }) ?? '';
-    if (query !== '') {
+    const query = links.find((val: string) => {
+      const regex = new RegExp(`${weapon.name}`, 'gi');
+      return regex.test(val);
+    });
+
+    if (query === undefined) return;
+    try {
       const weaponImage = await (await wiki().page(query)).mainImage();
       weaponsList[i].imagePath = weaponImage;
+    } catch {
+      //
     }
   });
 
@@ -102,6 +105,7 @@ const getWeaponsList = async (weapons: WeaponInfo): Promise<WeaponInfo> => {
 async function getAllWeapons(p: number): Promise<WeaponInfo> {
   const res = await getWeaponsName(p);
   const weaponsList: WeaponInfo = await getWeaponsList(res);
+  console.log(JSON.stringify(weaponsList));
   return weaponsList;
 }
 
