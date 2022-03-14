@@ -1,6 +1,8 @@
-const data = {
+import type { WeaponInfo } from '../services/weapons/wikiapi.d';
+
+const data: WeaponInfo = {
   pagination: {
-    lastVisiblePage: 1,
+    lastVisiblePage: 7,
     hasNextPage: false,
   },
   data: [
@@ -8,10 +10,11 @@ const data = {
       name: 'Arbalest',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/8/82/Arbalest_%28PSF%29.png',
-      synonyms: [' arblast'],
+      synonyms: ['arblast'],
     },
     {
       name: 'Ax match and wheellock',
+      imagePath: null,
       synonyms: [],
     },
     {
@@ -30,13 +33,13 @@ const data = {
       name: 'Blowgun',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/8/86/Yahua_Blowgun_Amazon_Iquitos_Peru.jpg',
-      synonyms: [' blowpipe', ' blow tube'],
+      synonyms: ['blowpipe', 'blow tube'],
     },
     {
       name: 'Bolas',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/b/b5/Bola_%28PSF%29.jpg',
-      synonyms: [' ayllo', ' liwi', ' qilumitautit'],
+      synonyms: ['ayllo', 'liwi', 'qilumitautit'],
     },
     {
       name: 'Boomerang',
@@ -46,7 +49,8 @@ const data = {
     },
     {
       name: 'Bullet bow',
-      synonyms: [' English bullet bow', ' pellet crossbow'],
+      imagePath: null,
+      synonyms: ['English bullet bow', 'pellet crossbow'],
     },
     {
       name: 'Bullwhip',
@@ -74,6 +78,7 @@ const data = {
     },
     {
       name: 'Carbine axe',
+      imagePath: null,
       synonyms: [],
     },
     {
@@ -103,7 +108,7 @@ const data = {
       name: 'Chain whip',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/5/5f/Chain_whip_1.jpg',
-      synonyms: [' jiujiebian', ' samjitbin', ' qijiebian'],
+      synonyms: ['jiujiebian', 'samjitbin', 'qijiebian'],
     },
     {
       name: 'Chakram',
@@ -115,7 +120,7 @@ const data = {
       name: 'Cheiroballistra',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/1/12/Cheiroballistra.jpg',
-      synonyms: [' hirovallistra hand ballista'],
+      synonyms: ['hirovallistra hand ballista'],
     },
     {
       name: 'Chigiriki',
@@ -131,10 +136,12 @@ const data = {
     },
     {
       name: 'Cumberjung',
-      synonyms: [' double ended flail', ' flail with quoits'],
+      imagePath: null,
+      synonyms: ['double ended flail', 'flail with quoits'],
     },
     {
       name: 'Daikyu',
+      imagePath: null,
       synonyms: [],
     },
     {
@@ -151,6 +158,7 @@ const data = {
     },
     {
       name: 'Efthytonon catapult',
+      imagePath: null,
       synonyms: [],
     },
     {
@@ -163,13 +171,13 @@ const data = {
       name: 'English longbow',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/2/24/Battle_of_crecy_froissart.jpg',
-      synonyms: [' warbow'],
+      synonyms: ['warbow'],
     },
     {
       name: 'Flail',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/2/27/Arte_De_Athletica_2b.jpg',
-      synonyms: [" fleau d'armes", ' kriegsflegel'],
+      synonyms: ["fleau d'armes", 'kriegsflegel'],
     },
     {
       name: 'Flatbow',
@@ -185,13 +193,14 @@ const data = {
     },
     {
       name: 'Flying guillotine',
+      imagePath: null,
       synonyms: [],
     },
     {
       name: 'Francisca',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/8/8b/Franziska.png',
-      synonyms: [' francesca'],
+      synonyms: ['francesca'],
     },
     {
       name: 'Fukiya',
@@ -203,28 +212,32 @@ const data = {
       name: 'Gastraphetes',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/f/f5/200910311250MEZ_Saalburg-Museum%2C_Gastraphetes.jpg',
-      synonyms: [' gastrafetis'],
+      synonyms: ['gastrafetis'],
     },
     {
       name: 'Greek flamethrower',
+      imagePath: null,
       synonyms: [],
     },
     {
       name: 'Gun',
+      imagePath: null,
       synonyms: [],
     },
     {
       name: 'Gungdo',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/d/d4/Gak_gung.jpg',
-      synonyms: [' hwal'],
+      synonyms: ['hwal'],
     },
     {
       name: 'Halberd double barreled wheellock',
+      imagePath: null,
       synonyms: [],
     },
     {
       name: 'Hankyu',
+      imagePath: null,
       synonyms: [],
     },
     {
@@ -235,18 +248,19 @@ const data = {
     },
     {
       name: 'Hu Dun Pao trebuchet',
+      imagePath: null,
       synonyms: [],
     },
     {
       name: 'Hunga munga',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/d/d2/Tibbu-waffen.JPG',
-      synonyms: [' danisco', ' goleyo', ' njiga'],
+      synonyms: ['danisco', 'goleyo', 'njiga'],
     },
     {
       name: 'Hurlbat',
       imagePath: 'https://upload.wikimedia.org/wikipedia/en/6/65/Waricon.svg',
-      synonyms: [' whirlbat'],
+      synonyms: ['whirlbat'],
     },
     {
       name: 'Jō',
@@ -257,13 +271,13 @@ const data = {
       name: 'Kestros',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/en/9/99/Question_book-new.svg',
-      synonyms: [' cestrus', ' cestrosfendoni', ' kestrosfedoni'],
+      synonyms: ['cestrus', 'cestrosfendoni', 'kestrosfedoni'],
     },
     {
       name: 'Knobkierrie',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/6/6e/Freedom_Park-150.jpg',
-      synonyms: [' knopkierie', ' knobkerry', ' also a blunt weapon'],
+      synonyms: ['knopkierie', 'knobkerry', 'also a blunt weapon'],
     },
     {
       name: 'Knout',
@@ -275,7 +289,7 @@ const data = {
       name: 'Kris',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/4/4d/COLLECTIE_TROPENMUSEUM_Kris_met_schede_TMnr_A-1448.jpg',
-      synonyms: [' keris sundang', ' keris bahari'],
+      synonyms: ['keris sundang', 'keris bahari'],
     },
     {
       name: 'Kunai',
@@ -287,10 +301,11 @@ const data = {
       name: 'Kusari-fundo',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/3/39/Manriki.JPG',
-      synonyms: [' manrikigusari', ' manriki'],
+      synonyms: ['manrikigusari', 'manriki'],
     },
     {
       name: 'Kusari-gama',
+      imagePath: null,
       synonyms: [],
     },
     {
@@ -303,10 +318,11 @@ const data = {
       name: 'Lasso',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/6/6f/2008_Kentucky_State_Fair_Roping_Show_%282765926132%29.jpg',
-      synonyms: [' uurga', ' lariat'],
+      synonyms: ['uurga', 'lariat'],
     },
     {
       name: 'Lathi',
+      imagePath: null,
       synonyms: [],
     },
     {
@@ -317,6 +333,7 @@ const data = {
     },
     {
       name: 'Mace wheellock',
+      imagePath: null,
       synonyms: [],
     },
     {
@@ -333,6 +350,7 @@ const data = {
     },
     {
       name: 'Matchlock axe dagger',
+      imagePath: null,
       synonyms: [],
     },
     {
@@ -340,11 +358,11 @@ const data = {
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/1/11/Meteor_hammer.JPG',
       synonyms: [
-        " dragon's fist",
-        ' dai chui',
-        ' flying hammer',
-        ' sheng bao',
-        ' liu xing chui',
+        "dragon's fist",
+        'dai chui',
+        'flying hammer',
+        'sheng bao',
+        'liu xing chui',
       ],
     },
     {
@@ -362,19 +380,19 @@ const data = {
     {
       name: 'Naboot',
       imagePath: 'https://upload.wikimedia.org/wikipedia/commons/f/f1/3px.jpg',
-      synonyms: [' shoum', ' nabboot', ' asa', ' asaya'],
+      synonyms: ['shoum', 'nabboot', 'asa', 'asaya'],
     },
     {
       name: 'Nagyka',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/8/8f/Nagyka_3.jpg',
-      synonyms: [' nagaika', ' nogaika'],
+      synonyms: ['nagaika', 'nogaika'],
     },
     {
       name: 'Nair',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/d/d3/Daniel_Thomas-A_Nair.jpg',
-      synonyms: [' nandaka', ' nayar'],
+      synonyms: ['nandaka', 'nayar'],
     },
     {
       name: 'Nunchaku',
@@ -398,18 +416,21 @@ const data = {
       name: 'Oxybeles',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/9/9c/Oxebeles.jpg',
-      synonyms: [' oxyvelis ballista'],
+      synonyms: ['oxyvelis ballista'],
     },
     {
       name: 'Palintonon catapult',
+      imagePath: null,
       synonyms: [],
     },
     {
       name: 'Pen Huo Qi flamethrower',
+      imagePath: null,
       synonyms: [],
     },
     {
       name: 'Pistol crossbow',
+      imagePath: null,
       synonyms: [],
     },
     {
@@ -428,7 +449,7 @@ const data = {
       name: 'Polybolos',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/5/5d/Ancient_Mechanical_Artillery._Pic_01.jpg',
-      synonyms: [' polyvolos repeating ballista'],
+      synonyms: ['polyvolos repeating ballista'],
     },
     {
       name: 'Quarterstaff',
@@ -440,13 +461,13 @@ const data = {
       name: 'Repeating crossbow',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/8/8a/Zhugenu-springautumn.jpg',
-      synonyms: [' chu ko nu', ' zhuge'],
+      synonyms: ['chu ko nu', 'zhuge'],
     },
     {
       name: 'Rope dart',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/d/d9/EricShouLiYao.JPG',
-      synonyms: [' jouhyou', ' rope javelin', ' sheng biao'],
+      synonyms: ['jouhyou', 'rope javelin', 'sheng biao'],
     },
     {
       name: 'Rungu',
@@ -462,6 +483,7 @@ const data = {
     },
     {
       name: 'Shareeravadi',
+      imagePath: null,
       synonyms: [],
     },
     {
@@ -475,13 +497,13 @@ const data = {
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/b/bd/Sjambok_%28plastic%29.jpg',
       synonyms: [
-        ' fimbo',
-        ' imvubu',
-        ' kiboko',
-        ' kurbash',
-        ' litupa',
-        ' mnigolo',
-        ' chicotte',
+        'fimbo',
+        'imvubu',
+        'kiboko',
+        'kurbash',
+        'litupa',
+        'mnigolo',
+        'chicotte',
       ],
     },
     {
@@ -498,21 +520,24 @@ const data = {
     },
     {
       name: 'Slungshot not to be confused with a slingshot',
+      imagePath: null,
       synonyms: [],
     },
     {
       name: 'Small whips',
-      synonyms: [' crops'],
+      imagePath: null,
+      synonyms: ['crops'],
     },
     {
       name: 'Stave sling',
-      synonyms: [' fustibale'],
+      imagePath: null,
+      synonyms: ['fustibale'],
     },
     {
       name: 'Stick',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/3/3d/Eskrima.jpg',
-      synonyms: [' branch'],
+      synonyms: ['branch'],
     },
     {
       name: 'Stockwhip',
@@ -530,13 +555,13 @@ const data = {
       name: 'Stone',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/d/d4/05-033.png',
-      synonyms: [' rock', ' lithos'],
+      synonyms: ['rock', 'lithos'],
     },
     {
       name: 'Surujin',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/e/ef/Suruchin.gif',
-      synonyms: [' suruchin'],
+      synonyms: ['suruchin'],
     },
     {
       name: 'Swiss arrow',
@@ -547,7 +572,7 @@ const data = {
     {
       name: 'Tabak-Toyok',
       imagePath: 'https://upload.wikimedia.org/wikipedia/commons/f/f1/3px.jpg',
-      synonyms: [' chako'],
+      synonyms: ['chako'],
     },
     {
       name: 'Taiaha',
@@ -563,6 +588,7 @@ const data = {
     },
     {
       name: 'Throwing dart',
+      imagePath: null,
       synonyms: [],
     },
     {
@@ -573,6 +599,7 @@ const data = {
     },
     {
       name: 'Tomahawk also an axe weapon',
+      imagePath: null,
       synonyms: [],
     },
     {
@@ -591,33 +618,35 @@ const data = {
       name: 'Two-section staff',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/en/4/40/Two-section_staff.jpg',
-      synonyms: [' xhang xiao ban', ' could also be considered a polearm'],
+      synonyms: ['xhang xiao ban', 'could also be considered a polearm'],
     },
     {
       name: 'Urumi',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/2/2a/Ethunu_kaduwa.jpg',
-      synonyms: [' chuttuval'],
+      synonyms: ['chuttuval'],
     },
     {
       name: 'War hammer wheellock',
+      imagePath: null,
       synonyms: [],
     },
     {
       name: 'Welsh longbow',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/2/24/Battle_of_crecy_froissart.jpg',
-      synonyms: [' warbow'],
+      synonyms: ['warbow'],
     },
     {
       name: 'Zhua',
+      imagePath: null,
       synonyms: [],
     },
     {
       name: 'Aspis',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/e/ef/Hoplitodromos_Staatliche_Antikensammlungen_1471.jpg',
-      synonyms: [' oplon'],
+      synonyms: ['oplon'],
     },
     {
       name: 'Buckler',
@@ -647,11 +676,12 @@ const data = {
       name: 'Heater shield',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/4/4b/Geometric_construction_of_heater_shield_ENG.svg',
-      synonyms: [' heraldic shield'],
+      synonyms: ['heraldic shield'],
     },
     {
       name: 'Hide',
-      synonyms: [' wickerwork', ' leather and ceremonial shields'],
+      imagePath: null,
+      synonyms: ['wickerwork', 'leather and ceremonial shields'],
     },
     {
       name: 'Hungarian shield',
@@ -661,6 +691,7 @@ const data = {
     },
     {
       name: 'Ishlangu',
+      imagePath: null,
       synonyms: [],
     },
     {
@@ -679,7 +710,7 @@ const data = {
       name: 'Parma',
       imagePath:
         'https://upload.wikimedia.org/wikipedia/en/9/99/Question_book-new.svg',
-      synonyms: [' parmula'],
+      synonyms: ['parmula'],
     },
     {
       name: 'Peltarion',
@@ -695,7 +726,8 @@ const data = {
     },
     {
       name: 'Scuta',
-      synonyms: [' rectangular', ' tower and oval scutum'],
+      imagePath: null,
+      synonyms: ['rectangular', 'tower and oval scutum'],
     },
     {
       name: 'Targe',
@@ -717,3 +749,7 @@ const data = {
     },
   ],
 };
+
+export default function fakeApi(): Promise<WeaponInfo> {
+  return Promise.resolve(data);
+}

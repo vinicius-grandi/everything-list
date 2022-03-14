@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import * as weaponsData from '../data/weapons';
+import weaponsData from '../data/weapons';
 import type { WeaponInfo } from '../services/weapons/wikiapi.d';
 
 const Weapons = (): JSX.Element => {
@@ -8,7 +8,7 @@ const Weapons = (): JSX.Element => {
 
   useEffect(() => {
     async function weaponsFn(): Promise<void> {
-      const weaponsName = await weaponsData.data;
+      const w = (await weaponsData()).data;
       setWeapons([...w]);
     }
     weaponsFn();

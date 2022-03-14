@@ -7,7 +7,7 @@ export type ContentType = {
 type weapons = {
   name: string;
   synonyms: string[] | string;
-  imagePath: string | undefined;
+  imagePath: string | null;
 };
 
 export type WeaponInfo = {

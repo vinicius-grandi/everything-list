@@ -52,19 +52,19 @@ export const getWeaponsName = async (p: number): Promise<WeaponInfo> => {
         .join('')
         .split('\n')
         .filter((weapon) => weapon.length >= 1);
-      weaponList.pagination.lastVisiblePage = Math.ceil(weapons.length / 21);
       res.sort().push(...weapons);
+      weaponList.pagination.lastVisiblePage = Math.ceil(res.length / 21);
     }
   });
   // 20(p - 1) => generating function => 0, 20, 40, 60, 80, 100...
   // res = res.filter((_v, i) => i >= 20 * (p - 1) && i <= 20 * (p + 1 - 1));
   res.forEach((weapon) => {
     const w = weapon.match(/[^,]*/) ?? [''];
-    const weaponSynonyms = weapon.split(',');
+    const weaponSynonyms = weapon.split(', ');
     weaponSynonyms.shift();
     weaponList.data.push({
       name: w[0],
-      imagePath: undefined,
+      imagePath: null,
       synonyms: [...weaponSynonyms],
     });
   });
@@ -105,7 +105,7 @@ const getWeaponsList = async (weapons: WeaponInfo): Promise<WeaponInfo> => {
 async function getAllWeapons(p: number): Promise<WeaponInfo> {
   const res = await getWeaponsName(p);
   const weaponsList: WeaponInfo = await getWeaponsList(res);
-  console.log(JSON.stringify(weaponsList));
+  console.log(weaponsList);
   return weaponsList;
 }
 
