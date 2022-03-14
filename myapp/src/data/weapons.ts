@@ -750,6 +750,12 @@ const data: WeaponInfo = {
   ],
 };
 
-export default function fakeApi(): Promise<WeaponInfo> {
-  return Promise.resolve(data);
+export default function fakeApi(p: number): Promise<WeaponInfo> {
+  const start = p === 1 ? 0 : (p - 1) * 19;
+  const end = p * 19;
+
+  const d = data.data.slice(start, end);
+  if (start !== 0) d.shift();
+  const dataSlice = { ...data, data: d };
+  return Promise.resolve(dataSlice);
 }
