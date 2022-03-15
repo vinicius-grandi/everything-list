@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import getAllWeapons from '../services/weapons/wikiapi';
+import Card from '../components/Card';
 import weaponsData from '../data/weapons';
 import type { WeaponInfo } from '../services/weapons/wikiapi.d';
 
@@ -8,6 +10,7 @@ const Weapons = (): JSX.Element => {
 
   // getting page
   const [searchParams, setSearchParams] = useSearchParams();
+  const [lastPage, setLastPage] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
   const changePage = (sign: '+' | '-'): void => {
     if (sign === '+') {
@@ -23,7 +26,9 @@ const Weapons = (): JSX.Element => {
   useEffect(() => {
     const p = Number(searchParams.get('page'));
     async function weaponsFn(): Promise<void> {
+      await getAllWeapons(1);
       const w = (await weaponsData(p <= 0 ? 1 : p)).data;
+      setLastPage((await weaponsData(0)).pagination.lastVisiblePage);
       setWeapons([...w]);
     }
     weaponsFn();
@@ -35,26 +40,24 @@ const Weapons = (): JSX.Element => {
       {weapons.length > 1 ? (
         <ul>
           {weapons.map((val) => (
-            <li key={val.name}>{val.name}</li>
+            <Card key={val.name} title={val.name} imagePath={val.imagePath} />
           ))}
         </ul>
       ) : (
         <p>Page not found</p>
       )}
-      <button
-        type="button"
-        data-testid="weapons-next-page"
-        onClick={() => changePage('-')}
-      >
+      <button type="button" onClick={() => changePage('-')}>
         Previous
       </button>
-      <button
-        type="button"
-        data-testid="weapons-next-page"
-        onClick={() => changePage('+')}
-      >
-        Next
-      </button>
+      {page < lastPage && (
+        <button
+          type="button"
+          data-testid="weapons-next-page"
+          onClick={() => changePage('+')}
+        >
+          Next
+        </button>
+      )}
     </div>
   );
 };

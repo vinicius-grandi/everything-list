@@ -65,7 +65,9 @@ export const getWeaponsName = async (p: number): Promise<WeaponInfo> => {
     weaponList.data.push({
       name: w[0],
       imagePath: null,
-      synonyms: [...weaponSynonyms],
+      summary: null,
+      synonyms: weaponSynonyms.join(', '),
+      wikiLink: null,
     });
   });
   return weaponList;
@@ -85,8 +87,12 @@ const getWeaponsList = async (weapons: WeaponInfo): Promise<WeaponInfo> => {
 
     if (query === undefined) return;
     try {
-      const weaponImage = await (await wiki().page(query)).mainImage();
+      const w = await wiki().page(query);
+      const weaponImage = await w.mainImage();
+      const weaponSummary = await w.summary();
       weaponsList[i].imagePath = weaponImage;
+      weaponsList[i].summary = weaponSummary;
+      weaponsList[i].wikiLink = query;
     } catch {
       //
     }

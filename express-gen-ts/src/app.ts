@@ -1,15 +1,15 @@
-import express from "express";
-import cookieParser from "cookie-parser";
-import sessions from "express-session";
-import helmet from "helmet";
-import loginRouter from "./routes/login";
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import sessions from 'express-session';
+import helmet from 'helmet';
+import loginRouter from './routes/login';
 
 // creating express app
 const app = express();
 
 const expirationTime = 1000 * 60 * 60 * 24;
 const session = sessions({
-  secret: process.env.SESSION_SECRET ?? "",
+  secret: process.env.SESSION_SECRET ?? '',
   resave: false,
   saveUninitialized: true,
   cookie: {

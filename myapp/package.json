@@ -7,6 +7,21 @@
     "path": false,
     "os": false
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!**/node_modules/**"
+    ],
+    "coverageReporters": [
+      "text-summary",
+      "lcov",
+      "cobertura"
+    ],
+    "testMatch": [
+      "**/*.spec.ts",
+      "**/*.spec.tsx"
+    ]
+  },
   "scripts": {
     "build": "npm run lint && react-scripts build",
     "eject": "react-scripts eject",

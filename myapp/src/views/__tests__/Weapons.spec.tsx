@@ -1,23 +1,24 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { render, RenderResult, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import renderWithRouter from './utils/renderWithRouter';
 import App from '../../App';
 
-jest.mock('../../services/weapons/wikiapi');
-
 describe('App', () => {
-  const renderWithRouter = (
-    ui: JSX.Element,
-    { route = '/' } = {},
-  ): RenderResult => {
-    window.history.pushState({}, 'Test page', route);
-    return render(ui, { wrapper: BrowserRouter });
-  };
-  it('should show next page when there are more than 20 items', async () => {
-    renderWithRouter(<App />, { route: '/weapons' });
-
-    const component = await screen.findByText('armabraba');
-
-    expect(component).toBeInTheDocument();
+  it("should render weapon's details with title, image and rating", async () => {
+    const { findByTestId, findByRole } = renderWithRouter(<App />, {
+      route: '/weapons/Bolas',
+    });
+    // {
+    //   name: 'Bolas',
+    //   imagePath:
+    //     'https://upload.wikimedia.org/wikipedia/commons/b/b5/Bola_%28PSF%29.jpg',
+    //   synonyms: ['ayllo', 'liwi', 'qilumitautit'],
+    // },
+    expect((await findByTestId('weapon-d-title')).innerText).toBe('Bolas');
+    expect((await findByTestId('weapon-d-image')).getAttribute('src')).toBe(
+      'https://upload.wikimedia.org/wikipedia/commons/b/b5/Bola_%28PSF%29.jpg',
+    );
+    expect(await findByTestId('weapon-d-title')).toBe('Bolas');
+    expect(await findByTestId('weapon-d-title')).toBe('Bolas');
   });
 });
