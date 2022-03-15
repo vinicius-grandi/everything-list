@@ -24,5 +24,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 express-gen-ts/.env
+express-gen-ts/.test.env
 express-gen-ts/node_modules
 express-gen-ts/dist
