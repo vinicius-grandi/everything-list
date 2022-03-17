@@ -13,11 +13,17 @@ dotenv.config({
 const dialect = 'postgres';
 
 module.exports = {
-  database: 'everyting-list',
+  database: process.env.DB_NAME ?? 'everyting-list',
   username: process.env.DB_USER ?? '',
   password: process.env.DB_PASS ?? '',
   logging: false,
   host: process.env.DB_HOST ?? '',
+  dialectOptions: process.env.SSL ?? {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false, // <<<<<<< YOU NEED THIS
+    },
+  },
   dialect,
   define: {
     timestamps: true,

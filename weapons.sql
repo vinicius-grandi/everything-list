@@ -1,4 +1,5 @@
 CREATE TABLE IF NOT EXISTS "weapons" (
+    "id" SERIAL PRIMARY KEY,
     "name" TEXT,
     "imagePath" TEXT,
     "wikiLink" TEXT,

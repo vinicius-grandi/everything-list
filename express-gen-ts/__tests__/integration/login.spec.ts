@@ -99,7 +99,6 @@ describe('Login', () => {
     const response = await agent
       .post('/login')
       .send({ email: user.email, password: user.password });
-
     expect(response.redirect).toBe(true);
   });
 });

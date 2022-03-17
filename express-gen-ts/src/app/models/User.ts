@@ -1,6 +1,5 @@
-import {
-  Model,
-} from 'sequelize';
+/* eslint-disable import/no-import-module-exports */
+import { Model } from 'sequelize';
 import bcrypt from 'bcryptjs';
 
 export interface UserAttributes {
@@ -9,15 +8,19 @@ export interface UserAttributes {
   password: string;
   email: string;
   password_hash: string;
-  checkPassword(password: string): Promise<Boolean>;
+  checkPassword(password: string): Promise<boolean>;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class User extends Model<UserAttributes> implements UserAttributes {
     id!: number;
+
     username!: string;
+
     password!: string;
+
     email!: string;
+
     password_hash!: string;
 
     checkPassword(password: string) {
@@ -25,23 +28,25 @@ module.exports = (sequelize: any, DataTypes: any) => {
     }
   }
 
-    const attributes = {
-      username: DataTypes.STRING,
-      email: DataTypes.STRING,
-      password: DataTypes.VIRTUAL,
-      password_hash: DataTypes.STRING
-    };
+  const attributes = {
+    username: DataTypes.STRING,
+    email: DataTypes.STRING,
+    password: DataTypes.VIRTUAL,
+    password_hash: DataTypes.STRING,
+  };
 
-    User.init(attributes, {
-        sequelize,
-        tableName: "users",
-        hooks: {
-          beforeSave: async (user: any) => {
-            if (user.password) {
-              const passwordHash = await bcrypt.hash(user.password, 8);
-              user.password_hash = passwordHash;
-            }
-          },
-    }});
+  User.init(attributes, {
+    sequelize,
+    tableName: 'users',
+    hooks: {
+      beforeSave: async (user: any) => {
+        if (user.password) {
+          const u = user;
+          const passwordHash = await bcrypt.hash(user.password, 8);
+          u.password_hash = passwordHash;
+        }
+      },
+    },
+  });
   return User;
-}
+};
