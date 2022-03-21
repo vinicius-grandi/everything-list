@@ -11,7 +11,7 @@ module.exports = {
         type: Sequelize.STRING(50),
         allowNull: false,
       },
-      imagePath: {
+      image_path: {
         type: Sequelize.STRING(150),
       },
       summary: {
@@ -23,7 +23,15 @@ module.exports = {
       rating: {
         type: Sequelize.DECIMAL(3, 2),
         allowNull: false,
-        default: Number('0.00'),
+        defaultValue: Number('0.00'),
+      },
+      created_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      updated_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
       },
     });
   },

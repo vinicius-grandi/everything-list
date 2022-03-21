@@ -1,15 +1,17 @@
 import db from '../../src/app/models';
-const { sequelize } = db;
 
-export default () => {
-  return Promise.all(Object.keys(
-    (sequelize.models)
-  ).map(
-    (key) => {
-      return sequelize.models[key].destroy({
+const {
+  sequelize: { models },
+} = db;
+
+export default () =>
+  Promise.all(
+    Object.keys(models).map((model) =>
+      models[model].destroy({
+        cascade: true,
         truncate: true,
+        restartIdentity: true,
         force: true,
-      });
-    }
-  ));
-};
+      }),
+    ),
+  );

@@ -1,4 +1,3 @@
-/* eslint-disable import/no-import-module-exports */
 import { Model } from 'sequelize';
 import bcrypt from 'bcryptjs';
 
@@ -28,7 +27,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     }
 
     static associate(models: any) {
-      this.belongsTo(models.User, {
+      this.hasMany(models.Review, {
         foreignKey: 'user_id',
         as: 'user',
       });
