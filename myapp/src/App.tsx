@@ -38,6 +38,11 @@ const Header = styled.header`
     .search-bar {
       display: none;
     }
+
+    a {
+      max-width: 100%;
+      width: 50%;
+    }
   }
 
   background-color: #543275;
@@ -49,10 +54,6 @@ const Header = styled.header`
   img {
     max-width: 100%;
     height: auto;
-  }
-
-  a {
-    max-width: 100%;
   }
 
   .search-icon {

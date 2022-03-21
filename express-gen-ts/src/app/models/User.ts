@@ -26,6 +26,13 @@ module.exports = (sequelize: any, DataTypes: any) => {
     checkPassword(password: string) {
       return bcrypt.compare(password, this.password_hash);
     }
+
+    static associate(models: any) {
+      this.belongsTo(models.User, {
+        foreignKey: 'user_id',
+        as: 'user',
+      });
+    }
   }
 
   const attributes = {
