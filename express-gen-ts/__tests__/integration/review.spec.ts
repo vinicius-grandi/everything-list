@@ -1,6 +1,6 @@
 import request from 'supertest';
 import truncate from '../utils/truncate';
-import factories from '../utils/factories';
+import factories, { userInputs } from '../utils/factories';
 import app from '../../src/app';
 import type { WeaponAttributes } from '../../src/app/models/Weapon';
 import type { UserAttributes } from '../../src/app/models/User';
@@ -34,5 +34,19 @@ describe('reviews', () => {
       rating,
     });
     expect(review.rating).toBe(rating.toFixed(2));
+  });
+  it('should let you rate weapon when logged in', async () => {
+    await factories.create('Weapon');
+    await factories.create('List');
+    const user = userInputs();
+    const agent = request.agent(app);
+    const rating = 2;
+
+    await agent.post('/signup').send(user);
+
+    const response = await agent.post('/weapons/1').send({
+      rating,
+    });
+    expect(response.body.rating).toBe(rating.toFixed(2));
   });
 });

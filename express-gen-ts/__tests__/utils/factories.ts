@@ -14,7 +14,7 @@ factory.define('User', User, {
 factory.define('Weapon', Weapon, {
   name: faker.word.noun(10),
   imagePath: null,
-  summary: faker.lorem.text(),
+  summary: faker.lorem.text(1),
   synonyms: [faker.word.noun(10), faker.word.noun(10)],
 });
 
