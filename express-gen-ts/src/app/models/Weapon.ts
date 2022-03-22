@@ -26,7 +26,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     imagePath: DataTypes.STRING(50),
     summary: DataTypes.STRING(150),
     synonyms: DataTypes.ARRAY(DataTypes.TEXT),
-    rating: DataTypes.DECIMAL(3, 2),
+    rating: DataTypes.DECIMAL(4, 2),
   };
 
   Weapon.init(attributes, {

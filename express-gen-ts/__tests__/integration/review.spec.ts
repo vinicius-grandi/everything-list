@@ -3,7 +3,6 @@ import truncate from '../utils/truncate';
 import factories, { userInputs } from '../utils/factories';
 import app from '../../src/app';
 import type { WeaponAttributes } from '../../src/app/models/Weapon';
-import type { UserAttributes } from '../../src/app/models/User';
 
 describe('reviews', () => {
   beforeEach(async () => {
@@ -41,12 +40,54 @@ describe('reviews', () => {
     const user = userInputs();
     const agent = request.agent(app);
     const rating = 2;
+    const message = 'This is the best weapon';
 
     await agent.post('/signup').send(user);
 
     const response = await agent.post('/weapons/1').send({
       rating,
+      message,
     });
     expect(response.body.rating).toBe(rating.toFixed(2));
+    expect(response.body.message).toBe(message);
+  });
+
+  it('should not let you create a weapon twice or more', async () => {
+    await factories.create('Weapon');
+    await factories.create('List');
+    const user = userInputs();
+    const agent = request.agent(app);
+    const rating = 2;
+
+    await agent.post('/signup').send(user);
+
+    await agent.post('/weapons/1').send({
+      rating,
+    });
+
+    const response = await agent.post('/weapons/1').send({
+      rating,
+    });
+
+    expect(response.status).toBe(405);
+  });
+  it('should let you update weapon rating', async () => {
+    await factories.create('Weapon');
+    await factories.create('List');
+    const user = userInputs();
+    const agent = request.agent(app);
+    const rating1 = 9.5;
+    const rating2 = 10;
+
+    await agent.post('/signup').send(user);
+    await agent.post('/weapons/1').send({
+      rating: rating1,
+    });
+
+    const response = await agent.put('/weapons/1').send({
+      rating: rating2.toFixed(2),
+    });
+
+    expect(response.body.rating).toBe(rating2.toFixed(2));
   });
 });

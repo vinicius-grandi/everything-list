@@ -21,7 +21,7 @@ module.exports = {
         type: Sequelize.ARRAY(Sequelize.TEXT),
       },
       rating: {
-        type: Sequelize.DECIMAL(3, 2),
+        type: Sequelize.DECIMAL(4, 2),
         allowNull: false,
         defaultValue: Number('0.00'),
       },

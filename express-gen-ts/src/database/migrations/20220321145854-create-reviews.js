@@ -37,7 +37,7 @@ module.exports = {
         allowNull: false,
       },
       rating: {
-        type: Sequelize.DECIMAL(3, 2),
+        type: Sequelize.DECIMAL(4, 2),
         allowNull: false,
       },
     });

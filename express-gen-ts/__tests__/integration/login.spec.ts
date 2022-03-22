@@ -101,4 +101,13 @@ describe('Login', () => {
       .send({ email: user.email, password: user.password });
     expect(response.redirect).toBe(true);
   });
+  it('/logout should logout user', async () => {
+    const user = userInputs();
+    const agent = request.agent(app);
+
+    await agent.post('/signup').send(user);
+    const response = await agent.get('/logout');
+
+    expect(response.headers['set-cookie']).toBe(undefined);
+  });
 });

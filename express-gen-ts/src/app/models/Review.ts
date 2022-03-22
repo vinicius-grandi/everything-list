@@ -50,7 +50,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       type: DataTypes.INTEGER,
     },
     message: DataTypes.STRING(500),
-    rating: DataTypes.INTEGER,
+    rating: DataTypes.DECIMAL(4, 2),
   };
 
   Review.init(attributes, {

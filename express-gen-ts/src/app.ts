@@ -14,6 +14,7 @@ const expirationTime = 1000 * 60 * 2;
 const session = sessions({
   secret: process.env.SESSION_SECRET ?? '',
   resave: false,
+  rolling: true,
   saveUninitialized: false,
   cookie: {
     maxAge: expirationTime,

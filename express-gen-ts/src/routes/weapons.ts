@@ -7,6 +7,7 @@ const routes = Router();
 routes.get('/:id', WeaponController.getWeapon);
 
 routes.use(auth);
-routes.post('/:id', WeaponController.sendRating);
+routes.post('/:id', WeaponController.sendRating.bind(WeaponController));
+routes.put('/:id', WeaponController.updateRating.bind(WeaponController));
 
 export default routes;
