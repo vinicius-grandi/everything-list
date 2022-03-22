@@ -2,7 +2,7 @@ import { factory } from 'factory-girl';
 import { faker } from '@faker-js/faker';
 import db from '../../src/app/models';
 
-const { User, Weapon } = db;
+const { User, Weapon, Review, List } = db;
 
 // defining user factory for tests
 factory.define('User', User, {
@@ -12,10 +12,25 @@ factory.define('User', User, {
 });
 
 factory.define('Weapon', Weapon, {
-  name: 'labraba',
+  name: faker.word.noun(10),
   imagePath: null,
-  summary: 'nada',
-  synonyms: ['brabuda', 'cambreta'],
+  summary: faker.lorem.text(),
+  synonyms: [faker.word.noun(10), faker.word.noun(10)],
+});
+
+factory.define('Review', Review, {
+  user_id: 1,
+  list_name: 'weapons',
+  item_id: 1,
+  message: faker.datatype.string(20),
+  rating: faker.datatype.number({
+    min: 0,
+    max: 10,
+  }),
+});
+
+factory.define('List', List, {
+  list_name: 'weapons',
 });
 
 export const userInputs = () => ({

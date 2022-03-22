@@ -10,7 +10,7 @@ import weaponsRouter from './routes/weapons';
 // creating express app
 const app = express();
 
-const expirationTime = 1000 * 60 * 60 * 24;
+const expirationTime = 1000 * 60 * 2;
 const session = sessions({
   secret: process.env.SESSION_SECRET ?? '',
   resave: false,

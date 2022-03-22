@@ -22,6 +22,7 @@ const LoginController = {
       }
 
       const { session } = req;
+      session.authenticated = true;
       session.userId = user.id;
 
       return res.json({ user, session });
@@ -36,7 +37,7 @@ const LoginController = {
       where: { email },
     });
 
-    if (req.session.userId) {
+    if (req.session.authenticated) {
       return res.redirect('/');
     }
 
@@ -48,8 +49,9 @@ const LoginController = {
 
     if (email === user.email && isPasswordValid) {
       const { session } = req;
+      session.authenticated = true;
       session.userId = user.id;
-      return res.json(user);
+      return res.json(session);
     }
 
     return res.status(401).json({ message: 'Invalid Username/Password' });

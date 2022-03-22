@@ -34,10 +34,22 @@ module.exports = (sequelize: any, DataTypes: any) => {
   }
 
   const attributes = {
-    item_id: DataTypes.INTEGER,
-    list_name: DataTypes.STRING(20),
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+    },
+    list_name: {
+      type: DataTypes.STRING(20),
+      primaryKey: true,
+      allowNull: false,
+    },
+    item_id: {
+      allowNull: false,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+    },
     message: DataTypes.STRING(500),
-    user_id: DataTypes.INTEGER,
     rating: DataTypes.INTEGER,
   };
 

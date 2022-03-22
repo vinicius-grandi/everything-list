@@ -17,12 +17,16 @@ module.exports = (sequelize: any, DataTypes: any) => {
   }
 
   const attributes = {
-    list_name: DataTypes.STRING(20),
+    list_name: {
+      type: DataTypes.STRING(20),
+      primaryKey: true,
+    },
   };
 
   List.init(attributes, {
     sequelize,
     tableName: 'lists',
+    timestamps: false,
   });
   return List;
 };
