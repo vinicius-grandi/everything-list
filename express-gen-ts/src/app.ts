@@ -1,6 +1,8 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import sessions from 'express-session';
+import connectRedis from 'connect-redis';
+import redisClient from './redisConfig';
 // import helmet from 'helmet';
 
 // importing routes
@@ -10,13 +12,18 @@ import weaponsRouter from './routes/weapons';
 // creating express app
 const app = express();
 
-const expirationTime = 1000 * 60 * 2;
+// app.set('trust proxy', 1);
+
+// creating sessions
+const RedisStore = connectRedis(sessions);
+const expirationTime = 1000 * 60 * 30;
 const session = sessions({
   secret: process.env.SESSION_SECRET ?? '',
   resave: false,
-  rolling: true,
   saveUninitialized: false,
+  store: new RedisStore({ client: redisClient }),
   cookie: {
+    httpOnly: true,
     maxAge: expirationTime,
   },
 });
