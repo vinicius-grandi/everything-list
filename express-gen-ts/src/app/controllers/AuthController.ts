@@ -4,7 +4,7 @@ import { UserAttributes } from '../models/User';
 
 const { User } = db;
 
-const LoginController = {
+const AuthController = {
   async createUser(req: Request, res: Response) {
     const { username, email, password } = req.body;
     try {
@@ -61,4 +61,4 @@ const LoginController = {
   },
 };
 
-export default LoginController;
+export default AuthController;

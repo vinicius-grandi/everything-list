@@ -5,9 +5,13 @@ import connectRedis from 'connect-redis';
 import redisClient from './redisConfig';
 // import helmet from 'helmet';
 
-// importing routes
-import loginRouter from './routes/login';
-import weaponsRouter from './routes/weapons';
+// importing routes and setting routes
+import authRouter from './routes/auth';
+import noApiListRouter from './routes/noapilist';
+import apiListRouter from './routes/apilist';
+
+const noApiListRoutes = ['/weapons'];
+const apiListRoutes = ['/animes'];
 
 // creating express app
 const app = express();
@@ -31,7 +35,8 @@ const session = sessions({
 app.use(express.json());
 app.use(cookieParser());
 app.use(session);
-app.use(loginRouter);
-app.use('/weapons', weaponsRouter);
+app.use(authRouter);
+app.use(noApiListRoutes, noApiListRouter);
+app.use(apiListRoutes, apiListRouter);
 
 export default app;

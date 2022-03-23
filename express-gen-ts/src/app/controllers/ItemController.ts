@@ -2,22 +2,24 @@ import { Request, Response } from 'express';
 import sequelize from 'sequelize';
 import db from '../models';
 
-const { Weapon, Review } = db;
+const { Review } = db;
 
-const LoginController = {
-  async getWeapon(req: Request, res: Response) {
-    const weapon = await Weapon.findByPk(req.params.id);
+const ItemController = {
+  async getItem(req: Request, res: Response) {
+    const listName = req.baseUrl.slice(1);
+    const modelName = listName.charAt(0).toUpperCase() + listName.slice(1, -1);
+    const item = await db[modelName].findByPk(req.params.id);
 
-    if (!weapon) {
-      return res.status(404).json({ error: 'weapon not found' });
+    if (!item) {
+      return res.status(404).json({ error: 'item not found' });
     }
-    return res.json(weapon);
+    return res.json(item);
   },
 
-  async setWeaponRating(weapon: any, id: string) {
+  async setItemRating(item: any, id: string, listName: string) {
     const info = {
       where: {
-        list_name: 'weapons',
+        list_name: listName,
         item_id: id,
       },
     };
@@ -33,44 +35,48 @@ const LoginController = {
       dataValues: { total_rating: totalRating },
     } = totalAmount;
 
-    await weapon.update({
+    await item.update({
       rating: Number(totalRating).toFixed(2),
     });
   },
 
   async sendRating(req: Request, res: Response) {
+    const listName = req.baseUrl.slice(1);
+    const modelName = listName.charAt(0).toUpperCase() + listName.slice(1, -1);
     const { rating, message } = req.body;
     const { id } = req.params;
     const { userId } = req.session;
-    const weapon = await Weapon.findByPk(id);
+    const item = await db[modelName].findByPk(id);
 
-    if (!weapon) {
-      return res.status(404).json({ error: 'weapon not found' });
+    if (!item) {
+      return res.status(404).json({ error: 'item not found' });
     }
     try {
       const review = await Review.create({
         user_id: userId,
-        list_name: 'weapons',
+        list_name: listName,
         item_id: id,
         message: message ?? '',
         rating: Number(rating).toFixed(2),
       });
-      await this.setWeaponRating(weapon, id);
-      return res.json({ review, weapon });
+      await this.setItemRating(item, id, listName);
+      return res.json({ review, item });
     } catch (err) {
       return res.status(405).send(err.message);
     }
   },
 
   async updateRating(req: Request, res: Response) {
+    const listName = req.baseUrl.slice(1);
+    const modelName = listName.charAt(0).toUpperCase() + listName.slice(1, -1);
     const { rating, message } = req.body;
     const { id } = req.params;
     const { userId } = req.session;
-    const weapon = await Weapon.findByPk(id);
+    const item = await db[modelName].findByPk(id);
     const info = {
       where: {
         user_id: userId,
-        list_name: 'weapons',
+        list_name: listName,
         item_id: id,
       },
     };
@@ -81,12 +87,12 @@ const LoginController = {
         rating: Number(rating).toFixed(2),
         message: message ?? '',
       });
-      await this.setWeaponRating(weapon, id);
-      return res.json(weapon);
+      await this.setItemRating(item, id, listName);
+      return res.json(item);
     } catch (err) {
       return res.status(405).send(err.message);
     }
   },
 };
 
-export default LoginController;
+export default ItemController;

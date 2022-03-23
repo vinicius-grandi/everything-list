@@ -2,7 +2,7 @@ import { factory } from 'factory-girl';
 import { faker } from '@faker-js/faker';
 import db from '../../src/app/models';
 
-const { User, Weapon, Review, List } = db;
+const { User, Weapon, Review, List, Anime } = db;
 
 // defining user factory for tests
 factory.define('User', User, {
@@ -31,6 +31,13 @@ factory.define('Review', Review, {
 
 factory.define('List', List, {
   list_name: 'weapons',
+});
+
+factory.define('Anime', Anime, {
+  id: faker.datatype.number({
+    precision: 1,
+  }),
+  rating: 0,
 });
 
 export const userInputs = () => ({
