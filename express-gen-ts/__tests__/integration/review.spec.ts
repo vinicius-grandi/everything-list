@@ -3,11 +3,13 @@ import truncate from '../utils/truncate';
 import factories, { userInputs } from '../utils/factories';
 import app from '../../src/app';
 import type { WeaponAttributes } from '../../src/app/models/Weapon';
+import redisClient from '../../src/redisConfig';
 
 describe('reviews', () => {
   beforeEach(async () => {
     await truncate();
   }, 15000);
+  afterAll(() => redisClient.disconnect());
   it('should get all info about weapon from item details page', async () => {
     const weapon: WeaponAttributes = await factories.create('Weapon');
 
@@ -48,8 +50,8 @@ describe('reviews', () => {
       rating,
       message,
     });
-    expect(response.body.rating).toBe(rating.toFixed(2));
-    expect(response.body.message).toBe(message);
+    expect(response.body.review.rating).toBe(rating.toFixed(2));
+    expect(response.body.review.message).toBe(message);
   });
 
   it('should not let you create a weapon twice or more', async () => {
@@ -88,6 +90,28 @@ describe('reviews', () => {
       rating: rating2.toFixed(2),
     });
 
-    expect(response.body.rating).toBe(rating2.toFixed(2));
+    expect(response.body.review.rating).toBe(rating2.toFixed(2));
+  });
+  it('should average the item rating correctly when there is more than one user', async () => {
+    await factories.create('Weapon');
+    await factories.create('List');
+    const user1 = userInputs();
+    const user2 = userInputs();
+    const agent = request.agent(app);
+    const average = ((5 + 10) / 2).toFixed(2);
+
+    await agent.post('/signup').send(user1);
+    await agent.post('/weapons/1').send({
+      rating: 5,
+      message: 'jo',
+    });
+    await agent.get('/logout');
+    await agent.post('/signup').send(user2);
+    const response = await agent.post('/weapons/1').send({
+      rating: 10,
+      message: 'jojo',
+    });
+
+    expect(response.body.weapon.rating).toBe(average);
   });
 });

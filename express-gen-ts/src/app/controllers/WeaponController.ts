@@ -22,18 +22,16 @@ const LoginController = {
       },
     };
 
-    const totalAmount = await Review.findAll({
+    const totalAmount = await Review.findOne({
       ...info,
       attributes: [
         [sequelize.fn('avg', sequelize.col('rating')), 'total_rating'],
       ],
     });
 
-    const [
-      {
-        dataValues: { total_rating: totalRating },
-      },
-    ] = totalAmount;
+    const {
+      dataValues: { total_rating: totalRating },
+    } = totalAmount;
 
     await weapon.update({
       rating: Number(totalRating).toFixed(2),
@@ -58,7 +56,7 @@ const LoginController = {
         rating: Number(rating).toFixed(2),
       });
       await this.setWeaponRating(weapon, id);
-      return res.json(review);
+      return res.json({ review, weapon });
     } catch (err) {
       return res.status(405).send(err.message);
     }
