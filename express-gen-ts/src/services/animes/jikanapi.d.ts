@@ -38,7 +38,7 @@ export type Anime = {
     [key in 'webp']: ImgTypesSupported;
   };
   trailer: object;
-  title: string | null;
+  title: string;
   title_english: string | null;
   title_japanese: string | null;
   title_synonyms: string[];

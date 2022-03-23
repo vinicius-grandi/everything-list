@@ -7,6 +7,7 @@ import redisClient from './redisConfig';
 
 // importing routes and setting routes
 import authRouter from './routes/auth';
+import searchRouter from './routes/search';
 import noApiListRouter from './routes/noapilist';
 import apiListRouter from './routes/apilist';
 
@@ -36,6 +37,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(session);
 app.use(authRouter);
+app.use(searchRouter);
 app.use(noApiListRoutes, noApiListRouter);
 app.use(apiListRoutes, apiListRouter);
 

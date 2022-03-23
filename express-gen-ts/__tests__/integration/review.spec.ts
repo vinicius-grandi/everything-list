@@ -89,7 +89,7 @@ describe('reviews', () => {
       rating: rating2.toFixed(2),
     });
 
-    expect(response.body.review.rating).toBe(rating2.toFixed(2));
+    expect(response.body.rating).toBe(rating2.toFixed(2));
   });
   it('should average the item rating correctly when there is more than one user', async () => {
     await factories.create('Weapon');
