@@ -34,22 +34,28 @@ const SearchController = {
     const animeOrManga = (await jikanapi[method](
       `?q=${query}${additionalParams}`,
     )) as Anime[];
-    if (animeOrManga.length === 1)
+    const meth = method === 'getMangaSearch' ? 'mangas' : 'animes';
+    if (animeOrManga.length === 1) {
+      const {
+        mal_id: malId,
+        images: {
+          jpg: { image_url: imageUrl },
+        },
+        title,
+      } = animeOrManga[0];
       return {
-        id: animeOrManga[0].mal_id,
-        imagePath: animeOrManga[0].images.jpg.image_url,
-        list_name: method === 'getMangaSearch' ? 'mangas' : 'animes',
-        name: animeOrManga[0].title,
+        id: malId,
+        imagePath: imageUrl,
+        list_name: meth,
+        name: title,
       };
-    const res: QueryItem[] = [];
-    animeOrManga.forEach((elem) =>
-      res.push({
-        id: elem.mal_id,
-        imagePath: elem.images.jpg.image_url,
-        list_name: method === 'getMangaSearch' ? 'mangas' : 'animes',
-        name: elem.title,
-      }),
-    );
+    }
+    const res: QueryItem[] = animeOrManga.map((elem) => ({
+      id: elem.mal_id,
+      imagePath: elem.images.jpg.image_url,
+      list_name: meth,
+      name: elem.title,
+    }));
     return animeOrManga === undefined ? null : res;
   },
 
@@ -72,9 +78,8 @@ const SearchController = {
         name: weapon[0].name,
       };
     }
-    const res: QueryItem[] = [];
-    weapon.forEach((elem: WeaponAttributes & { id: number }) =>
-      res.push({
+    const res: QueryItem[] = weapon.map(
+      (elem: WeaponAttributes & { id: number }) => ({
         id: elem.id,
         imagePath: elem.imagePath,
         list_name: 'weapons',
