@@ -1,13 +1,11 @@
-import { QueryInterface, DataTypes } from 'sequelize';
-
 module.exports = {
-  async up (queryInterface: QueryInterface, Sequelize: typeof DataTypes) {
-     await queryInterface.createTable("users", {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('users', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        allowNull: false
+        allowNull: false,
       },
       username: {
         type: Sequelize.STRING,
@@ -24,16 +22,16 @@ module.exports = {
       },
       created_at: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: false,
       },
       updated_at: {
         type: Sequelize.DATE,
-        allowNull: false
-      }
+        allowNull: false,
+      },
     });
   },
 
-  async down (queryInterface: QueryInterface) {
-     await queryInterface.dropTable("users");
-  }
+  async down(queryInterface) {
+    await queryInterface.dropTable('users');
+  },
 };

@@ -1,30 +1,37 @@
-'use strict';
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable global-require */
+/* eslint-disable @typescript-eslint/no-var-requires */
 
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
+
 const basename = path.basename(__filename);
-const config = require('../../database/config/config');
+const config = require('../../database/config/config.js');
+
 const db: any = {};
 
 const sequelize = new Sequelize(
   config.database,
   config.username,
   config.password,
-  config
+  config,
 );
 
-fs
-  .readdirSync(__dirname)
-  .filter((file: string) => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.ts');
-  })
+fs.readdirSync(__dirname)
+  .filter(
+    (file: string) =>
+      file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.ts',
+  )
   .forEach((file: any) => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+    const model = require(path.join(__dirname, file))(
+      sequelize,
+      Sequelize.DataTypes,
+    );
     db[model.name] = model;
   });
 
-Object.keys(db).forEach(modelName => {
+Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }

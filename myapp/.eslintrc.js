@@ -6,7 +6,7 @@ module.exports = {
     "airbnb",
     "plugin:@typescript-eslint/recommended",
     "prettier",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -15,7 +15,7 @@ module.exports = {
       "jsx": true
     },
     "ecmaVersion": 2018,
-    "project": "./tsconfig.json",
+    // "project": ["./tsconfig.json"],
     "sourceType": "module"
   },
   "plugins": [
@@ -24,6 +24,7 @@ module.exports = {
     "@typescript-eslint",
     "prettier"
   ],
+  "ignorePatterns": ["temp.js", ".eslintrc.js", "**/*.js", "/node_modules"],
   "rules": {
     "prettier/prettier": "error",
     "react-hooks/rules-of-hooks": "error",
@@ -45,6 +46,16 @@ module.exports = {
         "ts": "never",
         "tsx": "never"
       }
+    ],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies":
+        ["**/*.spec.ts", "**/*.spec.tsx"]
+      }
+    ],
+    "import/no-extraneous-dependencies": [
+      "error", {"devDependencies": true}
     ]
   },
   "settings": {
@@ -52,7 +63,4 @@ module.exports = {
       "typescript": {}
     }
   },
-  "include": {
-    ignorePatterns: ['.eslintrc.js'],
-  }
 }

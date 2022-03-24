@@ -2,10 +2,19 @@ import { Request, Response } from 'express';
 import db from '../models';
 import { UserAttributes } from '../models/User';
 
+interface IUserCredentials {
+  username: string;
+  email: string;
+  password: string;
+}
+
 const { User } = db;
 
-const LoginController = {
-  async createUser(req: Request, res: Response) {
+const AuthController = {
+  async createUser(
+    req: Request<unknown, unknown, IUserCredentials>,
+    res: Response,
+  ) {
     const { username, email, password } = req.body;
     try {
       const [user, created] = await User.findOrCreate({
@@ -22,6 +31,7 @@ const LoginController = {
       }
 
       const { session } = req;
+      session.authenticated = true;
       session.userId = user.id;
 
       return res.json({ user, session });
@@ -36,7 +46,7 @@ const LoginController = {
       where: { email },
     });
 
-    if (req.session.userId) {
+    if (req.session.authenticated) {
       return res.redirect('/');
     }
 
@@ -48,12 +58,16 @@ const LoginController = {
 
     if (email === user.email && isPasswordValid) {
       const { session } = req;
+      session.authenticated = true;
       session.userId = user.id;
-      return res.json(user);
+      return res.json(session);
     }
 
     return res.status(401).json({ message: 'Invalid Username/Password' });
   },
+  logout(req: Request, res: Response) {
+    req.session.destroy(() => res.redirect('/'));
+  },
 };
 
-export default LoginController;
+export default AuthController;

@@ -1,4 +1,5 @@
 import request from 'supertest';
+import redisClient from '../../src/redisConfig';
 import truncate from '../utils/truncate';
 import factories, { userInputs } from '../utils/factories';
 import app from '../../src/app';
@@ -9,6 +10,7 @@ describe('Login', () => {
   beforeEach(async () => {
     await truncate();
   }, 15000);
+  afterAll(() => redisClient.disconnect());
   it('should return info from model instance/save', async () => {
     const user: UserAttributes = await factories.create('User');
 
@@ -99,7 +101,15 @@ describe('Login', () => {
     const response = await agent
       .post('/login')
       .send({ email: user.email, password: user.password });
-
     expect(response.redirect).toBe(true);
+  });
+  it('/logout should logout user', async () => {
+    const user = userInputs();
+    const agent = request.agent(app);
+
+    await agent.post('/signup').send(user);
+    const response = await agent.get('/logout');
+
+    expect(response.headers['set-cookie']).toBe(undefined);
   });
 });
