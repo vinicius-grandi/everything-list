@@ -2,10 +2,19 @@ import { Request, Response } from 'express';
 import db from '../models';
 import { UserAttributes } from '../models/User';
 
+interface IUserCredentials {
+  username: string;
+  email: string;
+  password: string;
+}
+
 const { User } = db;
 
 const AuthController = {
-  async createUser(req: Request, res: Response) {
+  async createUser(
+    req: Request<unknown, unknown, IUserCredentials>,
+    res: Response,
+  ) {
     const { username, email, password } = req.body;
     try {
       const [user, created] = await User.findOrCreate({

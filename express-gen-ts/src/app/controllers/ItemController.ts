@@ -2,6 +2,15 @@ import { Request, Response } from 'express';
 import sequelize from 'sequelize';
 import db from '../models';
 
+interface IUserReview {
+  rating: string;
+  message: string;
+}
+
+interface Params {
+  id: string;
+}
+
 const { Review } = db;
 
 const ItemController = {
@@ -40,7 +49,7 @@ const ItemController = {
     });
   },
 
-  async sendRating(req: Request, res: Response) {
+  async sendRating(req: Request<Params, unknown, IUserReview>, res: Response) {
     const listName = req.baseUrl.slice(1);
     const modelName = listName.charAt(0).toUpperCase() + listName.slice(1, -1);
     const { rating, message } = req.body;
