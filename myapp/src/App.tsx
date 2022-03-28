@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Search, Menu } from 'react-feather';
 import './index.css';
-import { Route, Routes, HashRouter, Link } from 'react-router-dom';
+import { Route, Routes, BrowserRouter, Link } from 'react-router-dom';
 import Weapons from './views/Weapons';
 
 const Header = styled.header`
@@ -87,7 +87,7 @@ const Footer = styled.footer`
 
 function App(): JSX.Element {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Header>
         <Link to="/">
           <img
@@ -107,7 +107,7 @@ function App(): JSX.Element {
       <Footer>
         <p>Made by Vinicius Grandi</p>
       </Footer>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 

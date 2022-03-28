@@ -11,9 +11,7 @@ export async function getSchedule(page: number): Promise<Animes> {
   return data;
 }
 
-export async function getAnimeSearch(
-  queryParams: string,
-): Promise<Animes | Anime[]> {
+export async function getAnimeSearch(queryParams: string): Promise<Anime[]> {
   const res = await axios.get(`https://api.jikan.moe/v4/anime${queryParams}`);
   const {
     data: { data },
@@ -21,9 +19,7 @@ export async function getAnimeSearch(
   return data;
 }
 
-export async function getMangaSearch(
-  queryParams: string,
-): Promise<Animes | Anime[]> {
+export async function getMangaSearch(queryParams: string): Promise<Anime[]> {
   const res = await axios.get(`https://api.jikan.moe/v4/manga${queryParams}`);
   const {
     data: { data },

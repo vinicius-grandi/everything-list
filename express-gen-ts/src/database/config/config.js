@@ -18,7 +18,7 @@ module.exports = {
   password: process.env.DB_PASS ?? '',
   logging: false,
   host: process.env.DB_HOST ?? '',
-  dialectOptions: undefined ?? {
+  dialectOptions: process.env.DB_SQL ?? {
     ssl: {
       require: true,
       rejectUnauthorized: false, // <<<<<<< YOU NEED THIS
