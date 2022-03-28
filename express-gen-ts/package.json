@@ -22,6 +22,7 @@
     "exec": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./src"
   },
   "dependencies": {
+    "@types/fs-extra": "^9.0.13",
     "@types/ioredis": "^4.28.10",
     "axios": "^0.26.1",
     "bcryptjs": "^2.4.3",
@@ -45,7 +46,6 @@
     "@types/express": "^4.17.13",
     "@types/express-session": "^1.17.4",
     "@types/factory-girl": "^5.0.8",
-    "@types/fs-extra": "^9.0.13",
     "@types/jest": "^27.4.1",
     "@types/node": "^17.0.21",
     "@types/supertest": "^2.0.11",

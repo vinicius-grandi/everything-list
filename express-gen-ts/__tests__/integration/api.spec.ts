@@ -8,6 +8,6 @@ import redisClient from '../../src/redisConfig';
 describe('api', () => {
   it('should retrieve anime from route /animes using 3rd party api', async () => {
     const response = await request(app).get('/animes');
-    expect(response.body).toBe()
+    expect(response.body.data[0].title).toBe('!NVADE SHOW!');
   });
 });
