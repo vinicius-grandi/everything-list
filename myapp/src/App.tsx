@@ -2,8 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { Search, Menu } from 'react-feather';
 import './index.css';
-import { Route, Routes, BrowserRouter, Link } from 'react-router-dom';
+import { Route, Routes, HashRouter, Link } from 'react-router-dom';
 import Weapons from './views/Weapons';
+import SearchBar from './components/SearchBar';
 
 const Header = styled.header`
   @media screen and (min-width: 1001px) {
@@ -87,7 +88,7 @@ const Footer = styled.footer`
 
 function App(): JSX.Element {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Header>
         <Link to="/">
           <img
@@ -96,7 +97,7 @@ function App(): JSX.Element {
             className="logo"
           />
         </Link>
-        <input type="text" className="search-bar" />
+        <SearchBar />
         <Search color="#f6f6f6" className="search-icon" />
         <Menu color="#f6f6f6" className="menu-icon" />
       </Header>
@@ -107,7 +108,7 @@ function App(): JSX.Element {
       <Footer>
         <p>Made by Vinicius Grandi</p>
       </Footer>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

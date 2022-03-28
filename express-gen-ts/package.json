@@ -1,6 +1,7 @@
 {
   "name": "express-gen-ts",
   "version": "0.0.0",
+  "main": "src/index.ts",
   "scripts": {
     "build": "./node_modules/.bin/ts-node build.ts",
     "db:migrate": "tsc && cross-env NODE_ENV=test sequelize db:migrate",
@@ -16,10 +17,12 @@
       "src"
     ],
     "ext": "ts, html",
+    "execMap": {
+      "ts": "ts-node --files"
+    },
     "ignore": [
       "src/public"
-    ],
-    "exec": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./src"
+    ]
   },
   "dependencies": {
     "@types/fs-extra": "^9.0.13",
