@@ -49,6 +49,7 @@
     "fetch-blob": "^3.1.5",
     "history": "^5.3.0",
     "http-proxy-middleware": "^2.0.4",
+    "jest-fetch-mock": "^3.0.3",
     "node-fetch": "^3.2.3",
     "querystring": "^0.2.1",
     "react": "^17.0.2",

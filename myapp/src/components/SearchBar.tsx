@@ -1,4 +1,5 @@
 import React, { ChangeEventHandler, useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 type QueryItem = {
@@ -37,10 +38,9 @@ function SearchBar(): JSX.Element {
       });
       const searchResult = await response.json();
       setQueryItems(searchResult);
-      return;
     } catch (error) {
       if (error instanceof Error) {
-        console.error(`Error: ${error.message}`);
+        setQueryItems([]);
       }
     }
   };
@@ -48,9 +48,11 @@ function SearchBar(): JSX.Element {
   return (
     <div className="search-bar" role="search">
       <input type="text" onChange={handleSearch} role="searchbox" />
-      <SearchButton type="button" data-testid="search-btn">
-        Search
-      </SearchButton>
+      <Link to={`/search?q=${search}`}>
+        <SearchButton type="button" data-testid="search-btn">
+          Search
+        </SearchButton>
+      </Link>
       {queryItems.length !== 0 && (
         <ul data-testid="search-list">
           {queryItems.map((val) => (
