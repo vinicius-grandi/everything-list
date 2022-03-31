@@ -1,5 +1,12 @@
-import React, { useState } from 'react';
+import React, { ChangeEventHandler, useState } from 'react';
 import styled from 'styled-components';
+
+type QueryItem = {
+  list_name: string;
+  id: number;
+  name: string;
+  imagePath: string | null;
+} | null;
 
 const SearchButton = styled.button`
   border: 1px solid black;
@@ -18,31 +25,40 @@ const SearchButton = styled.button`
 
 function SearchBar(): JSX.Element {
   const [search, setSearch] = useState<string>('');
-  const handleSearch = async (): Promise<void> => {
+  const [queryItems, setQueryItems] = useState<QueryItem[]>([]);
+
+  const handleSearch = async ({
+    target: { value },
+  }: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+    setSearch(value);
     try {
-      const response = await fetch(`/search?q=${search}`, {
+      const response = await fetch(`/search/api?q=${value}`, {
         referrerPolicy: 'no-referrer',
       });
       const searchResult = await response.json();
-      console.log(searchResult);
+      setQueryItems(searchResult);
+      return;
     } catch (error) {
       if (error instanceof Error) {
-        throw new Error(`Error: ${error.message}`);
+        console.error(`Error: ${error.message}`);
       }
     }
   };
 
   return (
-    <>
-      <input
-        type="text"
-        onChange={(ev) => setSearch(ev.target.value)}
-        className="search-bar"
-      />
-      <SearchButton type="button" onClick={handleSearch}>
+    <div className="search-bar" role="search">
+      <input type="text" onChange={handleSearch} role="searchbox" />
+      <SearchButton type="button" data-testid="search-btn">
         Search
       </SearchButton>
-    </>
+      {queryItems.length !== 0 && (
+        <ul data-testid="search-list">
+          {queryItems.map((val) => (
+            <li key={val?.id}>{val?.name}</li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }
 
