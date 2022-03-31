@@ -108,8 +108,10 @@ const SearchController = {
         '&limit=1',
       )) as QueryItem;
 
+      console.log(weapon);
+
       queryResult.push(weapon, anime, manga);
-      return res.json(queryResult.filter((val) => val !== null));
+      return res.json(queryResult.filter((val) => val?.id !== undefined));
     }
     const methodsMap = new Map();
 
@@ -118,11 +120,11 @@ const SearchController = {
     methodsMap.set('an', this.getAnimeOrManga);
     methodsMap.set('wp', this.getWeapon);
 
-    const queryItems = await this.queryItem[filter](
+    const queryItems: QueryItem[] = await this.queryItem[filter](
       methodsMap.get(filter),
       query,
     );
-    return res.json(queryItems);
+    return res.json(queryItems.filter((val) => val?.id !== undefined));
   },
 };
 

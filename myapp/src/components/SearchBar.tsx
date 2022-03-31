@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, useState } from 'react';
+import React, { ChangeEventHandler, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -9,12 +9,16 @@ type QueryItem = {
   imagePath: string | null;
 } | null;
 
+const SearchList = styled.ul`
+  list-style-type: none;
+`;
+
+const QueryItem = styled.li``;
+
 const SearchButton = styled.button`
   border: 1px solid black;
   border-radius: 5px;
-  font-size: 1.2rem;
   padding: 0.5rem;
-  transform: translate(-140%, 0);
   background-color: #331e47;
   color: #f6f6f6;
 
@@ -28,37 +32,58 @@ function SearchBar(): JSX.Element {
   const [search, setSearch] = useState<string>('');
   const [queryItems, setQueryItems] = useState<QueryItem[]>([]);
 
-  const handleSearch = async ({
-    target: { value },
-  }: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
-    setSearch(value);
-    try {
-      const response = await fetch(`/search/api?q=${value}`, {
-        referrerPolicy: 'no-referrer',
-      });
-      const searchResult = await response.json();
-      setQueryItems(searchResult);
-    } catch (error) {
-      if (error instanceof Error) {
-        setQueryItems([]);
+  useEffect(() => {
+    const timeout = 3000;
+    if (search.length === 0) return setQueryItems([]);
+
+    async function handleSearch(): Promise<void> {
+      try {
+        const response = await fetch(`/search/api?q=${search}`, {
+          referrerPolicy: 'no-referrer',
+        });
+        const searchResult = await response.json();
+        setQueryItems(searchResult);
+      } catch (error) {
+        if (error instanceof Error) {
+          setQueryItems([]);
+        }
       }
     }
-  };
+
+    const to = setTimeout(() => handleSearch(), timeout);
+    return () => clearTimeout(to);
+  }, [search]);
 
   return (
-    <div className="search-bar" role="search">
-      <input type="text" onChange={handleSearch} role="searchbox" />
-      <Link to={`/search?q=${search}`}>
-        <SearchButton type="button" data-testid="search-btn">
-          Search
-        </SearchButton>
-      </Link>
+    <div className="search-box">
+      <div className="search-bar" role="search">
+        <input
+          type="text"
+          onChange={(ev) => setSearch(ev.target.value)}
+          role="searchbox"
+        />
+        <Link to={`/search?q=${search}`}>
+          <SearchButton type="button" data-testid="search-btn">
+            Search
+          </SearchButton>
+        </Link>
+      </div>
       {queryItems.length !== 0 && (
-        <ul data-testid="search-list">
+        <SearchList data-testid="search-list" className="search-list">
           {queryItems.map((val) => (
-            <li key={val?.id}>{val?.name}</li>
+            <QueryItem key={`${val?.list_name}-${val?.id}`}>
+              <img
+                src={
+                  val?.imagePath ??
+                  'https://via.placeholder.com/140x200?text=no+image'
+                }
+                alt={val?.name}
+              />
+
+              <p>{val?.name}</p>
+            </QueryItem>
           ))}
-        </ul>
+        </SearchList>
       )}
     </div>
   );

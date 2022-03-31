@@ -41,6 +41,6 @@ app.use(authRouter);
 app.use(searchRouter);
 app.use(noApiListRoutes, noApiListRouter);
 app.use(apiListRoutes, apiListRouter);
-app.use('/', express.static(resolve('..', 'myapp', 'build')));
+// app.use('/', express.static(resolve('..', 'myapp', 'build')));
 
 export default app;
