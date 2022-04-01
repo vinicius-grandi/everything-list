@@ -1,2 +1,2 @@
 # everything-list
- A app with everything in this world, where you can make your review
+ An app with everything in this condensed in tierlists.
