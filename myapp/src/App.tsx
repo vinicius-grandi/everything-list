@@ -5,6 +5,7 @@ import './index.css';
 import { Route, Routes, BrowserRouter, Link } from 'react-router-dom';
 import Weapons from './views/Weapons';
 import SearchBar from './components/SearchBar';
+import Home from './views/Home';
 
 const Header = styled.header`
   @media screen and (min-width: 1001px) {
@@ -118,6 +119,7 @@ function App(): JSX.Element {
         <Menu color="#f6f6f6" className="menu-icon" />
       </Header>
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/weapons" element={<Weapons />} />
         <Route path="/weapons?page=1" element={<Weapons />} />
       </Routes>

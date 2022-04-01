@@ -108,8 +108,6 @@ const SearchController = {
         '&limit=1',
       )) as QueryItem;
 
-      console.log(weapon);
-
       queryResult.push(weapon, anime, manga);
       return res.json(queryResult.filter((val) => val?.id !== undefined));
     }
