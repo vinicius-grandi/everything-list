@@ -2,6 +2,10 @@
   "name": "everything-list",
   "version": "1.0.0",
   "scripts": {
+    "start": "cd express-gen-ts && npm start",
+    "build:client": "cd myapp && npm run build",
+    "build:server": "cd express-gen-ts/src && npm run build",
+    "build": "npm run build:client && npm run build:server",
     "client": "cd myapp && npm start",
     "server": "cd express-gen-ts/src && npm run start:dev",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""

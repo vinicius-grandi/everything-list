@@ -76,7 +76,7 @@ function Weapons(): JSX.Element {
 
   return (
     <div>
-      <Title>Weapons</Title>
+      <Title data-testid="weapon-d-title">Weapons</Title>
       {weapons.length > 1 ? (
         <Main>
           {weapons.map((val) => (

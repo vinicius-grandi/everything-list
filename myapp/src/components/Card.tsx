@@ -33,7 +33,6 @@ const CardBody = styled.div`
   margin: 0.5rem;
   box-shadow: -2px 3px 5px rgba(0, 0, 0, 0.208);
   &:hover {
-    transform: scale(1.03);
     transition: 0.25s;
   }
   img {

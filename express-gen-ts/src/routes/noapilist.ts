@@ -4,10 +4,10 @@ import ItemController from '../app/controllers/ItemController';
 
 const routes = Router();
 
-routes.get('/:id', ItemController.getItem);
+routes.get('/api/:id', ItemController.getItem);
 
 routes.use(auth);
-routes.post('/:id', ItemController.sendRating.bind(ItemController));
-routes.put('/:id', ItemController.updateRating.bind(ItemController));
+routes.post('/api/:id', ItemController.sendRating.bind(ItemController));
+routes.put('/api/:id', ItemController.updateRating.bind(ItemController));
 
 export default routes;

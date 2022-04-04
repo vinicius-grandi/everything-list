@@ -17,12 +17,19 @@ const ItemController = {
   async getItem(req: Request, res: Response) {
     const listName = req.baseUrl.slice(1);
     const modelName = listName.charAt(0).toUpperCase() + listName.slice(1, -1);
-    const item = await db[modelName].findByPk(req.params.id);
+    try {
+      const item = await db[modelName].findByPk(req.params.id);
 
-    if (!item) {
-      return res.status(404).json({ error: 'item not found' });
+      if (!item) {
+        return res.status(404).json({ error: 'item not found' });
+      }
+      return res.json(item);
+    } catch (err) {
+      if (err instanceof Error) {
+        return res.status(400).json({ error: 'bad request' });
+      }
+      return res.send();
     }
-    return res.json(item);
   },
 
   async setItemRating(item: any, id: string, listName: string) {

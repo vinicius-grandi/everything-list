@@ -18,6 +18,7 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint', 'prettier'],
+  ignorePatterns: '/dist',
   rules: {
     'import/no-import-module-exports': 'off',
     '@typescript-eslint/no-explicit-any': 'off',

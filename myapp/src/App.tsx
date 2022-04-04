@@ -2,8 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { Search, Menu } from 'react-feather';
 import './index.css';
-import { Route, Routes, HashRouter, Link } from 'react-router-dom';
+import { Route, Routes, BrowserRouter, Link } from 'react-router-dom';
 import Weapons from './views/Weapons';
+import SearchBar from './components/SearchBar';
+import Home from './views/Home';
 
 const Header = styled.header`
   @media screen and (min-width: 1001px) {
@@ -11,10 +13,15 @@ const Header = styled.header`
       display: none;
     }
 
-    .search-bar {
+    .search-bar,
+    .search-box {
       flex-grow: 1;
       height: 1.7rem;
-      margin: 2rem;
+      margin: 0rem 2rem;
+    }
+
+    .search-bar input {
+      font-size: 1.2rem;
     }
   }
 
@@ -27,15 +34,16 @@ const Header = styled.header`
       transform: scale(1.2);
     }
 
-    .search-bar {
+    .search-bar,
+    .search-box {
       flex-grow: 1;
       height: 1.7rem;
-      margin: 2rem;
+      margin: 0rem 2rem;
     }
   }
 
   @media screen and (max-width: 599px) {
-    .search-bar {
+    .search-box {
       display: none;
     }
 
@@ -74,6 +82,16 @@ const Header = styled.header`
       transition: 0.25s;
     }
   }
+
+  .search-bar {
+    display: flex;
+    align-items: center;
+  }
+
+  .search-bar input {
+    width: 100%;
+    height: 80%;
+  }
 `;
 
 const Footer = styled.footer`
@@ -87,7 +105,7 @@ const Footer = styled.footer`
 
 function App(): JSX.Element {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Header>
         <Link to="/">
           <img
@@ -96,18 +114,19 @@ function App(): JSX.Element {
             className="logo"
           />
         </Link>
-        <input type="text" className="search-bar" />
+        <SearchBar />
         <Search color="#f6f6f6" className="search-icon" />
         <Menu color="#f6f6f6" className="menu-icon" />
       </Header>
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/weapons" element={<Weapons />} />
         <Route path="/weapons?page=1" element={<Weapons />} />
       </Routes>
       <Footer>
         <p>Made by Vinicius Grandi</p>
       </Footer>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 

@@ -17,11 +17,12 @@ const sequelize = new Sequelize(
   config.password,
   config,
 );
-
 fs.readdirSync(__dirname)
   .filter(
     (file: string) =>
-      file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.ts',
+      file.indexOf('.') !== 0 &&
+      file !== basename &&
+      file.slice(-3) === path.extname(__filename),
   )
   .forEach((file: any) => {
     const model = require(path.join(__dirname, file))(
