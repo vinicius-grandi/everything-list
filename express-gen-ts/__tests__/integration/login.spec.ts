@@ -4,7 +4,7 @@ import truncate from '../utils/truncate';
 import factories, { userInputs } from '../utils/factories';
 import app from '../../src/app';
 import db from '../../src/app/models';
-import { UserAttributes } from '../../src/app/models/User';
+import type { UserAttributes } from '../../src/app/models/User';
 
 describe('Login', () => {
   beforeEach(async () => {
