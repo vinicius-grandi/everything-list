@@ -20,7 +20,7 @@ describe('reviews', () => {
       list_name: 'animes',
     });
 
-    const response = await request(app).get('/api/reviews?ln=animes&id=1');
+    const response = await request(app).get('/reviews/api?ln=animes&id=1');
 
     expect(response.body[0].message).toBe(review.message);
   });

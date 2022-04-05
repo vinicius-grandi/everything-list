@@ -24,12 +24,6 @@
       "src/public"
     ]
   },
-  "jest": {
-    "automock": false,
-    "setupFiles": [
-      "./setupJest.js"
-    ]
-  },
   "dependencies": {
     "@types/fs-extra": "^9.0.13",
     "@types/ioredis": "^4.28.10",
