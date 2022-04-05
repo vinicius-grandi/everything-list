@@ -20,7 +20,10 @@ const rateLimiter = rateLimit({
 });
 routes.use(rateLimiter);
 routes.get('/api', ApiController.getItems.bind(ApiController));
+routes.get('/api/:id', ApiController.getAnimeOrManga.bind(ApiController));
+routes.get('/api/:id/comments', ApiController.getComments.bind(ApiController));
 
+// you must authenticate before review
 routes.use(auth);
 routes.post('/api/:id', ItemController.sendRating.bind(ItemController));
 routes.put('/api/:id', ItemController.updateRating.bind(ItemController));
