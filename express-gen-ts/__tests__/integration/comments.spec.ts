@@ -27,6 +27,6 @@ describe('reviews', () => {
 
     expect(response.body[0].message).toBe(review.message);
     expect(response.body[0].review_user.username).toBe(user.username);
-    expect(response.body[0].review_user.id).toBeUndefined();
+    expect(response.body[0].review_user.password).toBeUndefined();
   });
 });

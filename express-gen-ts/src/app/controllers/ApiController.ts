@@ -79,7 +79,7 @@ const ApiController = {
       include: {
         model: db.User,
         as: 'review_user',
-        attributes: ['username'],
+        attributes: ['id, username'],
       },
     });
 
