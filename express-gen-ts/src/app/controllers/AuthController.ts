@@ -15,6 +15,7 @@ const AuthController = {
     req: Request<unknown, unknown, IUserCredentials>,
     res: Response,
   ) {
+    console.log('jojo');
     const { username, email, password } = req.body;
     try {
       const [user, created] = await User.findOrCreate({
@@ -31,8 +32,13 @@ const AuthController = {
       }
 
       const { session } = req;
-      session.authenticated = true;
-      session.userId = user.id;
+
+      try {
+        session.authenticated = true;
+        session.userId = user.id;
+      } catch (err) {
+        console.error(err.message);
+      }
 
       return res.json({ user, session });
     } catch (err) {

@@ -13,13 +13,13 @@ describe('reviews', () => {
   it('should get all info about weapon from item details page', async () => {
     const weapon: WeaponAttributes = await factories.create('Weapon');
 
-    const response = await request(app).get('/weapons/1');
+    const response = await request(app).get('/weapons/api/1');
 
     expect(response.body.name).toBe(weapon.name);
   });
   it('should not let you rate weapon when not logged in', async () => {
     await factories.create('Weapon');
-    const response = await request(app).post('/weapons/1').send({
+    const response = await request(app).post('/weapons/api/1').send({
       rating: 2,
     });
 
@@ -38,21 +38,30 @@ describe('reviews', () => {
   });
   it('should let you rate weapon when logged in', async () => {
     await factories.create('Weapon');
-    await factories.create('List');
+    try {
+      await factories.create('List');
+    } catch (err) {
+      console.error(err.message);
+    }
     const user = userInputs();
     const agent = request.agent(app);
     const rating = 2;
     const message = 'This is the best weapon';
 
-    await agent.post('/signup').send(user);
+    try {
+      const r = await agent.post('/signup').send(user);
+      console.log(r.body);
+    } catch (error) {
+      console.error(error.message);
+    }
 
-    const response = await agent.post('/weapons/1').send({
+    const response = await agent.post('/weapons/api/1').send({
       rating,
       message,
     });
     expect(response.body.review.rating).toBe(rating.toFixed(2));
     expect(response.body.review.message).toBe(message);
-  });
+  }, 100000);
   it('should not let you create a weapon twice or more', async () => {
     await factories.create('Weapon');
     await factories.create('List');
@@ -62,11 +71,11 @@ describe('reviews', () => {
 
     await agent.post('/signup').send(user);
 
-    await agent.post('/weapons/1').send({
+    await agent.post('/weapons/api/1').send({
       rating,
     });
 
-    const response = await agent.post('/weapons/1').send({
+    const response = await agent.post('/weapons/api/1').send({
       rating,
     });
 
@@ -81,11 +90,11 @@ describe('reviews', () => {
     const rating2 = 10;
 
     await agent.post('/signup').send(user);
-    await agent.post('/weapons/1').send({
+    await agent.post('/weapons/api/1').send({
       rating: rating1,
     });
 
-    const response = await agent.put('/weapons/1').send({
+    const response = await agent.put('/weapons/api/1').send({
       rating: rating2.toFixed(2),
     });
 
@@ -100,13 +109,13 @@ describe('reviews', () => {
     const average = ((5 + 10) / 2).toFixed(2);
 
     await agent.post('/signup').send(user1);
-    await agent.post('/weapons/1').send({
+    await agent.post('/weapons/api/1').send({
       rating: 5,
       message: 'jo',
     });
     await agent.get('/logout');
     await agent.post('/signup').send(user2);
-    const response = await agent.post('/weapons/1').send({
+    const response = await agent.post('/weapons/api/1').send({
       rating: 10,
       message: 'jojo',
     });
@@ -125,7 +134,7 @@ describe('reviews', () => {
 
     await agent.post('/signup').send(user);
 
-    const response = await agent.post(`/animes/${id}`).send({
+    const response = await agent.post(`/animes/api/${id}`).send({
       rating,
       message,
     });

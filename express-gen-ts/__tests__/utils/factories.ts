@@ -1,5 +1,6 @@
 import { factory } from 'factory-girl';
 import { faker } from '@faker-js/faker';
+
 import db from '../../src/app/models';
 
 const { User, Weapon, Review, List, Anime } = db;

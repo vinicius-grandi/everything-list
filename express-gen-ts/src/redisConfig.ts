@@ -14,4 +14,10 @@ const redisClient = new Redis({
   },
 });
 
+redisClient.on('error', (err) => {
+  process.nextTick(() => {
+    console.error(err);
+  });
+});
+
 export default redisClient;

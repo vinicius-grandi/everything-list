@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const { resolve } = require('path');
-
 module.exports = {
   env: {
     es6: true,
@@ -13,7 +10,7 @@ module.exports = {
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    tsconfigRootDir: resolve(__dirname),
+    tsconfigRootDir: __dirname,
     ecmaVersion: 2018,
     sourceType: 'module',
   },

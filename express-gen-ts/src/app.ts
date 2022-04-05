@@ -1,4 +1,4 @@
-import { resolve } from 'path';
+// import { resolve } from 'path';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import sessions from 'express-session';
@@ -8,6 +8,7 @@ import redisClient from './redisConfig';
 
 // importing routes and setting routes
 import authRouter from './routes/auth';
+import userRouter from './routes/user';
 import searchRouter from './routes/search';
 import noApiListRouter from './routes/noapilist';
 import apiListRouter from './routes/apilist';
@@ -29,7 +30,7 @@ const session = sessions({
   saveUninitialized: false,
   store: new RedisStore({ client: redisClient }),
   cookie: {
-    httpOnly: true,
+    // httpOnly: true,
     maxAge: expirationTime,
   },
 });
@@ -38,6 +39,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(session);
 app.use(authRouter);
+app.use('/profiles', userRouter);
 app.use(searchRouter);
 app.use(noApiListRoutes, noApiListRouter);
 app.use(apiListRoutes, apiListRouter);
