@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import redisClient from '../../redisConfig';
 import db from '../models';
 import { UserAttributes } from '../models/User';
 
@@ -15,7 +16,6 @@ const AuthController = {
     req: Request<unknown, unknown, IUserCredentials>,
     res: Response,
   ) {
-    console.log('jojo');
     const { username, email, password } = req.body;
     try {
       const [user, created] = await User.findOrCreate({
@@ -30,15 +30,14 @@ const AuthController = {
       if (!created) {
         return res.status(409).send({ msg: 'User Already Exists' });
       }
-
+      // creating session
       const { session } = req;
+      session.authenticated = true;
+      session.userId = user.id;
 
-      try {
-        session.authenticated = true;
-        session.userId = user.id;
-      } catch (err) {
-        console.error(err.message);
-      }
+      // saving in redis
+      const userStr = JSON.stringify(user);
+      redisClient.set(`user-${user.id}`, userStr);
 
       return res.json({ user, session });
     } catch (err) {

@@ -2,8 +2,10 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import sessions from 'express-session';
+import fileUpload from 'express-fileupload';
 import connectRedis from 'connect-redis';
 import redisClient from './redisConfig';
+import './app/models';
 // import helmet from 'helmet';
 
 // importing routes and setting routes
@@ -35,9 +37,19 @@ const session = sessions({
   },
 });
 
+// handling upload
+const fileSize = 50 * 1024 * 1024;
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(session);
+app.use(
+  fileUpload({
+    limits: {
+      fileSize,
+    },
+  }),
+);
 app.use(authRouter);
 app.use('/profiles', userRouter);
 app.use(searchRouter);

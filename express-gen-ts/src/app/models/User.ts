@@ -7,6 +7,7 @@ export interface UserAttributes {
   password: string;
   email: string;
   password_hash: string;
+  profile_picture: string;
   checkPassword(password: string): Promise<boolean>;
 }
 
@@ -19,6 +20,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
     password!: string;
 
     email!: string;
+
+    profile_picture!: string;
 
     password_hash!: string;
 
@@ -39,6 +42,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     email: DataTypes.STRING,
     password: DataTypes.VIRTUAL,
     password_hash: DataTypes.STRING,
+    profile_picture: DataTypes.STRING,
   };
 
   User.init(attributes, {

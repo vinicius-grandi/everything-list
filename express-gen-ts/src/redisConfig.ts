@@ -9,9 +9,6 @@ const redisClient = new Redis({
   host: process.env.NOSQL_DB_HOST,
   port: Number(process.env.NOSQL_DB_PORT),
   password: process.env.NOSQL_DB_PASS,
-  tls: {
-    rejectUnauthorized: false,
-  },
 });
 
 redisClient.on('error', (err) => {

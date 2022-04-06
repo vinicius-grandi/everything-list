@@ -47,21 +47,14 @@ describe('reviews', () => {
     const agent = request.agent(app);
     const rating = 2;
     const message = 'This is the best weapon';
-
-    try {
-      const r = await agent.post('/signup').send(user);
-      console.log(r.body);
-    } catch (error) {
-      console.error(error.message);
-    }
-
+    const r = await agent.post('/signup').send(user);
     const response = await agent.post('/weapons/api/1').send({
       rating,
       message,
     });
     expect(response.body.review.rating).toBe(rating.toFixed(2));
     expect(response.body.review.message).toBe(message);
-  }, 100000);
+  });
   it('should not let you create a weapon twice or more', async () => {
     await factories.create('Weapon');
     await factories.create('List');
