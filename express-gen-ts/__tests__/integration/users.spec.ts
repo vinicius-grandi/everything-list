@@ -19,6 +19,8 @@ describe('users', () => {
       .post('/profiles/api/0')
       .attach('profilePicture', './test.png');
 
-    expect(response.body).toBe(/(https:\/\/i.ibb.co\/)*/);
+    const regex = /^(https:\/\/i\.ibb\.co\/).*/;
+
+    expect(response.body).toMatch(regex);
   });
 });
