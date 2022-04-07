@@ -8,6 +8,7 @@ import type { UserAttributes } from '../../src/app/models/User';
 
 describe('Login', () => {
   beforeEach(async () => {
+    await redisClient.flushall();
     await truncate();
   }, 15000);
   afterAll(() => redisClient.disconnect());

@@ -1,12 +1,11 @@
 import request from 'supertest';
 import truncate from '../utils/truncate';
-import factories, { userInputs } from '../utils/factories';
 import app from '../../src/app';
-import type { WeaponAttributes } from '../../src/app/models/Weapon';
 import redisClient from '../../src/redisConfig';
 
 describe('api', () => {
   beforeEach(async () => {
+    await redisClient.flushall();
     await truncate();
   }, 15000);
   afterAll(() => redisClient.disconnect());

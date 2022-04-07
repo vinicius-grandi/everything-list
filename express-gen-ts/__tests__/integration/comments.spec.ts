@@ -8,6 +8,7 @@ import { UserAttributes } from '../../src/app/models/User';
 
 describe('reviews', () => {
   beforeEach(async () => {
+    await redisClient.flushall();
     await truncate();
   }, 15000);
   afterAll(() => redisClient.disconnect());

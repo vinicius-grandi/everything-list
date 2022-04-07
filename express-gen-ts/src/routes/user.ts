@@ -5,6 +5,7 @@ import auth from '../auth/auth';
 const routes = Router();
 
 routes.use(auth);
-routes.post('/api/0', UserController.createProfilePicture);
+routes.get('/api/0', UserController.getUserInfo);
+routes.put('/api/0', UserController.updateProfilePicture);
 
 export default routes;

@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
-import redisClient from '../../redisConfig';
 import db from '../models';
-import { UserAttributes } from '../models/User';
 
 interface IUserCredentials {
   username: string;
@@ -12,6 +10,10 @@ interface IUserCredentials {
 const { User } = db;
 
 const AuthController = {
+  // async createSession(user: any, s: Session & Partial<SessionData>) {
+  //   const session = s;
+  //   session.authenticated = true;
+  // },
   async createUser(
     req: Request<unknown, unknown, IUserCredentials>,
     res: Response,
@@ -34,10 +36,11 @@ const AuthController = {
       const { session } = req;
       session.authenticated = true;
       session.userId = user.id;
-
-      // saving in redis
-      const userStr = JSON.stringify(user);
-      redisClient.set(`user-${user.id}`, userStr);
+      session.user = {
+        ...user.dataValues,
+        password: undefined,
+        password_hash: undefined,
+      };
 
       return res.json({ user, session });
     } catch (err) {
@@ -47,7 +50,7 @@ const AuthController = {
 
   async login(req: Request, res: Response) {
     const { email, password } = req.body;
-    const user: UserAttributes = await User.findOne({
+    const user = await User.findOne({
       where: { email },
     });
 
@@ -65,6 +68,12 @@ const AuthController = {
       const { session } = req;
       session.authenticated = true;
       session.userId = user.id;
+      session.user = {
+        ...user.dataValues,
+        password: undefined,
+        password_hash: undefined,
+      };
+
       return res.json(session);
     }
 

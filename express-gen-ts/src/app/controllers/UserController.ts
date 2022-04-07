@@ -44,7 +44,13 @@ type ImgbbResponse = {
 };
 
 const UserController = {
-  async createProfilePicture(req: Request, res: Response) {
+  async getUserInfo(req: Request, res: Response) {
+    const { user } = req.session;
+
+    return res.json(user);
+  },
+
+  async updateProfilePicture(req: Request, res: Response) {
     const { profilePicture } = req.files as any;
     const body = new FormData();
     body.append('key', process.env.IMGBB_API_KEY ?? '');
@@ -63,12 +69,8 @@ const UserController = {
           .json({ error: 'could not upload picture image' });
       }
 
+      // finding and updating user
       const user = await User.findByPk(req.session.userId);
-
-      if (!user) {
-        return res.status(404).json({ error: 'user not found' });
-      }
-
       await user.update({ profile_picture: response.data.data.url });
 
       return res.json(response.data.data.url);

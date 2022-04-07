@@ -7,6 +7,7 @@ import redisClient from '../../src/redisConfig';
 
 describe('reviews', () => {
   beforeEach(async () => {
+    await redisClient.flushall();
     await truncate();
   }, 15000);
   afterAll(() => redisClient.disconnect());
@@ -38,16 +39,12 @@ describe('reviews', () => {
   });
   it('should let you rate weapon when logged in', async () => {
     await factories.create('Weapon');
-    try {
-      await factories.create('List');
-    } catch (err) {
-      console.error(err.message);
-    }
+    await factories.create('List');
     const user = userInputs();
     const agent = request.agent(app);
     const rating = 2;
     const message = 'This is the best weapon';
-    const r = await agent.post('/signup').send(user);
+    await agent.post('/signup').send(user);
     const response = await agent.post('/weapons/api/1').send({
       rating,
       message,
