@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import logger from 'jet-logger';
 import { getAnimeSearch, getMangaSearch } from '../../services/animes/jikanapi';
 import getQueryItem from '../../utils/db/getQueryItem';
 import db from '../models';
@@ -70,20 +71,25 @@ const ApiController = {
   async getComments(req: Request, res: Response) {
     const { id } = req.params;
     const listName = req.baseUrl.slice(1);
-    const reviews = await db.Review.findAll({
-      where: {
-        list_name: listName,
-        item_id: id,
-      },
-      attributes: ['message', 'rating', 'created_at', 'updated_at'],
-      include: {
-        model: db.User,
-        as: 'review_user',
-        attributes: ['id, username'],
-      },
-    });
+    try {
+      const reviews = await db.Review.findAll({
+        where: {
+          list_name: listName,
+          item_id: id,
+        },
+        attributes: ['message', 'rating', 'created_at', 'updated_at'],
+        include: {
+          model: db.User,
+          as: 'review_user',
+          attributes: ['id', 'username'],
+        },
+      });
 
-    res.json(reviews);
+      return res.json(reviews);
+    } catch (error) {
+      logger.err(error);
+      return res.status(500).json({ error: 'internal server error' });
+    }
   },
 };
 
