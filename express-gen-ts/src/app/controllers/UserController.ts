@@ -4,7 +4,7 @@ import type { Request, Response } from 'express';
 import logger from 'jet-logger';
 import db from '../models';
 
-const { User } = db;
+const { User, Review } = db;
 
 type ImgbbResponse = {
   data: {
@@ -45,9 +45,11 @@ type ImgbbResponse = {
 
 const UserController = {
   async getUserInfo(req: Request, res: Response) {
-    const { user } = req.session;
+    const { user, userId } = req.session;
 
-    return res.json(user);
+    const reviews = await Review.findAll({ where: { user_id: userId } });
+
+    return res.json({ ...user, reviews });
   },
 
   async updateProfilePicture(req: Request, res: Response) {

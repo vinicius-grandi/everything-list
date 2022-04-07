@@ -1,8 +1,9 @@
 import request from 'supertest';
 import redisClient from '../../src/redisConfig';
 import truncate from '../utils/truncate';
-import { userInputs } from '../utils/factories';
+import factories, { userInputs } from '../utils/factories';
 import app from '../../src/app';
+import { ReviewAttributes } from '../../src/app/models/Review';
 
 describe('users', () => {
   beforeEach(async () => {
@@ -24,16 +25,20 @@ describe('users', () => {
 
     expect(response.body).toMatch(regex);
   });
-  it('should get info from logged user ', async () => {
+  it('should get info from logged user', async () => {
     const user = userInputs();
+    await factories.create('Weapon');
+    await factories.create('List');
     const agent = request.agent(app);
 
     await agent.post('/signup').send(user);
+    const review: ReviewAttributes = await factories.create('Review');
 
     const response = await agent.get('/profiles/api/0');
 
     expect(response.status).toBe(200);
     expect(response.body.password).toBeUndefined();
     expect(response.body.username).toBe(user.username);
+    expect(response.body.reviews[0].message).toBe(review.message);
   });
 });
