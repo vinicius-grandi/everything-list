@@ -24,9 +24,8 @@ const app = express();
 // app.set('trust proxy', 1);
 
 // creating sessions
-console.log(process.env.NODE_ENV);
 const RedisStore = connectRedis(sessions);
-const expirationTime = 1000 * 60;
+const expirationTime = 1000 * 60 * 30;
 const session = sessions({
   secret: process.env.SESSION_SECRET ?? '',
   resave: false,
@@ -51,11 +50,11 @@ app.use(
     },
   }),
 );
-app.use('/api', authRouter);
-app.use('/profiles', userRouter);
 app.use(searchRouter);
 app.use(noApiListRoutes, noApiListRouter);
 app.use(apiListRoutes, apiListRouter);
+app.use('/profiles', userRouter);
+app.use('/api', authRouter);
 // app.use('/', express.static(resolve('..', 'myapp', 'build')));
 
 export default app;

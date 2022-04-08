@@ -11,6 +11,12 @@ interface IUserCredentials {
 const { User } = db;
 
 const AuthController = {
+  isUserAuth(req: Request, res: Response) {
+    if (req.session.authenticated) {
+      return res.json({ auth: true });
+    }
+    return res.json({ auth: false });
+  },
   async createUser(
     req: Request<unknown, unknown, IUserCredentials>,
     res: Response,

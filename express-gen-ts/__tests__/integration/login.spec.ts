@@ -5,7 +5,12 @@ import factories, { userInputs } from '../utils/factories';
 import app from '../../src/app';
 import db from '../../src/app/models';
 import type { UserAttributes } from '../../src/app/models/User';
-import { logoutRoute, signupRoute, loginRoute } from '../utils/routes';
+import {
+  logoutRoute,
+  signupRoute,
+  loginRoute,
+  isUserAuthRoute,
+} from '../utils/routes';
 
 describe('Login', () => {
   beforeEach(async () => {
@@ -113,5 +118,13 @@ describe('Login', () => {
     const response = await agent.get(logoutRoute);
 
     expect(response.headers['set-cookie']).toBe(undefined);
+  });
+
+  it('should return true when user is authenticated - route /api/is-user-auth', async () => {
+    const agent = request.agent(app);
+
+    const response = await agent.get(isUserAuthRoute);
+
+    expect(response.body.auth).toBe(false);
   });
 });
