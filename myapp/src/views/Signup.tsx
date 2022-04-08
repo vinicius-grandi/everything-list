@@ -1,0 +1,55 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
+// /signup
+// /login
+// /logout
+function Signup(): JSX.Element {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ): Promise<void | JSX.Element> => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    try {
+      const response = await fetch('/signup', {
+        method: 'POST',
+        body: new FormData(form),
+      });
+
+      return navigate('/', {
+        replace: true,
+      });
+    } catch (error) {
+      return <h1>Bad Request</h1>;
+    }
+  };
+  return (
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="username">
+        Username:
+        <input
+          type="text"
+          data-testid="username"
+          name="username"
+          id="username"
+        />
+      </label>
+      <label htmlFor="email">
+        <input type="email" data-testid="email" name="email" id="email" />
+      </label>
+      <label htmlFor="password">
+        <input
+          type="password"
+          data-testid="password"
+          name="password"
+          id="password"
+        />
+      </label>
+      <input type="submit" data-testid="submit" />
+    </form>
+  );
+}
+
+export default Signup;

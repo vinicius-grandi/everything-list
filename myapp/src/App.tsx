@@ -6,6 +6,7 @@ import { Route, Routes, BrowserRouter, Link } from 'react-router-dom';
 import Weapons from './views/Weapons';
 import SearchBar from './components/SearchBar';
 import Home from './views/Home';
+import Signup from './views/Signup';
 
 const Header = styled.header`
   @media screen and (min-width: 1001px) {
@@ -122,6 +123,7 @@ function App(): JSX.Element {
         <Route path="/" element={<Home />} />
         <Route path="/weapons" element={<Weapons />} />
         <Route path="/weapons?page=1" element={<Weapons />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
       <Footer>
         <p>Made by Vinicius Grandi</p>

@@ -3,14 +3,14 @@
  */
 import React from 'react';
 import { fireEvent, screen, act } from '@testing-library/react';
-import { FetchMock } from 'jest-fetch-mock';
+import type { FetchMock } from 'jest-fetch-mock';
 import SearchBar from '../SearchBar';
 import renderWithRouter from '../../views/__tests__/utils/renderWithRouter';
 
 const fetchMock = fetch as FetchMock;
 const mockFetchJson = (val: unknown) => (): Promise<any> =>
   Promise.resolve({
-    json: () => Promise.resolve(val),
+    json: () => Promise.resolve(),
   });
 
 describe('Search', () => {
