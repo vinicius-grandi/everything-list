@@ -1,36 +1,19 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/auth';
+import { useAuth } from '../contexts/AuthContext';
 
 // /signup
 // /login
 // /logout
 function Signup(): JSX.Element {
   const navigate = useNavigate();
-  const { auth } = useAuth();
+  const { setAuth } = useAuth();
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement>,
-  ): Promise<void | JSX.Element> => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    console.log(auth);
     const form = e.currentTarget;
-    try {
-      const response = await fetch('/api/signup', {
-        method: 'POST',
-        body: new FormData(form),
-      });
-
-      console.log(response.status);
-
-      return navigate('/', {
-        replace: true,
-      });
-    } catch (error) {
-      return navigate('/weapons', {
-        replace: true,
-      });
-    }
+      .catch(() => navigate('/bad-request', { replace: true }))
+      .then(() => navigate('/', { replace: true }));
   };
   return (
     <form onSubmit={handleSubmit}>
