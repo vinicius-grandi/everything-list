@@ -5,6 +5,7 @@ import factories, { userInputs } from '../utils/factories';
 import app from '../../src/app';
 import db from '../../src/app/models';
 import type { UserAttributes } from '../../src/app/models/User';
+import { logoutRoute, signupRoute, loginRoute } from '../utils/routes';
 
 describe('Login', () => {
   beforeEach(async () => {
@@ -19,7 +20,7 @@ describe('Login', () => {
   });
 
   it('should return status 200 from route /signup', async () => {
-    const response = await request(app).post('/signup').send(userInputs());
+    const response = await request(app).post(signupRoute).send(userInputs());
 
     expect(response.status).toBe(200);
   });
@@ -27,7 +28,7 @@ describe('Login', () => {
   it('should create a new user from route /signup', async () => {
     const user = userInputs();
 
-    await request(app).post('/signup').send(user);
+    await request(app).post(signupRoute).send(user);
 
     const getUser = await db.User.findOne({
       where: { username: user.username },
@@ -37,7 +38,7 @@ describe('Login', () => {
   });
 
   it('should not create a new user from route /signup when is a bad request', async () => {
-    const response = await request(app).post('/signup').send({
+    const response = await request(app).post(signupRoute).send({
       username: 'jaimin',
       email: 'jungcook@gmail.com',
     });
@@ -48,17 +49,17 @@ describe('Login', () => {
   it('should not create two users with the same email', async () => {
     const user = userInputs();
 
-    await request(app).post('/signup').send(user);
+    await request(app).post(signupRoute).send(user);
 
     const response = await request(app)
-      .post('/signup')
+      .post(signupRoute)
       .send({ username: 'jo', email: user.email, password: 'o' });
 
     expect(response.status).toBe(409);
   });
 
   it('should login after signup', async () => {
-    const response = await request(app).post('/signup').send(userInputs());
+    const response = await request(app).post(signupRoute).send(userInputs());
 
     expect(response.body.session).not.toBeUndefined();
   });
@@ -67,7 +68,7 @@ describe('Login', () => {
     const user: UserAttributes = await factories.create('User');
 
     const response = await request(app)
-      .post('/login')
+      .post(loginRoute)
       .send({ email: user.email, password: user.password });
 
     expect(response.body).not.toBeUndefined();
@@ -77,7 +78,7 @@ describe('Login', () => {
     const user: UserAttributes = await factories.create('User');
 
     const response = await request(app)
-      .post('/login')
+      .post(loginRoute)
       .send({ email: 'jojo', password: user.password });
 
     expect(response.status).toBe(401);
@@ -87,7 +88,7 @@ describe('Login', () => {
     const user: UserAttributes = await factories.create('User');
 
     const response = await request(app)
-      .post('/login')
+      .post(loginRoute)
       .send({ email: user.email, password: 'jojf' });
 
     expect(response.status).toBe(401);
@@ -97,10 +98,10 @@ describe('Login', () => {
     const user = userInputs();
     const agent = request.agent(app);
 
-    await agent.post('/signup').send(user);
+    await agent.post(signupRoute).send(user);
 
     const response = await agent
-      .post('/login')
+      .post(loginRoute)
       .send({ email: user.email, password: user.password });
     expect(response.redirect).toBe(true);
   });
@@ -108,8 +109,8 @@ describe('Login', () => {
     const user = userInputs();
     const agent = request.agent(app);
 
-    await agent.post('/signup').send(user);
-    const response = await agent.get('/logout');
+    await agent.post(signupRoute).send(user);
+    const response = await agent.get(logoutRoute);
 
     expect(response.headers['set-cookie']).toBe(undefined);
   });

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Op, UpdateOptions } from 'sequelize';
+import logger from 'jet-logger';
 import * as jikanapi from '../../services/animes/jikanapi';
 import db from '../models';
 import type { Anime } from '../../services/animes/jikanapi.d';
@@ -60,33 +61,38 @@ const SearchController = {
   },
 
   async getWeapon(query: string, options: Partial<UpdateOptions> = {}) {
-    const weapon = await Weapon.findAll({
-      where: {
-        name: {
-          [Op.iLike]: `%${query}%`,
+    try {
+      const weapon = await Weapon.findAll({
+        where: {
+          name: {
+            [Op.iLike]: `%${query}%`,
+          },
         },
-      },
-      attributes: ['name', 'id', 'imagePath'],
-      ...options,
-    });
-    if (!weapon) return null;
-    if (weapon.length === 1) {
-      return {
-        id: weapon[0].id,
-        imagePath: weapon[0].imagePath,
-        list_name: 'weapons',
-        name: weapon[0].name,
-      };
+        attributes: ['name', 'id', 'imagePath'],
+        ...options,
+      });
+      if (!weapon) return null;
+      if (weapon.length === 1) {
+        return {
+          id: weapon[0].id,
+          imagePath: weapon[0].imagePath,
+          list_name: 'weapons',
+          name: weapon[0].name,
+        };
+      }
+      const res: QueryItem[] = weapon.map(
+        (elem: WeaponAttributes & { id: number }) => ({
+          id: elem.id,
+          imagePath: elem.imagePath,
+          list_name: 'weapons',
+          name: elem.name,
+        }),
+      );
+      return res;
+    } catch (error) {
+      logger.err(error);
+      return null;
     }
-    const res: QueryItem[] = weapon.map(
-      (elem: WeaponAttributes & { id: number }) => ({
-        id: elem.id,
-        imagePath: elem.imagePath,
-        list_name: 'weapons',
-        name: elem.name,
-      }),
-    );
-    return res;
   },
 
   async find(

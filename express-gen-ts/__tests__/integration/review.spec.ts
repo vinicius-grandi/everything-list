@@ -4,6 +4,7 @@ import factories, { userInputs } from '../utils/factories';
 import app from '../../src/app';
 import type { WeaponAttributes } from '../../src/app/models/Weapon';
 import redisClient from '../../src/redisConfig';
+import { logoutRoute, signupRoute } from '../utils/routes';
 
 describe('reviews', () => {
   beforeEach(async () => {
@@ -44,7 +45,7 @@ describe('reviews', () => {
     const agent = request.agent(app);
     const rating = 2;
     const message = 'This is the best weapon';
-    await agent.post('/signup').send(user);
+    await agent.post(signupRoute).send(user);
     const response = await agent.post('/weapons/api/1').send({
       rating,
       message,
@@ -59,7 +60,7 @@ describe('reviews', () => {
     const agent = request.agent(app);
     const rating = 2;
 
-    await agent.post('/signup').send(user);
+    await agent.post(signupRoute).send(user);
 
     await agent.post('/weapons/api/1').send({
       rating,
@@ -79,7 +80,7 @@ describe('reviews', () => {
     const rating1 = 9.5;
     const rating2 = 10;
 
-    await agent.post('/signup').send(user);
+    await agent.post(signupRoute).send(user);
     await agent.post('/weapons/api/1').send({
       rating: rating1,
     });
@@ -98,13 +99,13 @@ describe('reviews', () => {
     const agent = request.agent(app);
     const average = ((5 + 10) / 2).toFixed(2);
 
-    await agent.post('/signup').send(user1);
+    await agent.post(signupRoute).send(user1);
     await agent.post('/weapons/api/1').send({
       rating: 5,
       message: 'jo',
     });
-    await agent.get('/logout');
-    await agent.post('/signup').send(user2);
+    await agent.get(logoutRoute);
+    await agent.post(signupRoute).send(user2);
     const response = await agent.post('/weapons/api/1').send({
       rating: 10,
       message: 'jojo',
@@ -122,7 +123,7 @@ describe('reviews', () => {
     const rating = 2;
     const message = 'This is the best weapon';
 
-    await agent.post('/signup').send(user);
+    await agent.post(signupRoute).send(user);
 
     const response = await agent.post(`/animes/api/${id}`).send({
       rating,

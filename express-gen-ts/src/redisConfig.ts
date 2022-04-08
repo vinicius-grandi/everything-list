@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import Redis from 'ioredis';
+import logger from 'jet-logger';
 
 dotenv.config({
   path: process.env.NODE_ENV === 'test' ? './.test.env' : './.env',
@@ -15,7 +16,7 @@ const redisClient = new Redis({
 
 redisClient.on('error', (err) => {
   process.nextTick(() => {
-    console.error(err);
+    logger.err(`redis${err}`);
   });
 });
 

@@ -13,16 +13,20 @@ function Signup(): JSX.Element {
     e.preventDefault();
     const form = e.currentTarget;
     try {
-      const response = await fetch('/signup', {
+      const response = await fetch('/api/signup', {
         method: 'POST',
         body: new FormData(form),
       });
+
+      console.log(response.status);
 
       return navigate('/', {
         replace: true,
       });
     } catch (error) {
-      return <h1>Bad Request</h1>;
+      return navigate('/weapons', {
+        replace: true,
+      });
     }
   };
   return (

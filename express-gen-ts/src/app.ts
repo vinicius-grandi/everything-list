@@ -24,15 +24,16 @@ const app = express();
 // app.set('trust proxy', 1);
 
 // creating sessions
+console.log(process.env.NODE_ENV);
 const RedisStore = connectRedis(sessions);
-const expirationTime = 1000 * 60 * 30;
+const expirationTime = 1000 * 60;
 const session = sessions({
   secret: process.env.SESSION_SECRET ?? '',
   resave: false,
   saveUninitialized: false,
   store: new RedisStore({ client: redisClient }),
   cookie: {
-    // httpOnly: true,
+    httpOnly: process.env.NODE_ENV !== 'test',
     maxAge: expirationTime,
   },
 });
@@ -50,7 +51,7 @@ app.use(
     },
   }),
 );
-app.use(authRouter);
+app.use('/api', authRouter);
 app.use('/profiles', userRouter);
 app.use(searchRouter);
 app.use(noApiListRoutes, noApiListRouter);

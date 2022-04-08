@@ -7,6 +7,7 @@
     "db:migrate": "tsc && cross-env NODE_ENV=test sequelize db:migrate",
     "lint": "eslint . --ext .ts",
     "start": "node ./dist/src/index.js --env=production",
+    "prestart:dev": "cross-env NODE_ENV=test sequelize db:migrate",
     "start:dev": "nodemon",
     "pretest": "tsc && cross-env NODE_ENV=test sequelize db:migrate",
     "test": "cross-env NODE_ENV=test jest --detectOpenHandles",
@@ -18,7 +19,7 @@
     ],
     "ext": "ts, html",
     "execMap": {
-      "ts": "ts-node --files"
+      "ts": "npx cross-env NODE_ENV=test ts-node --files"
     },
     "ignore": [
       "src/public"

@@ -4,6 +4,7 @@ import truncate from '../utils/truncate';
 import factories, { userInputs } from '../utils/factories';
 import app from '../../src/app';
 import { ReviewAttributes } from '../../src/app/models/Review';
+import { signupRoute } from '../utils/routes';
 
 describe('users', () => {
   beforeEach(async () => {
@@ -15,7 +16,7 @@ describe('users', () => {
     const user = userInputs();
     const agent = request.agent(app);
 
-    await agent.post('/signup').send(user);
+    await agent.post(signupRoute).send(user);
 
     const response = await agent
       .put('/profiles/api/0')
@@ -31,7 +32,7 @@ describe('users', () => {
     await factories.create('List');
     const agent = request.agent(app);
 
-    await agent.post('/signup').send(user);
+    await agent.post(signupRoute).send(user);
     const review: ReviewAttributes = await factories.create('Review');
 
     const response = await agent.get('/profiles/api/0');

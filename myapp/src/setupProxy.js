@@ -13,4 +13,16 @@ module.exports = (app) => {
     '/search/api',
     createProxyMiddleware(proxy),
   );
+  app.use(
+    '/api/signup',
+    createProxyMiddleware(proxy),
+  );
+  app.use(
+    '/api/login',
+    createProxyMiddleware(proxy),
+  );
+  app.use(
+    '/api/logout',
+    createProxyMiddleware(proxy),
+  );
 };

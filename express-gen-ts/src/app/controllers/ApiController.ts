@@ -55,9 +55,13 @@ const ApiController = {
 
   async getItems(req: Request, res: Response) {
     const list = req.baseUrl.slice(1) as lists;
-    const items = await this[list]();
-
-    res.json({ data: items });
+    try {
+      const items = await this[list]();
+      return res.json({ data: items });
+    } catch (error) {
+      logger.err(error);
+      return res.json({ data: null });
+    }
   },
 
   async getAnimeOrManga(req: Request, res: Response) {

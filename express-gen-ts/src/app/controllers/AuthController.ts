@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import logger from 'jet-logger';
 import db from '../models';
 
 interface IUserCredentials {
@@ -10,10 +11,6 @@ interface IUserCredentials {
 const { User } = db;
 
 const AuthController = {
-  // async createSession(user: any, s: Session & Partial<SessionData>) {
-  //   const session = s;
-  //   session.authenticated = true;
-  // },
   async createUser(
     req: Request<unknown, unknown, IUserCredentials>,
     res: Response,
@@ -44,6 +41,7 @@ const AuthController = {
 
       return res.json({ user, session });
     } catch (err) {
+      logger.err(err);
       return res.status(400).send({ msg: 'Bad Request' });
     }
   },
