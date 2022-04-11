@@ -7,6 +7,8 @@ import Weapons from './views/Weapons';
 import SearchBar from './components/SearchBar';
 import Home from './views/Home';
 import Signup from './views/Signup';
+import { useAuth } from './contexts/AuthContext';
+import NotFound from './components/NotFound';
 
 const Header = styled.header`
   @media screen and (min-width: 1001px) {
@@ -105,6 +107,12 @@ const Footer = styled.footer`
 `;
 
 function App(): JSX.Element {
+  const { auth } = useAuth();
+
+  if (auth === 'standby') {
+    return <h1>loading</h1>;
+  }
+
   return (
     <BrowserRouter>
       <Header>
@@ -123,7 +131,8 @@ function App(): JSX.Element {
         <Route path="/" element={<Home />} />
         <Route path="/weapons" element={<Weapons />} />
         <Route path="/weapons?page=1" element={<Weapons />} />
-        <Route path="/signup" element={<Signup />} />
+        {!auth && <Route path="/signup" element={<Signup />} />}
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer>
         <p>Made by Vinicius Grandi</p>

@@ -7,13 +7,21 @@ import { useAuth } from '../contexts/AuthContext';
 // /logout
 function Signup(): JSX.Element {
   const navigate = useNavigate();
-  const { setAuth } = useAuth();
+  const { signup } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     e.preventDefault();
     const form = e.currentTarget;
-      .catch(() => navigate('/bad-request', { replace: true }))
-      .then(() => navigate('/', { replace: true }));
+    if (signup !== undefined) {
+      const response = await signup(form);
+      if (response instanceof Response) {
+        navigate('/', {
+          replace: true,
+        });
+      }
+    }
   };
   return (
     <form onSubmit={handleSubmit}>

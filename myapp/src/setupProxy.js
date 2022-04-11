@@ -25,4 +25,8 @@ module.exports = (app) => {
     '/api/logout',
     createProxyMiddleware(proxy),
   );
+  app.use(
+    '/api/is-user-auth',
+    createProxyMiddleware(proxy),
+  );
 };
