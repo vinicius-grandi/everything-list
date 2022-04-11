@@ -59,7 +59,9 @@ function SearchBar(): JSX.Element {
 
   useEffect(() => {
     const timeout = 3000;
-    if (search.length === 0) return setQueryItems([]);
+    if (search.length === 0) {
+      return setQueryItems([]);
+    }
 
     async function handleSearch(): Promise<void> {
       try {
@@ -80,7 +82,7 @@ function SearchBar(): JSX.Element {
   }, [search]);
 
   return (
-    <div className="search-box">
+    <div className="search-box" data-testid="full-search">
       <div className="search-bar" role="search">
         <input
           type="text"

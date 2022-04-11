@@ -2,15 +2,15 @@
  * @jest-environment jsdom
  */
 import React from 'react';
-import { fireEvent, screen, act } from '@testing-library/react';
+import { fireEvent, screen, act, waitFor } from '@testing-library/react';
 import type { FetchMock } from 'jest-fetch-mock';
 import SearchBar from '../SearchBar';
 import renderWithRouter from '../../views/__tests__/utils/renderWithRouter';
 
-const fetchMock = fetch as FetchMock;
+const fetchMock = global.fetch as FetchMock;
 const mockFetchJson = (val: unknown) => (): Promise<any> =>
   Promise.resolve({
-    json: () => Promise.resolve(),
+    json: () => Promise.resolve(val),
   });
 
 describe('Search', () => {
@@ -36,8 +36,14 @@ describe('Search', () => {
       fireEvent.input(SearchBox, { target: { value: 'jojo' } });
     });
     expect(SearchBox.value).toBe('jojo');
-    const list = screen.getByText(/kimyou/gi);
-    expect(list).toBeInTheDocument();
+
+    await waitFor(
+      () => {
+        const list = screen.getByText(/kimyou/gi);
+        expect(list).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
   it('should create a link using search box content', () => {
     act(() => {

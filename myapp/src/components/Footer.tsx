@@ -11,7 +11,7 @@ const StyledFooter = styled.footer`
 `;
 
 function Footer(): JSX.Element {
-  return <p>Site created by Vinicius Grandi</p>;
+  return <StyledFooter>Site created by Vinicius Grandi</StyledFooter>;
 }
 
 export default Footer;

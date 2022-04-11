@@ -22,6 +22,9 @@ function AuthProvider({
     async function getUserAuth(): Promise<void> {
       const response = await fetch('/api/is-user-auth', { method: 'get' });
       const { auth: isUserAuth }: { auth: boolean } = await response.json();
+      if (isUserAuth === undefined) {
+        setAuth(false);
+      }
       setAuth(isUserAuth);
     }
     getUserAuth();

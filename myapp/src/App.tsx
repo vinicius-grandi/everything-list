@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import './index.css';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import Weapons from './views/Weapons';
