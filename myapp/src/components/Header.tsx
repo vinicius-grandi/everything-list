@@ -102,7 +102,19 @@ function Header(): JSX.Element {
         />
       </Link>
       <SearchBar />
-      <Search color="#f6f6f6" className="search-icon" />
+      <Search
+        color="#f6f6f6"
+        className="search-icon"
+        data-cy="search-icon"
+        onClick={(ev) => {
+          const elemStyle = ev.currentTarget.style;
+          elemStyle.display = 'none';
+          const searchBox = document.querySelector('.search-box');
+          if (searchBox instanceof HTMLElement) {
+            searchBox.style.display = 'initial';
+          }
+        }}
+      />
       <Menu color="#f6f6f6" className="menu-icon" />
     </StyledHeader>
   );

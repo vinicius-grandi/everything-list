@@ -82,7 +82,7 @@ function SearchBar(): JSX.Element {
   }, [search]);
 
   return (
-    <div className="search-box" data-testid="full-search">
+    <div className="search-box" data-cy="full-search">
       <div className="search-bar" role="search">
         <input
           type="text"
