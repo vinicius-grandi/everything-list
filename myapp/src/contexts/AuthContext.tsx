@@ -20,12 +20,13 @@ function AuthProvider({
 
   React.useEffect(() => {
     async function getUserAuth(): Promise<void> {
-      const response = await fetch('/api/is-user-auth', { method: 'get' });
-      const { auth: isUserAuth }: { auth: boolean } = await response.json();
-      if (isUserAuth === undefined) {
-        setAuth(false);
+      try {
+        const response = await fetch('/api/is-user-auth', { method: 'get' });
+        const { auth: isUserAuth }: { auth: boolean } = await response.json();
+        return setAuth(isUserAuth);
+      } catch (err) {
+        return setAuth(false);
       }
-      setAuth(isUserAuth);
     }
     getUserAuth();
   }, []);

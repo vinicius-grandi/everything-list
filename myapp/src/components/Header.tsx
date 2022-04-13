@@ -1,8 +1,7 @@
-/* eslint-disable no-console */
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Search, Menu } from 'react-feather';
+import { Search, Menu, X } from 'react-feather';
 import SearchBar from './SearchBar';
 
 type Searchbox = 'initial' | 'none';
@@ -15,28 +14,47 @@ type TranslationValue = {
 };
 
 const ExpandedMenu = styled.div<TranslationValue>`
-  height: 100vh;
+  height: 200vh;
+  flex-grow: 1!;
   width: 90%;
   position: absolute;
   z-index: 4;
   transform: translate(${({ translation }) => translation}%);
   background-color: #332164;
+  transition: 0.5s;
+  box-shadow: -20vw -2px #000000d9;
+
+  svg {
+    margin-top: 2rem;
+    padding: 0.5rem;
+  }
 
   ul {
-    margin: 0;
+    margin-top: 3rem;
     padding: 0;
+    list-style-type: none;
+    text-align: center;
   }
 
   a,
   li {
-    font-size: 1rem;
+    font-size: 1.5rem;
+    margin-top: 0.5rem;
+    height: fit-content;
     color: #f6f6f6;
-    width: fit-content;
+    text-decoration: none;
+  }
+
+  li {
+    background-color: #26184d;
+    padding: 0.3rem;
   }
 
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  text-align: center;
 `;
 
 const StyledHeader = styled.header<DisplayValue>`
@@ -139,9 +157,15 @@ const StyledHeader = styled.header<DisplayValue>`
   }
 `;
 
-function Header(): JSX.Element {
+function Header({
+  setHidden,
+}: {
+  setHidden: React.Dispatch<React.SetStateAction<boolean>>;
+}): JSX.Element {
   const [sbDisplay, setSbDisplay] = useState<Searchbox>('none');
-  const [translation, setTranslation] = useState<number>(120);
+
+  const dVTranslation = 130;
+  const [translation, setTranslation] = useState<number>(dVTranslation);
   const searchBoxContainer = useRef<HTMLDivElement>(null);
   // capture all clicks on window to close search input when is required
   window.onclick = (ev) => {
@@ -181,7 +205,7 @@ function Header(): JSX.Element {
           setSbDisplay('initial');
         }}
       />
-      <ExpandedMenu translation={translation}>
+      <ExpandedMenu data-cy="expanded-menu" translation={translation}>
         <ul>
           <Link to="/weapons">
             <li>Weapons</li>
@@ -190,6 +214,14 @@ function Header(): JSX.Element {
             <li>Animes</li>
           </Link>
         </ul>
+        <X
+          data-cy="menu-close-btn"
+          color="#f6f6f6"
+          onClick={() => {
+            setTranslation(dVTranslation);
+            setHidden(false);
+          }}
+        />
       </ExpandedMenu>
       <Menu
         color="#f6f6f6"
@@ -197,6 +229,7 @@ function Header(): JSX.Element {
         data-cy="menu-icon"
         onClick={() => {
           setTranslation(10);
+          setHidden(true);
         }}
       />
     </StyledHeader>
