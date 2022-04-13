@@ -18,13 +18,18 @@ describe('Search Bar E2E', () => {
   it('should close searchbox when user clicks in anything but search box or search button', () => {
     cy.viewport('samsung-s10');
     cy.get('@searchbox').should('not.be.visible');
-    cy.get('[data-cy="menu-icon"]').click();
+    cy.get('body').click('bottom');
     cy.get('[data-cy="search-icon"]').click();
     cy.get('@searchbox').should('be.visible');
-    cy.get('[data-cy="menu-icon"]').click();
+    cy.get('body').click('bottom');
     cy.get('@searchbox').should('not.be.visible');
     cy.get('[data-cy="search-icon"]').click();
     cy.get('[data-cy="searchbox"]').click();
     cy.get('@searchbox').should('to.be.visible');
+  });
+  it('should open menu when it is clicked', () => {
+    cy.viewport('samsung-s10');
+    cy.get('[data-cy="menu-icon"]').click();
+    cy.contains('Weapons').should('exist');
   });
 });

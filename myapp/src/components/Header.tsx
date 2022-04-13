@@ -6,11 +6,41 @@ import { Search, Menu } from 'react-feather';
 import SearchBar from './SearchBar';
 
 type Searchbox = 'initial' | 'none';
-type Teste = {
+type DisplayValue = {
   sbDisplay: Searchbox;
 };
 
-const StyledHeader = styled.header<Teste>`
+type TranslationValue = {
+  translation: number;
+};
+
+const ExpandedMenu = styled.div<TranslationValue>`
+  height: 100vh;
+  width: 90%;
+  position: absolute;
+  z-index: 4;
+  transform: translate(${({ translation }) => translation}%);
+  background-color: #332164;
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  a,
+  li {
+    font-size: 1rem;
+    color: #f6f6f6;
+    width: fit-content;
+  }
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const StyledHeader = styled.header<DisplayValue>`
+  height: 100px;
   @media screen and (min-width: 1001px) {
     .search-icon {
       display: none;
@@ -111,6 +141,7 @@ const StyledHeader = styled.header<Teste>`
 
 function Header(): JSX.Element {
   const [sbDisplay, setSbDisplay] = useState<Searchbox>('none');
+  const [translation, setTranslation] = useState<number>(120);
   const searchBoxContainer = useRef<HTMLDivElement>(null);
   // capture all clicks on window to close search input when is required
   window.onclick = (ev) => {
@@ -150,7 +181,24 @@ function Header(): JSX.Element {
           setSbDisplay('initial');
         }}
       />
-      <Menu color="#f6f6f6" className="menu-icon" data-cy="menu-icon" />
+      <ExpandedMenu translation={translation}>
+        <ul>
+          <Link to="/weapons">
+            <li>Weapons</li>
+          </Link>
+          <Link to="/animes">
+            <li>Animes</li>
+          </Link>
+        </ul>
+      </ExpandedMenu>
+      <Menu
+        color="#f6f6f6"
+        className="menu-icon"
+        data-cy="menu-icon"
+        onClick={() => {
+          setTranslation(10);
+        }}
+      />
     </StyledHeader>
   );
 }
