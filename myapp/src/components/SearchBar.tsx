@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -46,14 +46,18 @@ const SearchButton = styled.button`
   color: #f6f6f6;
   position: relative;
   z-index: 1;
+  width: fit-content;
 
   &:hover {
     background-color: #663a8f;
     cursor: pointer;
   }
+  @media screen and (max-width: 599px) {
+    font-size: 0.5rem;
+  }
 `;
 
-function SearchBar(): JSX.Element {
+const SearchBar = forwardRef<HTMLDivElement>((_, ref) => {
   const [search, setSearch] = useState<string>('');
   const [queryItems, setQueryItems] = useState<QueryItem[]>([]);
 
@@ -82,12 +86,13 @@ function SearchBar(): JSX.Element {
   }, [search]);
 
   return (
-    <div className="search-box" data-cy="full-search">
+    <div className="search-box" data-cy="full-search" ref={ref}>
       <div className="search-bar" role="search">
         <input
           type="text"
           onChange={(ev) => setSearch(ev.target.value)}
           role="searchbox"
+          data-cy="searchbox"
           value={search}
         />
         <Link to={`/search?q=${search}`}>
@@ -125,6 +130,6 @@ function SearchBar(): JSX.Element {
       )}
     </div>
   );
-}
+});
 
 export default SearchBar;

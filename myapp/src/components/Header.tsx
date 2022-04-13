@@ -1,10 +1,16 @@
-import React from 'react';
+/* eslint-disable no-console */
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Search, Menu } from 'react-feather';
 import SearchBar from './SearchBar';
 
-const StyledHeader = styled.header`
+type Searchbox = 'initial' | 'none';
+type Teste = {
+  sbDisplay: Searchbox;
+};
+
+const StyledHeader = styled.header<Teste>`
   @media screen and (min-width: 1001px) {
     .search-icon {
       display: none;
@@ -41,15 +47,20 @@ const StyledHeader = styled.header`
 
   @media screen and (max-width: 599px) {
     .search-box {
-      display: none;
+      display: ${({ sbDisplay }) => sbDisplay};
+      flex-grow: 1;
     }
 
     a {
       max-width: 100%;
       width: 50%;
     }
-  }
 
+    .search-box a {
+      max-width: 100%;
+      width: fit-content;
+    }
+  }
   background-color: #543275;
   display: flex;
   align-items: center;
@@ -61,8 +72,15 @@ const StyledHeader = styled.header`
     height: auto;
   }
 
+  #logo {
+    display: ${({ sbDisplay }) =>
+      sbDisplay === 'initial' ? 'none' : 'initial'};
+  }
+
   .search-icon {
     margin: 0.5rem;
+    display: ${({ sbDisplay }) =>
+      sbDisplay === 'initial' ? 'none' : 'initial'};
     &:hover {
       cursor: pointer;
       transform: rotate(90deg) scale(1.1);
@@ -92,30 +110,47 @@ const StyledHeader = styled.header`
 `;
 
 function Header(): JSX.Element {
+  const [sbDisplay, setSbDisplay] = useState<Searchbox>('none');
+  const searchBoxContainer = useRef<HTMLDivElement>(null);
+  // capture all clicks on window to close search input when is required
+  window.onclick = (ev) => {
+    const elem = ev.target;
+
+    if (
+      (elem instanceof SVGElement && elem.classList[0] === 'search-icon') ||
+      window.innerWidth > 598
+    ) {
+      return;
+    }
+    if (
+      elem instanceof HTMLElement &&
+      elem.getAttribute('role') === 'searchbox'
+    ) {
+      return;
+    }
+    if (searchBoxContainer.current) {
+      setSbDisplay('none');
+    }
+  };
   return (
-    <StyledHeader>
-      <Link to="/">
+    <StyledHeader sbDisplay={sbDisplay}>
+      <Link to="/" id="logo">
         <img
           src="images/EverythingList-logo.png"
           alt="header-logo"
           className="logo"
         />
       </Link>
-      <SearchBar />
+      <SearchBar ref={searchBoxContainer} />
       <Search
         color="#f6f6f6"
         className="search-icon"
         data-cy="search-icon"
-        onClick={(ev) => {
-          const elemStyle = ev.currentTarget.style;
-          elemStyle.display = 'none';
-          const searchBox = document.querySelector('.search-box');
-          if (searchBox instanceof HTMLElement) {
-            searchBox.style.display = 'initial';
-          }
+        onClick={() => {
+          setSbDisplay('initial');
         }}
       />
-      <Menu color="#f6f6f6" className="menu-icon" />
+      <Menu color="#f6f6f6" className="menu-icon" data-cy="menu-icon" />
     </StyledHeader>
   );
 }

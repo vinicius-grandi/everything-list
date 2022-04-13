@@ -39,7 +39,7 @@
     "preinstall": "npx npm-force-resolutions",
     "start": "react-scripts start",
     "test": "react-scripts test",
-    "cypress": "cypress open-ct"
+    "cypress": "cypress open-ct --browser firefox"
   },
   "dependencies": {
     "ajv": "^7.2.3",
