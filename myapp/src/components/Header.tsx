@@ -14,12 +14,12 @@ type TranslationValue = {
 };
 
 const ExpandedMenu = styled.div<TranslationValue>`
-  height: 200vh;
+  height: 201vh;
   flex-grow: 1!;
   width: 90%;
   position: absolute;
   z-index: 4;
-  transform: translate(${({ translation }) => translation}%);
+  transform: translate(${({ translation }) => translation}%, 5%);
   background-color: #332164;
   transition: 0.5s;
   box-shadow: -20vw -2px #000000d9;
@@ -108,6 +108,11 @@ const StyledHeader = styled.header<DisplayValue>`
       max-width: 100%;
       width: fit-content;
     }
+
+    .search-icon {
+      display: ${({ sbDisplay }) =>
+        sbDisplay === 'initial' ? 'none' : 'initial'};
+    }
   }
   background-color: #543275;
   display: flex;
@@ -127,8 +132,7 @@ const StyledHeader = styled.header<DisplayValue>`
 
   .search-icon {
     margin: 0.5rem;
-    display: ${({ sbDisplay }) =>
-      sbDisplay === 'initial' ? 'none' : 'initial'};
+    display: 'none';
     &:hover {
       cursor: pointer;
       transform: rotate(90deg) scale(1.1);
@@ -164,7 +168,7 @@ function Header({
 }): JSX.Element {
   const [sbDisplay, setSbDisplay] = useState<Searchbox>('none');
 
-  const dVTranslation = 130;
+  const dVTranslation = 150;
   const [translation, setTranslation] = useState<number>(dVTranslation);
   const searchBoxContainer = useRef<HTMLDivElement>(null);
   // capture all clicks on window to close search input when is required
@@ -187,6 +191,11 @@ function Header({
       setSbDisplay('none');
     }
   };
+
+  const menuHandle = (): void => {
+    setHidden(false);
+    setTranslation(dVTranslation);
+  };
   return (
     <StyledHeader sbDisplay={sbDisplay}>
       <Link to="/" id="logo">
@@ -202,15 +211,17 @@ function Header({
         className="search-icon"
         data-cy="search-icon"
         onClick={() => {
-          setSbDisplay('initial');
+          if (window.innerWidth < 599) {
+            setSbDisplay('initial');
+          }
         }}
       />
       <ExpandedMenu data-cy="expanded-menu" translation={translation}>
         <ul>
-          <Link to="/weapons">
+          <Link to="/weapons" onClick={menuHandle}>
             <li>Weapons</li>
           </Link>
-          <Link to="/animes">
+          <Link to="/animes" onClick={menuHandle}>
             <li>Animes</li>
           </Link>
         </ul>
@@ -228,7 +239,7 @@ function Header({
         className="menu-icon"
         data-cy="menu-icon"
         onClick={() => {
-          setTranslation(10);
+          setTranslation(11);
           setHidden(true);
         }}
       />

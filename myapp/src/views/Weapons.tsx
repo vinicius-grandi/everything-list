@@ -22,8 +22,25 @@ const Title = styled.h1`
 `;
 
 const Main = styled.main`
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  @media screen and (min-width: 1001px) {
+    font-size: 2rem;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media screen and (min-width: 600px) and (max-width: 1000px) {
+    font-size: 1.5rem;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media screen and (max-width: 599px) {
+    font-size: 1.5rem;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media screen and (max-width: 250px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const Buttons = styled.div`
@@ -66,6 +83,7 @@ function Weapons(): JSX.Element {
 
   useEffect(() => {
     const p = Number(searchParams.get('page'));
+    setPage(p);
     async function weaponsFn(): Promise<void> {
       const w = (await weaponsData(p <= 0 ? 1 : p)).data;
       setLastPage((await weaponsData(0)).pagination.lastVisiblePage);
@@ -87,17 +105,20 @@ function Weapons(): JSX.Element {
         <p>Page not found</p>
       )}
       <Buttons>
-        <button
-          type="button"
-          onClick={() => {
-            if (page > 1) {
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-            changePage('-');
-          }}
-        >
-          Previous
-        </button>
+        {page > 1 && (
+          <button
+            type="button"
+            onClick={() => {
+              if (page > 1) {
+                // scrolls page to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+              changePage('-');
+            }}
+          >
+            Previous
+          </button>
+        )}
         {page < lastPage && (
           <button
             type="button"

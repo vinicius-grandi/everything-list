@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
@@ -10,16 +10,13 @@ type Card = {
 const CardBody = styled.div`
   @media screen and (min-width: 1001px) {
     font-size: 2rem;
-    flex: 1 1 15%;
   }
 
   @media screen and (min-width: 600px) and (max-width: 1000px) {
-    flex: 1 1 20%;
     font-size: 1.5rem;
   }
 
   @media screen and (max-width: 250px) {
-    flex: 1 1 100%;
     font-size: 1.5rem;
   }
   background-color: #53c278;
@@ -28,7 +25,6 @@ const CardBody = styled.div`
   align-items: center;
   justify-content: space-around;
   text-align: center;
-  flex: 1 1 30%;
   padding: 0.5rem;
   margin: 0.5rem;
   box-shadow: -2px 3px 5px rgba(0, 0, 0, 0.208);
@@ -41,6 +37,7 @@ const CardBody = styled.div`
     height: auto;
     max-height: 400px;
     border-radius: 4px;
+    image-rendering: pixelated;
   }
   a {
     text-shadow: -1px 2px 3px rgba(0, 0, 0, 0.208);
@@ -57,10 +54,17 @@ function Card({ title, imagePath }: Card): JSX.Element {
         <p data-testid="card-title">{title}</p>
         <img
           data-testid="card-image"
+          loading="lazy"
           src={imagePath ?? 'https://via.placeholder.com/500x500?text=No+Image'}
+          data-src="https://via.placeholder.com/500x500?text=No+Image"
           onError={({ target }) => {
             const image = target as HTMLImageElement;
-            image.src = 'https://via.placeholder.com/500x500?text=No+Image';
+            const {
+              dataset: { src },
+            } = image;
+            if (src) {
+              image.src = src;
+            }
           }}
           alt={title}
         />
