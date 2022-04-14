@@ -29,4 +29,8 @@ module.exports = (app) => {
     '/api/is-user-auth',
     createProxyMiddleware(proxy),
   );
+  app.use(
+    '/profiles/api/0',
+    createProxyMiddleware(proxy),
+  );
 };

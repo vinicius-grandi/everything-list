@@ -8,6 +8,7 @@ import { useAuth } from './contexts/AuthContext';
 import NotFound from './components/NotFound';
 import Footer from './components/Footer';
 import GlobalStyles from './globalStyles';
+import UserProfile from './views/UserProfile';
 
 function App(): JSX.Element {
   const { auth } = useAuth();
@@ -26,6 +27,7 @@ function App(): JSX.Element {
           <Route path="/" element={<Home />} />
           <Route path="/weapons" element={<Weapons />} />
           <Route path="/weapons?page=1" element={<Weapons />} />
+          {auth && <Route path="/my-profile" element={<UserProfile />} />}
           {!auth && <Route path="/signup" element={<Signup />} />}
           <Route path="*" element={<NotFound />} />
         </Routes>
