@@ -1,10 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import { useAuth } from '../contexts/AuthContext';
 
-// /signup
-// /login
-// /logout
 function Signup(): JSX.Element {
   const navigate = useNavigate();
   const { signup } = useAuth();
@@ -35,9 +33,11 @@ function Signup(): JSX.Element {
         />
       </label>
       <label htmlFor="email">
+        Email:
         <input type="email" data-testid="email" name="email" id="email" />
       </label>
       <label htmlFor="password">
+        Password:
         <input
           type="password"
           data-testid="password"

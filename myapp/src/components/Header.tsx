@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Search, Menu, X } from 'react-feather';
 import SearchBar from './SearchBar';
+import { useAuth } from '../contexts/AuthContext';
 
 type Searchbox = 'initial' | 'none';
 type DisplayValue = {
@@ -167,6 +168,7 @@ function Header({
   setHidden: React.Dispatch<React.SetStateAction<boolean>>;
 }): JSX.Element {
   const [sbDisplay, setSbDisplay] = useState<Searchbox>('none');
+  const { auth } = useAuth();
 
   const dVTranslation = 150;
   const [translation, setTranslation] = useState<number>(dVTranslation);
@@ -224,6 +226,11 @@ function Header({
           <Link to="/animes" onClick={menuHandle}>
             <li>Animes</li>
           </Link>
+          {!auth && (
+            <Link to="/signup" onClick={menuHandle}>
+              <li>Sign Up</li>
+            </Link>
+          )}
         </ul>
         <X
           data-cy="menu-close-btn"

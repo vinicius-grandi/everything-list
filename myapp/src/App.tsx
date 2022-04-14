@@ -26,7 +26,6 @@ function App(): JSX.Element {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/weapons" element={<Weapons />} />
-          <Route path="/weapons?page=1" element={<Weapons />} />
           {auth && <Route path="/my-profile" element={<UserProfile />} />}
           {!auth && <Route path="/signup" element={<Signup />} />}
           <Route path="*" element={<NotFound />} />
