@@ -7,7 +7,7 @@ type AuthContextType = {
   logout?(): void;
 };
 
-const AuthContext = createContext<AuthContextType>({
+export const AuthContext = createContext<AuthContextType>({
   auth: false,
 });
 
