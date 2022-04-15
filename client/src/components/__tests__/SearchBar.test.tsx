@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import { mountWithRouter } from '../../views/__tests__/utils/renderWithRouter';
 import Header from '../Header';
 
+function MockedHeader(): JSX.Element {
+  const [, setHidden] = useState<boolean>(false);
+  return <Header setHidden={setHidden} />;
+}
+
 describe('Search Bar E2E', () => {
   beforeEach(() => {
-    mountWithRouter(
-      <Header
-        setHidden={(() => {
-          const [, setHidden] = useState<boolean>(false);
-          return setHidden;
-        })()}
-      />,
-    );
+    mountWithRouter(<MockedHeader />);
     cy.get('[data-cy="full-search"]').as('searchbox');
   });
   it("should hide searchbox when viewport width is lower than 599px and when it's clicked should it prev state", () => {

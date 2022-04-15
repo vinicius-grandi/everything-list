@@ -21,6 +21,7 @@ function Login(): JSX.Element {
         <input
           placeholder="type your email here"
           type="email"
+          data-cy="email"
           data-testid="email"
           name="email"
           id="email"
@@ -33,17 +34,20 @@ function Login(): JSX.Element {
           type="password"
           data-testid="password"
           name="password"
-          pattern=""
+          pattern="^(?=.*[A-Z].*[A-Z])(?=.*[!@#$%&*()+_-].*[!@#$%&*()+_-])(?=.*[\d].*[\d])(?=.*[a-z].*[a-z]).{8,15}$"
+          data-cy="password"
           id="password"
+          minLength={8}
+          maxLength={15}
           onInvalid={(ev) => {
             const elem = ev.target as HTMLInputElement;
             elem.setCustomValidity(
-              'you password must have at least 8 characters',
+              'Your password is too weak! Please be sure it has at least 2 special characters(!@#$%&*()+_-), 2 uppercase letters, 2 lowercases and 2 numbers.',
             );
           }}
         />
         {error && <p>Incorrect email/password</p>}
-        <input type="submit" data-testid="submit" value="Sign Up" />
+        <input type="submit" data-testid="submit" value="Login" />
       </label>
     </form>
   );

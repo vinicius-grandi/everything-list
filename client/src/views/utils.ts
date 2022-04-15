@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
+import { NavigateFunction } from 'react-router-dom';
 import type { AuthContextType } from '../contexts/AuthContext';
 
 type Methods = AuthContextType['login'] | AuthContextType['signup'];

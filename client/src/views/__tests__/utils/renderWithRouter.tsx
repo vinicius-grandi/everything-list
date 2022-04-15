@@ -1,5 +1,5 @@
 import React from 'react';
-import { mo, MountReturn } from '@cypress/react';
+import { mount, MountReturn } from '@cypress/react';
 import { RenderResult, render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
