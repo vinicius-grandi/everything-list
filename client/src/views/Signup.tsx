@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAuth } from '../contexts/AuthContext';
+import submit from './utils';
 
 const SignupForm = styled.form`
   margin: 1rem;
@@ -49,28 +50,16 @@ const SignupForm = styled.form`
 `;
 
 function Signup(): JSX.Element {
-  const navigate = useNavigate();
   const [error, setError] = useState<boolean>(false);
+  const navigate = useNavigate();
   const { signup } = useAuth();
 
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    if (signup !== undefined) {
-      const response = await signup(form);
-      if (response) {
-        if (response.status !== 200) {
-          setError(true);
-        } else {
-          navigate('/', {
-            replace: true,
-          });
-        }
-      }
-    }
+    await submit(e, signup, setError, navigate);
   };
+
   return (
     <SignupForm onSubmit={handleSubmit}>
       <h1>Sign up</h1>

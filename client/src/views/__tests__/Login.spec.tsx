@@ -2,9 +2,9 @@
  * @jest-environment jsdom
  */
 import React from 'react';
-import { act, fireEvent, screen } from '@testing-library/react';
+import { act, fireEvent } from '@testing-library/react';
 import renderWithRouter from './utils/renderWithRouter';
-import Signup from '../Signup';
+import Login from '../Login';
 import { AuthContext } from '../../contexts/AuthContext';
 
 function MockAuthContext({ status }: { status: number }): JSX.Element {
@@ -12,7 +12,7 @@ function MockAuthContext({ status }: { status: number }): JSX.Element {
   const value = React.useMemo(
     () => ({
       auth,
-      signup: (): Promise<any> =>
+      login: (): Promise<any> =>
         Promise.resolve({
           json: () => Promise.resolve(),
           status,
@@ -22,24 +22,22 @@ function MockAuthContext({ status }: { status: number }): JSX.Element {
   );
   return (
     <AuthContext.Provider value={value}>
-      <Signup />
+      <Login />
     </AuthContext.Provider>
   );
 }
 
-describe('Signup', () => {
-  it('should redirect page when signup is successful - status 200', async () => {
+describe('Login', () => {
+  it('should redirect page when login is successful - status 200', async () => {
     const { getByTestId } = renderWithRouter(<MockAuthContext status={200} />, {
-      route: '/signup',
+      route: '/login',
     });
     const firstState = window.history.state;
-    const usernameInput = getByTestId('username');
-    const passwordInput = getByTestId('password');
     const emailInput = getByTestId('email');
+    const passwordInput = getByTestId('password');
     const submitButton = getByTestId('submit');
 
     await act(async () => {
-      fireEvent.input(usernameInput, { target: { value: 'muitobala' } });
       fireEvent.input(passwordInput, { target: { value: '12345678' } });
       fireEvent.input(emailInput, { target: { value: 'jojo@gmail.com' } });
       fireEvent.click(submitButton);
@@ -47,26 +45,23 @@ describe('Signup', () => {
 
     expect(firstState).not.toEqual(window.history.state);
   });
-  it('should return bad request when login data is wrong - status 400', async () => {
-    const { getByTestId } = renderWithRouter(<MockAuthContext status={400} />, {
-      route: '/signup',
-    });
-    const usernameInput = getByTestId('username');
-    const passwordInput = getByTestId('password');
+  it('should return error when login info is wrong', async () => {
+    const { getByTestId, findByText } = renderWithRouter(
+      <MockAuthContext status={401} />,
+      {
+        route: '/login',
+      },
+    );
     const emailInput = getByTestId('email');
+    const passwordInput = getByTestId('password');
     const submitButton = getByTestId('submit');
 
-    if (emailInput instanceof HTMLInputElement) emailInput.type = 'text';
-
     await act(async () => {
-      fireEvent.input(usernameInput, { target: { value: 'muitobala' } });
       fireEvent.input(passwordInput, { target: { value: '12345678' } });
-      fireEvent.input(emailInput, { target: { value: 'jojo' } });
+      fireEvent.input(emailInput, { target: { value: 'jojo@gmail.com' } });
       fireEvent.click(submitButton);
     });
 
-    expect(
-      await screen.findByText('invalid username/password'),
-    ).toBeInTheDocument();
+    expect(await findByText('Incorrect email/password')).toBeInTheDocument();
   });
 });

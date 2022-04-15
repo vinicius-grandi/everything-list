@@ -1,9 +1,11 @@
 import React, { useContext, createContext, useState } from 'react';
 
-type AuthContextType = {
+type Res = Promise<void | false | Response>;
+
+export type AuthContextType = {
   auth: boolean | 'standby';
-  login?(form: HTMLFormElement): Promise<Response | false | void>;
-  signup?(form: HTMLFormElement): Promise<Response | false | void>;
+  login?(form: HTMLFormElement): Res;
+  signup?(form: HTMLFormElement): Res;
   logout?(): void;
 };
 
@@ -14,8 +16,6 @@ export const AuthContext = createContext<AuthContextType>({
 function AuthProvider({
   children,
 }: React.PropsWithChildren<{ children: JSX.Element }>): JSX.Element {
-  type Res = Promise<void | false | Response>;
-
   const [auth, setAuth] = useState<boolean | 'standby'>('standby');
 
   React.useEffect(() => {
