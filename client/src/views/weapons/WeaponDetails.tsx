@@ -1,5 +1,7 @@
-const WeaponsDetails = (): void => {
-  //
-};
+import React from 'react';
 
-export default WeaponsDetails;
+function WeaponDetails(): JSX.Element {
+  return <h1>Weapon Details</h1>;
+}
+
+export default WeaponDetails;

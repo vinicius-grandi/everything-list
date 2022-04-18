@@ -1,6 +1,6 @@
 import type { WeaponInfo } from '../services/weapons/wikiapi.d';
 
-const data: WeaponInfo = {
+export const data: WeaponInfo = {
   pagination: {
     lastVisiblePage: 7,
     hasNextPage: false,
