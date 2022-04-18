@@ -6,10 +6,14 @@ import getQueryItem from '../../utils/db/getQueryItem';
 import db from '../models';
 
 const { Anime } = db;
+type IQueryParams = {
+  page: number;
+};
+
 type Lists = 'animes' | 'mangas' | 'books';
 
 const ApiController = {
-  async animes(animeId?: string, query = '?order_by=title') {
+  async animes(page = 1, query = `?order_by=title&limit=20&page=${page}`) {
     const animeOrAnimes = await getAnimeSearch(query);
     const animes = Array.isArray(animeOrAnimes)
       ? animeOrAnimes
@@ -40,19 +44,33 @@ const ApiController = {
     return data;
   },
 
-  async books(page = 1) {
-    const books = await getBookSearch(
-      `a&maxResults=20&startIndex=${(page - 1) * 20}`,
-    );
+  async books(
+    page = 1,
+    query = `?q=a&maxResults=20&startIndex=${(page - 1) * 20}`,
+  ) {
+    const books = await getBookSearch(query);
+    if (books.items === undefined) {
+      const id = query.slice(1);
+      const [bookFromDB] = await db.Book.findOrCreate({
+        where: { id },
+        defaults: {
+          id,
+          rating: 0,
+        },
+      });
+      return {
+        ...books,
+        rating: Number(bookFromDB.rating),
+      };
+    }
     const data = books.items.map((book) => {
-      let rating = 0;
-      if (db.Book) {
-        const bookFromDB = db.Book.findOrCreate({
-          where: { id: book.id },
-          defaults: { id: book.id },
-        });
-        rating = bookFromDB.rating;
-      }
+      const bookFromDB = db.Book.findOrCreate({
+        where: { id: book.id },
+        defaults: {
+          id: book.id,
+          rating: 0,
+        },
+      });
       const {
         id,
         volumeInfo: {
@@ -60,12 +78,12 @@ const ApiController = {
           title,
         },
       } = book;
-      return getQueryItem(id, rating, thumbnail, 'animes', title);
+      return getQueryItem(id, bookFromDB.rating, thumbnail, 'books', title);
     });
     return data;
   },
 
-  async mangas(mangaId?: string, query = '?order_by=title') {
+  async mangas(page = 1, query = `?order_by=title&limit=20&page=${page}`) {
     const mangas = await getMangaSearch(query);
     const data = mangas.map((manga) => {
       let rating = 0;
@@ -88,10 +106,14 @@ const ApiController = {
     return data;
   },
 
-  async getItems(req: Request, res: Response) {
+  async getItems(
+    req: Request<unknown, unknown, unknown, IQueryParams>,
+    res: Response,
+  ) {
     const list = req.baseUrl.slice(1) as Lists;
+    const { page } = req.query;
     try {
-      const items = await this[list]();
+      const items = await this[list](page);
       return res.json({ data: items });
     } catch (error) {
       logger.err(error);
@@ -99,14 +121,19 @@ const ApiController = {
     }
   },
 
-  async getAnimeOrManga(req: Request, res: Response) {
+  async getAnimeOrManga(
+    req: Request<{ id: string }, unknown, unknown, IQueryParams>,
+    res: Response,
+  ) {
     const list = req.baseUrl.slice(1) as Lists;
+    const { page } = req.query;
     const { id } = req.params;
     if (list === 'animes' || list === 'mangas') {
-      const items = await this[list](id, `/${id}`);
+      const items = await this[list](page, `/${id}`);
       res.json({ data: items });
     }
-    res.status(404).json({ error: 'not found' });
+    const items = await this[list](page, `/${id}`);
+    return res.json({ data: items });
   },
 
   async getComments(req: Request, res: Response) {

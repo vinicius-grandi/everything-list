@@ -1000,6 +1000,7 @@ type Book = {
   selfLink: string;
   volumeInfo: {
     title: string;
+    subtitle?: string;
     authors: string[];
     publishedDate: string;
     industryIdentifiers: IndustryIdentifiers[];
