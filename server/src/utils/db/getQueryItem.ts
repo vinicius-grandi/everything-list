@@ -1,7 +1,7 @@
 import type { QueryItem } from '../../app/controllers/SearchController.d';
 
 export default function getQueryItem(
-  id: number,
+  id: number | string,
   rating: number,
   imagePath: string | null,
   listName: string,

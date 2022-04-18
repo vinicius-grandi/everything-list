@@ -17,7 +17,7 @@ export type getAnimeOrManga = (
 
 export type QueryItem = {
   list_name: string;
-  id: number;
+  id: number | string;
   name: string;
   imagePath: string | null;
 } | null;
