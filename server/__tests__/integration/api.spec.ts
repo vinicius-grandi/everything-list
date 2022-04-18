@@ -32,4 +32,9 @@ describe('api', () => {
     );
     expect(response.body.data.rating.toFixed(0)).toBe('0');
   });
+  it('should get movies from route /movies/api/', async () => {
+    const response = await request(app).get('/movies/api/');
+    expect(response.body.data[0].name).toBe("Zeg 'ns Aaa");
+    expect(response.body.data[0].rating.toFixed(0)).toBe('0');
+  });
 });

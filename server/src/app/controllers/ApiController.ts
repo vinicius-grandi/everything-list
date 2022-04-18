@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import logger from 'jet-logger';
 import { getAnimeSearch, getMangaSearch } from '../../services/animes/jikanapi';
 import getBookSearch from '../../services/books/googlebooksapi';
+import getMovieSearch from '../../services/movies/omdbapi';
 import getQueryItem from '../../utils/db/getQueryItem';
 import db from '../models';
 
@@ -104,6 +105,29 @@ const ApiController = {
       return getQueryItem(id, rating, imagePath, 'animes', title);
     });
     return data;
+  },
+
+  async movies(page = 1, query = `s=aaa&page=${page}`) {
+    const movies = await getMovieSearch(query);
+    const data = movies.Search.map(async (movie) => {
+      const { Title: title, imdbID: id, Poster: imagePath } = movie;
+      return getQueryItem(
+        id,
+        (
+          await db.Movie.findOrCreate({
+            where: { id: movie.imdbID },
+            defaults: {
+              id: movie.imdbID,
+              rating: 0,
+            },
+          })
+        )[0].rating,
+        imagePath,
+        'movies',
+        title,
+      );
+    });
+    return Promise.all(data);
   },
 
   async getItems(

@@ -11,7 +11,7 @@ async function getBookSearch(queryParams = '?q=a&maxResults=20'): Promise<
   );
   const { data } = res;
   return {
-    maxPage: data.totalItems / 20,
+    maxPage: Math.ceil(data.totalItems / 20),
     ...data,
   };
 }
