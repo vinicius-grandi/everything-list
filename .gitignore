@@ -27,3 +27,9 @@ server/.env
 server/.test.env
 server/node_modules
 server/dist
+
+client/build
+client/node_modules
+client/.env
+client/.pnp
+client/.pnp.js

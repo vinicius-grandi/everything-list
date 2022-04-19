@@ -6,6 +6,7 @@ export type ContentType = {
 
 type weapons = {
   name: string;
+  rating?: number;
   synonyms: string[] | string;
   summary: string | null;
   imagePath: string | null;

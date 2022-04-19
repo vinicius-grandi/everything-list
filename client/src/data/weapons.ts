@@ -12,8 +12,9 @@ export const data: WeaponInfo = {
         'https://upload.wikimedia.org/wikipedia/commons/8/82/Arbalest_%28PSF%29.png',
       summary:
         'The arbalest (also arblast) was a late variation of the crossbow coming into use in Europe during the 12th century. A large weapon, the arbalest had a steel prod (the "bow" portion of the weapon). Since the arbalest was much larger than earlier crossbows, and because of the greater tensile strength of steel, it had a greater force. However, the greater draw weight was offset by the smaller powerstroke, which limited its potential in fully transferring the energy into the crossbow bolt. The strongest windlass-pulled arbalests could have up to 22 kN (2,200 kilograms-force; 4,900 pounds-force) of force and be accurate up to 100 m (110 yards). A skilled arbalestier (arbalester) could loose two bolts per minute.',
-      synonyms: 'arblast',
+      synonyms: ['arblast'],
       wikiLink: 'Arbalest',
+      rating: 0,
     },
     {
       name: 'Ax match and wheellock',
