@@ -9,6 +9,7 @@ export default function getQueryItem(
 ) {
   const qItem: QueryItem = {
     id,
+    rating,
     imagePath,
     list_name: listName,
     name,

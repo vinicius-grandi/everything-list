@@ -19,8 +19,8 @@ const ApiController = {
     const animes = Array.isArray(animeOrAnimes)
       ? animeOrAnimes
       : [animeOrAnimes];
-    const data = animes.map((anime) => {
-      const animeRating = Anime.findOrCreate({
+    const data = animes.map(async (anime) => {
+      const [animeRating] = await Anime.findOrCreate({
         where: { id: anime.mal_id },
         defaults: {
           id: anime.mal_id,
@@ -42,7 +42,7 @@ const ApiController = {
         title,
       );
     });
-    return data;
+    return Promise.all(data);
   },
 
   async books(
@@ -64,8 +64,8 @@ const ApiController = {
         rating: Number(bookFromDB.rating),
       };
     }
-    const data = books.items.map((book) => {
-      const bookFromDB = db.Book.findOrCreate({
+    const data = books.items.map(async (book) => {
+      const [bookFromDB] = await db.Book.findOrCreate({
         where: { id: book.id },
         defaults: {
           id: book.id,
@@ -79,17 +79,23 @@ const ApiController = {
           title,
         },
       } = book;
-      return getQueryItem(id, bookFromDB.rating, thumbnail, 'books', title);
+      return getQueryItem(
+        id,
+        Number(bookFromDB.rating),
+        thumbnail,
+        'books',
+        title,
+      );
     });
-    return data;
+    return Promise.all(data);
   },
 
   async mangas(page = 1, query = `?order_by=title&limit=20&page=${page}`) {
     const mangas = await getMangaSearch(query);
-    const data = mangas.map((manga) => {
+    const data = mangas.map(async (manga) => {
       let rating = 0;
       if (db.Manga) {
-        const mangaFromDB = db.Manga.findOrCreate({
+        const [mangaFromDB] = await db.Manga.findOrCreate({
           where: { id: manga.mal_id },
           defaults: { id: manga.mal_id },
         });
@@ -104,24 +110,23 @@ const ApiController = {
       } = manga;
       return getQueryItem(id, rating, imagePath, 'animes', title);
     });
-    return data;
+    return Promise.all(data);
   },
 
   async movies(page = 1, query = `s=aaa&page=${page}`) {
     const movies = await getMovieSearch(query);
     const data = movies.Search.map(async (movie) => {
+      const [movieFromDB] = await db.Movie.findOrCreate({
+        where: { id: movie.imdbID },
+        defaults: {
+          id: movie.imdbID,
+          rating: 0,
+        },
+      });
       const { Title: title, imdbID: id, Poster: imagePath } = movie;
       return getQueryItem(
         id,
-        (
-          await db.Movie.findOrCreate({
-            where: { id: movie.imdbID },
-            defaults: {
-              id: movie.imdbID,
-              rating: 0,
-            },
-          })
-        )[0].rating,
+        Number(movieFromDB.rating),
         imagePath,
         'movies',
         title,

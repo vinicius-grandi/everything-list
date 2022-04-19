@@ -21,7 +21,7 @@ describe('api', () => {
   });
   it('should retrieve books from page 2 on books route', async () => {
     const response = await request(app).get('/books/api?page=2');
-    expect(response.body.data[0].name).toBe('A Rand Note');
+    expect(response.body.data[0].name).toBe('A Renegade in Springtime');
     const response2 = await request(app).get('/books/api?page=3');
     expect(response2.body.data[0].name).toBe('Learning to Think in a Math Lab');
   });
