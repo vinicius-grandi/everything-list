@@ -3,7 +3,7 @@
 
 ## Description
 ------
- An app where you can review a plethora of things
+ ✨ An app where you can review a plethora of things
 ## Installation
 ------
 To install this project in your own machine:
