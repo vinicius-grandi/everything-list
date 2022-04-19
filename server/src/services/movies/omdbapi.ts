@@ -11,7 +11,7 @@ async function getMovieSearch(queryParams = 's=aaa&page=1'): Promise<
   );
   const { data } = res;
   return {
-    maxPage: Math.ceil(Number(data.totalResults) / 20),
+    maxPage: Math.ceil(Number(data.totalResults) / 10),
     ...data,
   };
 }
