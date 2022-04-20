@@ -6,6 +6,7 @@ const routes = Router();
 
 routes.use(auth);
 routes.get('/api/0', UserController.getUserInfo);
+routes.get('/api/0?review=false', UserController.getUserInfo);
 routes.put('/api/0', UserController.updateProfilePicture);
 
 export default routes;

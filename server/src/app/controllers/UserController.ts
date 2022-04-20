@@ -4,6 +4,10 @@ import type { Request, Response } from 'express';
 import logger from 'jet-logger';
 import db from '../models';
 
+interface IQueryParam {
+  review: string;
+}
+
 const { User, Review } = db;
 
 type ImgbbResponse = {
@@ -44,8 +48,13 @@ type ImgbbResponse = {
 };
 
 const UserController = {
-  async getUserInfo(req: Request, res: Response) {
+  async getUserInfo(req: Request<IQueryParam>, res: Response) {
     const { user, userId } = req.session;
+    const { review } = req.params;
+
+    if (review !== undefined) {
+      return res.json(user);
+    }
 
     const reviews = await Review.findAll({ where: { user_id: userId } });
 

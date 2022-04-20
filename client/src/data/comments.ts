@@ -4,6 +4,7 @@ const date3 = new Date();
 
 export const comments = [
   {
+    username: 'GamerXX',
     id: 1,
     profilePicture: 'img1',
     message: 'Consectetur excepteur sunt et officia aliquip.',
@@ -12,6 +13,7 @@ export const comments = [
     updated_at: date1,
   },
   {
+    username: 'MaganWolf',
     id: 2,
     profilePicture: 'img2',
     message: 'Aute dolore occaecat fugiat enim irure cillum aliqua ex.',
@@ -20,6 +22,7 @@ export const comments = [
     updated_at: date2,
   },
   {
+    username: 'InsaneGG',
     id: 1,
     profilePicture: 'img3',
     message: 'Esse ad Lorem ad labore veniam.',
