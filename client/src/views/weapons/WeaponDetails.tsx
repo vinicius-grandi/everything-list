@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Star } from 'react-feather';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import Reviews from '../../components/itemDetails/Reviews';
 import { useAuth } from '../../contexts/AuthContext';
 
 type User = {
@@ -10,7 +11,7 @@ type User = {
   profile_picture: string;
 };
 
-type Comment = {
+export type Comment = {
   id: number;
   username: string;
   profilePicture: string;
@@ -35,7 +36,35 @@ function WeaponDetails(): JSX.Element {
   const { auth } = useAuth();
   const [item, setItem] = useState<QueryItem>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [updateComments, setUpdateComments] = useState<boolean>(false);
   const [comments, setComments] = useState<Comment[]>([]);
+
+  const handleForm = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const response = await fetch(`/weapons/api/${id}`, {
+      method: 'post',
+      body: formData,
+    });
+    if (response.status !== 200) {
+      const body: { error: string } = await response.json();
+      return setError(body.error);
+    }
+
+    return setUpdateComments(!updateComments);
+  };
+
+  useEffect(() => {
+    async function getComments(): Promise<void> {
+      const response = await fetch(`/weapons/api/${id}/comments`);
+      const commentsFromResponse: Comment[] = await response.json();
+      setComments(commentsFromResponse);
+    }
+    getComments();
+  }, [id, updateComments]);
 
   useEffect(() => {
     async function getUser(): Promise<void> {
@@ -48,13 +77,7 @@ function WeaponDetails(): JSX.Element {
       const itemFromResponse: QueryItem = await response.json();
       setItem(itemFromResponse);
     }
-    async function getComments(): Promise<void> {
-      const response = await fetch(`/weapons/api/${id}/comments`);
-      const commentsFromResponse: Comment[] = await response.json();
-      setComments(commentsFromResponse);
-    }
     getItem();
-    getComments();
 
     if (auth) {
       getUser();
@@ -62,6 +85,7 @@ function WeaponDetails(): JSX.Element {
   });
   return (
     <main>
+      {error && <p>{error}</p>}
       {item && (
         <>
           <section>
@@ -86,7 +110,7 @@ function WeaponDetails(): JSX.Element {
             </ul>
           </section>
           {user && (
-            <form>
+            <form onSubmit={handleForm}>
               <h1>Rate this item</h1>
               <div>
                 <img src={user.profile_picture} alt="your profile" />
@@ -100,31 +124,7 @@ function WeaponDetails(): JSX.Element {
               </div>
             </form>
           )}
-          <h1>Reviews</h1>
-          {comments.length > 0 && (
-            <section>
-              <ul>
-                {comments.map((comment) => (
-                  <li key={`${comment.id}-${comment.created_at}`}>
-                    <div>
-                      <Link to={`/profiles/${comment.id}`}>
-                        <img
-                          src={comment.profilePicture}
-                          alt={`${comment.username} profile`}
-                        />
-                      </Link>
-                      <p>{comment.username}</p>
-                      <span>⭐rating {comment.rating}</span>
-                      <p>
-                        {`created at - ${comment.created_at} / updated at - ${comment.updated_at}`}
-                      </p>
-                    </div>
-                    <p>{comment.message}</p>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
+          {comments.length > 1 && <Reviews comments={comments} />}
         </>
       )}
     </main>
