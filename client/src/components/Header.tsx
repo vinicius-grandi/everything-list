@@ -172,7 +172,7 @@ function Header({
 
   const dVTranslation = 150;
   const [translation, setTranslation] = useState<number>(dVTranslation);
-  const searchBoxContainer = useRef<HTMLDivElement>(null);
+  const searchInput = useRef<HTMLInputElement>(null);
   // capture all clicks on window to close search input when is required
   window.onclick = (ev) => {
     const elem = ev.target;
@@ -189,7 +189,7 @@ function Header({
     ) {
       return;
     }
-    if (searchBoxContainer.current) {
+    if (searchInput.current) {
       setSbDisplay('none');
     }
   };
@@ -207,7 +207,7 @@ function Header({
           className="logo"
         />
       </Link>
-      <SearchBar ref={searchBoxContainer} />
+      <SearchBar ref={searchInput} />
       <Search
         color="#f6f6f6"
         className="search-icon"
@@ -215,6 +215,9 @@ function Header({
         onClick={() => {
           if (window.innerWidth < 599) {
             setSbDisplay('initial');
+            if (searchInput.current) {
+              setTimeout(() => searchInput.current?.focus(), 1);
+            }
           }
         }}
       />

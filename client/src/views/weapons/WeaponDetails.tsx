@@ -12,9 +12,11 @@ type User = {
 };
 
 export type Comment = {
-  id: number;
-  username: string;
-  profilePicture: string;
+  review_user: {
+    id: number;
+    username: string;
+    profile_picture: string;
+  };
   message: string;
   rating: number;
   created_at: string;
@@ -45,11 +47,6 @@ const WeaponInfoContainer = styled.section`
   }
   background-color: #53c278;
   padding: 1rem 0;
-
-  img {
-    width: 90%;
-    height: auto;
-  }
 `;
 
 const Rating = styled.p`
@@ -64,6 +61,13 @@ const Rating = styled.p`
   }
 `;
 
+const Container = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0.45rem;
+`;
+
 const WeaponSummary = styled.p`
   text-align: justify;
   padding: 0.55rem;
@@ -75,36 +79,54 @@ const WeaponSummary = styled.p`
 const WeaponReviewForm = styled.form`
   margin-top: 1rem;
   background-color: #543275;
+  padding: 0.5rem;
   h1 {
     color: #f6f6f6;
+  }
+
+  div {
+    margin: 1rem;
+  }
+
+  img {
+    border-radius: 50%;
+  }
+
+  input[type='number'] {
+    font-size: 1rem;
+    width: 3rem;
   }
 `;
 
 const ReviewUserInfo = styled.div`
-  display: flex;
-  color: #f6f6f6;
-  span {
-    display: flex;
-    input {
-      width: 50%;
-      height: 50%;
-    }
+  * {
+    margin: 0 !important;
+    padding: 0 !important;
   }
+  margin: 1rem;
+  color: #f6f6f6;
+  display: grid;
+  grid-template-columns: 60px 1fr 1fr;
 `;
 
 const ReviewInput = styled.div`
   display: flex;
+  margin: 0 !important;
   flex-direction: column;
   align-items: flex-end;
   textarea {
     width: 100%;
+    font-size: 1.2rem;
+    margin: 0;
   }
-  input {
+  input[type='submit'] {
     width: fit-content;
     border: none;
     color: #f6f6f6;
     font-weight: 600;
     padding: 0.36rem;
+    margin-top: 0.8Zrem;
+    margin-top: 1rem;
     background-color: #38754c;
   }
 `;
@@ -166,6 +188,11 @@ function WeaponDetails(): JSX.Element {
     async function getItem(): Promise<void> {
       try {
         const response = await fetch(`/weapons/api/${id}`);
+        if (response.status !== 200) {
+          navigate('/weapons', {
+            replace: true,
+          });
+        }
         const itemFromResponse: QueryItem = await response.json();
         setItem(itemFromResponse);
       } catch (_err) {
@@ -178,7 +205,7 @@ function WeaponDetails(): JSX.Element {
   }, [id, navigate]);
   return (
     <WeaponDetailsContainer>
-      {error && <p>{error}</p>}
+      {error && <h2 className="error">{error}</h2>}
       {item && (
         <>
           <WeaponInfoContainer>
@@ -187,14 +214,16 @@ function WeaponDetails(): JSX.Element {
               <Star fill="#faea5a" />
               <strong>Rating:</strong> <span>{item.rating}</span>
             </Rating>
-            <img
-              src={
-                item.imagePath ??
-                'https://via.placeholder.com/500x500?text=No+Image'
-              }
-              alt={`${item.name}-weapons`}
-            />
-            <WeaponSummary>{item.summary}</WeaponSummary>
+            <Container>
+              <img
+                src={
+                  item.imagePath ??
+                  'https://via.placeholder.com/500x500?text=No+Image'
+                }
+                alt={`${item.name}-weapons`}
+              />
+              <WeaponSummary>{item.summary}</WeaponSummary>
+            </Container>
             {item.synonyms && (
               <>
                 <h2>Synonyms</h2>
@@ -215,11 +244,30 @@ function WeaponDetails(): JSX.Element {
               <h1>Rate this item</h1>
               <div>
                 <ReviewUserInfo>
-                  <img src={user.profile_picture} alt="your profile" />
-                  <p>{user.username}</p>
+                  <img
+                    src={
+                      user.profile_picture ??
+                      'https://via.placeholder.com/50X50.png'
+                    }
+                    alt="your profile"
+                  />
+                  <p>
+                    <strong>{user.username}</strong>
+                  </p>
                   <span>
-                    {'⭐rating '}
-                    <input type="number" step={0.1} max={10} min={0} />
+                    ⭐
+                    <label htmlFor="rating">
+                      Rating
+                      <input
+                        type="number"
+                        step={0.1}
+                        max={10}
+                        min={0}
+                        name="rating"
+                        id="rating"
+                        defaultValue={0}
+                      />
+                    </label>
                   </span>
                 </ReviewUserInfo>
                 <ReviewInput>
@@ -229,7 +277,7 @@ function WeaponDetails(): JSX.Element {
               </div>
             </WeaponReviewForm>
           )}
-          {comments.length > 1 && <Reviews comments={comments} />}
+          {comments.length >= 1 && <Reviews comments={comments} />}
         </>
       )}
     </WeaponDetailsContainer>

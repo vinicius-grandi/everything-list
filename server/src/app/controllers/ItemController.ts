@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import sequelize from 'sequelize';
+import logger from 'jet-logger';
 import db from '../models';
 
 interface IUserReview {
@@ -78,7 +79,8 @@ const ItemController = {
       await this.setItemRating(item, id, listName);
       return res.json({ review, item });
     } catch (err) {
-      return res.status(405).send(err.message);
+      logger.err(err.message);
+      return res.status(405).send({ error: 'Internal server error' });
     }
   },
 
