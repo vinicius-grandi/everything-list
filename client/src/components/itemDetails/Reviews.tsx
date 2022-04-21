@@ -1,4 +1,5 @@
 import React from 'react';
+import { RefreshCcw } from 'react-feather';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import type { Comment } from '../../views/weapons/WeaponDetails';
@@ -78,6 +79,7 @@ function Reviews({ comments }: { comments: Comment[] }): JSX.Element {
   return (
     <>
       <h1 style={{ margin: '1rem 0' }}>Reviews</h1>
+      <RefreshCcw />
       <ReviewsContainer>
         <ul>
           {comments.map((comment) => (

@@ -180,6 +180,7 @@ const ApiController = {
           as: 'review_user',
           attributes: ['id', 'username', 'profile_picture'],
         },
+        order: [['created_at', 'DESC']],
       });
 
       return res.json(reviews);
