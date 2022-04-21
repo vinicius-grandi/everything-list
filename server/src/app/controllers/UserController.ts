@@ -48,9 +48,12 @@ type ImgbbResponse = {
 };
 
 const UserController = {
-  async getUserInfo(req: Request<IQueryParam>, res: Response) {
+  async getUserInfo(
+    req: Request<unknown, unknown, unknown, IQueryParam>,
+    res: Response,
+  ) {
     const { user, userId } = req.session;
-    const { review } = req.params;
+    const { review } = req.query;
 
     if (review !== undefined) {
       return res.json(user);

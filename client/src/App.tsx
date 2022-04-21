@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import Weapons from './views/Weapons';
+import WeaponDetails from './views/weapons/WeaponDetails';
 import Header from './components/Header';
 import Home from './views/Home';
 import Signup from './views/Signup';
@@ -26,6 +27,7 @@ function App(): JSX.Element {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/weapons" element={<Weapons />} />
+          <Route path="/weapons/:id" element={<WeaponDetails />} />
           {auth && <Route path="/my-profile" element={<UserProfile />} />}
           {!auth && <Route path="/signup" element={<Signup />} />}
           <Route path="*" element={<NotFound />} />

@@ -20,7 +20,7 @@ const SearchList = styled.ul`
   grid-auto-rows: 1fr;
   text-align: center;
   place-items: center;
-  position: relative;
+  position: absolute;
   z-index: 0;
 `;
 

@@ -5,8 +5,11 @@ import auth from '../auth/auth';
 const routes = Router();
 
 routes.use(auth);
-routes.get('/api/0', UserController.getUserInfo);
-routes.get('/api/0?review=false', UserController.getUserInfo);
-routes.put('/api/0', UserController.updateProfilePicture);
+routes.get('/api/0', UserController.getUserInfo.bind(UserController));
+routes.get(
+  '/api/0?review=false',
+  UserController.getUserInfo.bind(UserController),
+);
+routes.put('/api/0', UserController.updateProfilePicture.bind(UserController));
 
 export default routes;
