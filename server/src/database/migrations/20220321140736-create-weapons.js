@@ -10,6 +10,7 @@ module.exports = {
       name: {
         type: Sequelize.STRING(50),
         allowNull: false,
+        unique: true,
       },
       image_path: {
         type: Sequelize.STRING(150),

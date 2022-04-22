@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Card from '../components/Card';
-import weaponsData from '../data/weapons';
 import type { WeaponInfo } from '../services/weapons/wikiapi.d';
 
 const Title = styled.h1`
@@ -65,6 +64,7 @@ const Buttons = styled.div`
 
 function Weapons(): JSX.Element {
   const [weapons, setWeapons] = useState<WeaponInfo['data']>([]);
+  const [error, setError] = useState<boolean>(false);
 
   // getting page
   const [searchParams, setSearchParams] = useSearchParams();
@@ -85,17 +85,23 @@ function Weapons(): JSX.Element {
     const p = Number(searchParams.get('page'));
     setPage(p);
     async function weaponsFn(): Promise<void> {
-      const w = (await weaponsData(p <= 0 ? 1 : p)).data;
-      setLastPage((await weaponsData(0)).pagination.lastVisiblePage);
-      setWeapons([...w]);
+      const response = await fetch(`/weapons/api?page=${p}`);
+
+      if (response.status !== 200) {
+        return setError(true);
+      }
+      const items: WeaponInfo = await response.json();
+      setLastPage(items.pagination.lastVisiblePage);
+      return setWeapons([...items.data]);
     }
     weaponsFn();
   }, [page, searchParams]);
 
   return (
     <div>
+      {error && <h2 className="error">Item not found</h2>}
       <Title data-testid="weapon-d-title">Weapons</Title>
-      {weapons.length > 1 ? (
+      {weapons.length >= 1 ? (
         <Main>
           {weapons.map((val) => (
             <Card key={val.name} title={val.name} imagePath={val.imagePath} />
