@@ -16,7 +16,7 @@ import noApiListRouter from './routes/noapilist';
 import apiListRouter from './routes/apilist';
 
 const noApiListRoutes = ['/weapons'];
-const apiListRoutes = ['/animes'];
+const apiListRoutes = ['/animes', '/books', '/movies'];
 
 // creating express app
 const app = express();
