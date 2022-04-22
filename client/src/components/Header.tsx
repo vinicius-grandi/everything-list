@@ -230,8 +230,18 @@ function Header({
             <li>Animes</li>
           </Link>
           {!auth && (
-            <Link to="/signup" onClick={menuHandle}>
-              <li>Sign Up</li>
+            <>
+              <Link to="/signup" onClick={menuHandle}>
+                <li>Sign Up</li>
+              </Link>
+              <Link to="/login" onClick={menuHandle}>
+                <li>Login</li>
+              </Link>
+            </>
+          )}
+          {auth && (
+            <Link to="/logout" onClick={menuHandle}>
+              Logout
             </Link>
           )}
         </ul>

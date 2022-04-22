@@ -1,19 +1,20 @@
 import React from 'react';
 import MockAuthContext from './utils/MockAuthContext';
 import { mountWithRouter } from './utils/renderWithRouter';
-import Login from '../Login';
+import Signup from '../Signup';
 
 describe('Login', () => {
   it('should return a pop up error when user types weak password', () => {
     mountWithRouter(
       <MockAuthContext status={200}>
-        <Login />
+        <Signup />
       </MockAuthContext>,
       {
         route: '/login',
       },
     );
     cy.get('[data-cy=email]').type('a@gmail.com');
+    cy.get('[data-cy=username]').type('afadsaf');
     cy.get('[data-cy=password]').type('12345678').as('password-input');
     cy.get('[type=submit]').click();
     cy.get('@password-input').then(($input) => {

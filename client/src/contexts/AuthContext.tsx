@@ -6,7 +6,7 @@ export type AuthContextType = {
   auth: boolean | 'standby';
   login?(form: HTMLFormElement): Res;
   signup?(form: HTMLFormElement): Res;
-  logout?(): void;
+  logout?(): Res;
 };
 
 export const AuthContext = createContext<AuthContextType>({
@@ -56,10 +56,12 @@ function AuthProvider({
       signup: async (form: HTMLFormElement): Res => {
         return fetchWithForm(form, '/api/signup');
       },
-      logout: (): void => {
-        fetch('/api/logout').then(
-          (res) => res.status === 200 && setAuth(false),
-        );
+      logout: async (): Res => {
+        const response = await fetch('/api/logout');
+        if (response.status === 200) {
+          setAuth(false);
+        }
+        return response;
       },
     }),
     [auth, fetchWithForm],

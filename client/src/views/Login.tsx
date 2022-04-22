@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { RegisterForm } from './Signup';
 import submit from './utils';
 
 function Login(): JSX.Element {
@@ -15,7 +16,7 @@ function Login(): JSX.Element {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <RegisterForm onSubmit={handleSubmit}>
       <label htmlFor="email">
         Email:
         <input
@@ -34,22 +35,13 @@ function Login(): JSX.Element {
           type="password"
           data-testid="password"
           name="password"
-          pattern="^(?=.*[A-Z].*[A-Z])(?=.*[!@#$%&*()+_-].*[!@#$%&*()+_-])(?=.*[\d].*[\d])(?=.*[a-z].*[a-z]).{8,15}$"
           data-cy="password"
           id="password"
-          minLength={8}
-          maxLength={15}
-          onInvalid={(ev) => {
-            const elem = ev.target as HTMLInputElement;
-            elem.setCustomValidity(
-              'Your password is too weak! Please be sure it has at least 2 special characters(!@#$%&*()+_-), 2 uppercase letters, 2 lowercases and 2 numbers.',
-            );
-          }}
         />
         {error && <p>Incorrect email/password</p>}
         <input type="submit" data-testid="submit" value="Login" />
       </label>
-    </form>
+    </RegisterForm>
   );
 }
 

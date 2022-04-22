@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useAuth } from '../contexts/AuthContext';
 import submit from './utils';
 
-const SignupForm = styled.form`
+export const RegisterForm = styled.form`
   margin: 1rem;
   background-color: #38754c;
   border-radius: 5px;
@@ -61,7 +61,7 @@ function Signup(): JSX.Element {
   };
 
   return (
-    <SignupForm onSubmit={handleSubmit}>
+    <RegisterForm onSubmit={handleSubmit}>
       <h1>Sign up</h1>
       <label htmlFor="username">
         Username:
@@ -69,6 +69,7 @@ function Signup(): JSX.Element {
           placeholder="type your username here"
           type="text"
           data-testid="username"
+          data-cy="username"
           name="username"
           id="username"
         />
@@ -79,6 +80,7 @@ function Signup(): JSX.Element {
           placeholder="type your email here"
           type="email"
           data-testid="email"
+          data-cy="email"
           name="email"
           id="email"
         />
@@ -90,19 +92,21 @@ function Signup(): JSX.Element {
           type="password"
           data-testid="password"
           name="password"
-          pattern="^(?=.*[A-Z].*[A-Z])(?=.*[!@#$%&*()+_-].*[!@#$%&*()+_-])(?=.*[\d].*[\d])(?=.*[a-z].*[a-z]).{8,15}$"
           id="password"
+          data-cy="password"
+          minLength={8}
+          maxLength={15}
           onInvalid={(ev) => {
             const elem = ev.target as HTMLInputElement;
             elem.setCustomValidity(
-              'Your password is too weak! Please be sure it has at least 2 special characters(!@#$%&*()+_-), 2 uppercase letters, 2 lowercases and 2 numbers.',
+              'Your password is too weak! Please be sure it has at least 2 special characters(!@#$%&*()+_-), 2 uppercase letters, 2 lowercases and 2 numbers. Length - between 8 and 15 characters',
             );
           }}
         />
       </label>
       {error && <p id="error-msg">invalid username/password</p>}
       <input type="submit" data-testid="submit" value="Sign Up" />
-    </SignupForm>
+    </RegisterForm>
   );
 }
 

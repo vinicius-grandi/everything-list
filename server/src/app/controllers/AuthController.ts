@@ -84,7 +84,9 @@ const AuthController = {
     return res.status(401).json({ message: 'Invalid Username/Password' });
   },
   logout(req: Request, res: Response) {
-    req.session.destroy(() => res.redirect('/'));
+    return req.session.destroy(() =>
+      res.send({ message: 'logout successful' }),
+    );
   },
 };
 
