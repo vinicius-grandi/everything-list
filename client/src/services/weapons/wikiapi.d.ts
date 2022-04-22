@@ -4,7 +4,8 @@ export type ContentType = {
   items?: ContentType[];
 };
 
-type weapons = {
+export type weapons = {
+  id?: string | number;
   name: string;
   rating?: number;
   synonyms: string[] | string;

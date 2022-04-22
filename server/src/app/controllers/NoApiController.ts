@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import logger from 'jet-logger';
 import getModelName from '../../utils/db/getModelName';
 import db from '../models';
 
@@ -15,22 +16,26 @@ const NoApiController = {
     const page = req.query.page === undefined ? 1 : Number(req.query.page);
     const modelName = getModelName(baseUrl);
 
-    const lastPage = Math.ceil((await db[modelName].count()) / 20);
-    const items = await db[modelName].findAll({
-      limit: 20,
-      offset: page === 1 ? 0 : (page - 1) * 20,
-    });
+    try {
+      const lastPage = Math.ceil((await db[modelName].count()) / 20);
+      const items = await db[modelName].findAll({
+        limit: 20,
+        offset: page <= 1 ? 0 : (page - 1) * 20,
+      });
+      if (!items) {
+        return res.status(404).json({ error: 'no items' });
+      }
 
-    if (!items) {
-      return res.status(404).json({ error: 'no items' });
+      return res.json({
+        pagination: {
+          lastVisiblePage: lastPage,
+        },
+        data: items,
+      });
+    } catch (error) {
+      logger.err(error);
+      return res.status(504).json({ error: 'Internal server error' });
     }
-
-    return res.json({
-      pagination: {
-        lastVisiblePage: lastPage,
-      },
-      data: items,
-    });
   },
 };
 

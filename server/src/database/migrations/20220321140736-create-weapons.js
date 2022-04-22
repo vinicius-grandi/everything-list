@@ -13,13 +13,13 @@ module.exports = {
         unique: true,
       },
       image_path: {
-        type: Sequelize.STRING(150),
+        type: Sequelize.STRING(250),
       },
       summary: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
       },
       synonyms: {
-        type: Sequelize.ARRAY(Sequelize.TEXT),
+        type: Sequelize.STRING,
       },
       rating: {
         type: Sequelize.DECIMAL(4, 2),

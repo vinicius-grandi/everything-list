@@ -68,6 +68,8 @@ function Signup(): JSX.Element {
         <input
           placeholder="type your username here"
           type="text"
+          minLength={0}
+          maxLength={15}
           data-testid="username"
           data-cy="username"
           name="username"

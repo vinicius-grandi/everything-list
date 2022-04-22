@@ -38,7 +38,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
   }
 
   const attributes = {
-    username: DataTypes.STRING,
+    username: DataTypes.STRING(15),
     email: DataTypes.STRING,
     password: DataTypes.VIRTUAL,
     password_hash: DataTypes.STRING,

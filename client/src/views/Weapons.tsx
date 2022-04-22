@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Card from '../components/Card';
-import type { WeaponInfo } from '../services/weapons/wikiapi.d';
+import type {
+  WeaponInfo,
+  weapons as WeaponsType,
+} from '../services/weapons/wikiapi.d';
 
 const Title = styled.h1`
   @media screen and (min-width: 1001px) {
@@ -63,7 +66,7 @@ const Buttons = styled.div`
 `;
 
 function Weapons(): JSX.Element {
-  const [weapons, setWeapons] = useState<WeaponInfo['data']>([]);
+  const [weapons, setWeapons] = useState<WeaponsType[]>([]);
   const [error, setError] = useState<boolean>(false);
 
   // getting page
@@ -83,7 +86,7 @@ function Weapons(): JSX.Element {
 
   useEffect(() => {
     const p = Number(searchParams.get('page'));
-    setPage(p);
+    setPage(p < 1 ? 1 : 0);
     async function weaponsFn(): Promise<void> {
       const response = await fetch(`/weapons/api?page=${p}`);
 
@@ -104,7 +107,12 @@ function Weapons(): JSX.Element {
       {weapons.length >= 1 ? (
         <Main>
           {weapons.map((val) => (
-            <Card key={val.name} title={val.name} imagePath={val.imagePath} />
+            <Card
+              key={val.name}
+              title={val.name}
+              imagePath={val.imagePath}
+              id={val.id ?? 0}
+            />
           ))}
         </Main>
       ) : (

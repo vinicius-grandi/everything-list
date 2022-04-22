@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 type Card = {
   title: string;
   imagePath: string | null;
+  id: number | string;
 };
 
 const CardBody = styled.div`
@@ -47,10 +48,10 @@ const CardBody = styled.div`
   }
 `;
 
-function Card({ title, imagePath }: Card): JSX.Element {
+function Card({ title, imagePath, id }: Card): JSX.Element {
   return (
     <CardBody>
-      <Link to={`/weapons/${title.toLowerCase()}`} data-testid="weapon-link">
+      <Link to={`/weapons/${id}`} data-testid="weapon-link">
         <p data-testid="card-title">{title}</p>
         <img
           data-testid="card-image"

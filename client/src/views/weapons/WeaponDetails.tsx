@@ -52,6 +52,10 @@ const WeaponInfoContainer = styled.section`
   }
   background-color: #53c278;
   padding: 1rem 0;
+
+  img {
+    max-width: 100%;
+  }
 `;
 
 const Rating = styled.p`
