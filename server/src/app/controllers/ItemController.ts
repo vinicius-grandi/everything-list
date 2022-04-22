@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import sequelize from 'sequelize';
+import logger from 'jet-logger';
 import db from '../models';
 
 interface IUserReview {
@@ -23,8 +24,24 @@ const ItemController = {
       if (!item) {
         return res.status(404).json({ error: 'item not found' });
       }
+
+      if (req.session.authenticated) {
+        const verifyReview = await db.Review.findOne({
+          where: {
+            item_id: req.params.id,
+            list_name: listName,
+            user_id: Number(req.session.user?.id),
+          },
+        });
+        return res.json({
+          ...item.dataValues,
+          reviewExists: verifyReview,
+        });
+      }
+
       return res.json(item);
     } catch (err) {
+      logger.err(err);
       if (err instanceof Error) {
         return res.status(400).json({ error: 'bad request' });
       }
@@ -78,7 +95,8 @@ const ItemController = {
       await this.setItemRating(item, id, listName);
       return res.json({ review, item });
     } catch (err) {
-      return res.status(405).send(err.message);
+      logger.err(err.message);
+      return res.status(405).send({ error: 'Internal server error' });
     }
   },
 

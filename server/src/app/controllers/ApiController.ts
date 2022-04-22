@@ -85,8 +85,9 @@ const ApiController = {
         include: {
           model: db.User,
           as: 'review_user',
-          attributes: ['id', 'username'],
+          attributes: ['id', 'username', 'profile_picture'],
         },
+        order: [['created_at', 'DESC']],
       });
 
       return res.json(reviews);

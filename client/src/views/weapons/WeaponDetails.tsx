@@ -1,25 +1,31 @@
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { Star } from 'react-feather';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Reviews from '../../components/itemDetails/Reviews';
-import { useAuth } from '../../contexts/AuthContext';
+import SetReview from '../../components/itemDetails/SetReview';
 
-type User = {
+export type User = {
   id: number;
   username: string;
   email: string;
   profile_picture: string;
 };
 
-export type Comment = {
-  id: number;
-  username: string;
-  profilePicture: string;
+export type Rate = {
   message: string;
   rating: number;
   created_at: string;
   updated_at: string;
 };
+
+export type Comment = {
+  review_user: {
+    id: number;
+    username: string;
+    profile_picture: string;
+  };
+} & Rate;
 
 type QueryItem = {
   list_name: string;
@@ -27,107 +33,153 @@ type QueryItem = {
   id: number | string;
   name: string;
   summary: string;
-  synonyms: string[];
+  synonyms: string[] | string | null;
   imagePath: string | null;
+  reviewExists: Rate | null;
 } | null;
+
+const WeaponDetailsContainer = styled.main`
+  *:not(section, form) {
+    margin: 0 1rem;
+  }
+`;
+
+const WeaponInfoContainer = styled.section`
+  margin-top: 1rem;
+  h1 {
+    font-size: 2.5rem;
+    margin: 1rem;
+  }
+  background-color: #53c278;
+  padding: 1rem 0;
+`;
+
+const Rating = styled.p`
+  margin: 1rem 0;
+  padding: 0;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  span {
+    margin-left: 0.5rem;
+    font-weight: 700;
+  }
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0.45rem;
+`;
+
+const WeaponSummary = styled.p`
+  text-align: justify;
+  padding: 0.55rem;
+  color: #f6f6f6;
+  margin-right: 1rem;
+  background-color: #3b8955;
+`;
 
 function WeaponDetails(): JSX.Element {
   const { id } = useParams();
-  const { auth } = useAuth();
   const [item, setItem] = useState<QueryItem>(null);
   const [user, setUser] = useState<User | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [updateComments, setUpdateComments] = useState<boolean>(false);
   const [comments, setComments] = useState<Comment[]>([]);
-
-  const handleForm = async (
-    e: React.FormEvent<HTMLFormElement>,
-  ): Promise<void> => {
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    const response = await fetch(`/weapons/api/${id}`, {
-      method: 'post',
-      body: formData,
-    });
-    if (response.status !== 200) {
-      const body: { error: string } = await response.json();
-      return setError(body.error);
-    }
-
-    return setUpdateComments(!updateComments);
-  };
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getComments(): Promise<void> {
-      const response = await fetch(`/weapons/api/${id}/comments`);
-      const commentsFromResponse: Comment[] = await response.json();
-      setComments(commentsFromResponse);
+      try {
+        const response = await fetch(`/weapons/api/${id}/comments`);
+        const commentsFromResponse: Comment[] = await response.json();
+        setComments(commentsFromResponse);
+      } catch (_error) {
+        setComments([]);
+      }
     }
     getComments();
-  }, [id, updateComments]);
+  }, [id]);
 
   useEffect(() => {
     async function getUser(): Promise<void> {
-      const response = await fetch('/api/0?review=false');
-      const userFromResponse: User = await response.json();
-      setUser(userFromResponse);
+      try {
+        const response = await fetch('/profiles/api/0?review=false');
+        const userFromResponse: User = await response.json();
+        setUser(userFromResponse);
+      } catch (_error) {
+        setUser(null);
+      }
     }
+    getUser();
+  }, []);
+
+  useEffect(() => {
     async function getItem(): Promise<void> {
-      const response = await fetch(`/weapons/api/${id}`);
-      const itemFromResponse: QueryItem = await response.json();
-      setItem(itemFromResponse);
+      try {
+        const response = await fetch(`/weapons/api/${id}`);
+        if (response.status !== 200) {
+          navigate('/weapons', {
+            replace: true,
+          });
+        }
+        const itemFromResponse: QueryItem = await response.json();
+        setItem(itemFromResponse);
+      } catch (_err) {
+        navigate('/weapons', {
+          replace: true,
+        });
+      }
     }
     getItem();
-
-    if (auth) {
-      getUser();
-    }
-  });
+  }, [id, navigate]);
   return (
-    <main>
-      {error && <p>{error}</p>}
+    <WeaponDetailsContainer>
       {item && (
         <>
-          <section>
+          <WeaponInfoContainer>
             <h1>{item.name}</h1>
-            <span>
+            <Rating>
               <Star fill="#faea5a" />
-              Rating: {item.rating}
-            </span>
-            <img
-              src={
-                item.imagePath ??
-                'https://via.placeholder.com/500x500?text=No+Image'
-              }
-              alt={`${item.name}-weapons`}
-            />
-            <p>{item.summary}</p>
-            <h2>Synonyms</h2>
-            <ul>
-              {item.synonyms.map((val) => (
-                <li key={`${val}-weapons`}>{val}</li>
-              ))}
-            </ul>
-          </section>
+              <strong>Rating:</strong> <span>{item.rating}</span>
+            </Rating>
+            <Container>
+              <img
+                src={
+                  item.imagePath ??
+                  'https://via.placeholder.com/500x500?text=No+Image'
+                }
+                alt={`${item.name}-weapons`}
+              />
+              <WeaponSummary>{item.summary}</WeaponSummary>
+            </Container>
+            {item.synonyms && (
+              <>
+                <h2>Synonyms</h2>
+                {typeof item.synonyms === 'string' ? (
+                  <p>{item.synonyms}</p>
+                ) : (
+                  <ul>
+                    {item.synonyms.map((val) => (
+                      <li key={`${val}-weapons`}>{val}</li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            )}
+          </WeaponInfoContainer>
           {user && (
-            <form onSubmit={handleForm}>
-              <h1>Rate this item</h1>
-              <div>
-                <img src={user.profile_picture} alt="your profile" />
-                <p>{user.username}</p>
-                <span>
-                  {'⭐rating '}
-                  <input type="number" step={0.1} max={10} min={0} />
-                </span>
-                <textarea name="message" cols={10} rows={10} />
-                <input type="submit" />
-              </div>
-            </form>
+            <SetReview
+              id={id ?? 0}
+              listName="weapons"
+              user={user}
+              reviewExists={item.reviewExists}
+            />
           )}
-          {comments.length > 1 && <Reviews comments={comments} />}
+          {comments.length >= 1 && <Reviews comments={comments} />}
         </>
       )}
-    </main>
+    </WeaponDetailsContainer>
   );
 }
 

@@ -90,12 +90,12 @@ function Signup(): JSX.Element {
           type="password"
           data-testid="password"
           name="password"
-          pattern=""
+          pattern="^(?=.*[A-Z].*[A-Z])(?=.*[!@#$%&*()+_-].*[!@#$%&*()+_-])(?=.*[\d].*[\d])(?=.*[a-z].*[a-z]).{8,15}$"
           id="password"
           onInvalid={(ev) => {
             const elem = ev.target as HTMLInputElement;
             elem.setCustomValidity(
-              'you password must have at least 8 characters',
+              'Your password is too weak! Please be sure it has at least 2 special characters(!@#$%&*()+_-), 2 uppercase letters, 2 lowercases and 2 numbers.',
             );
           }}
         />

@@ -33,4 +33,8 @@ module.exports = (app) => {
     '/profiles/api/0',
     createProxyMiddleware(proxy),
   );
+  app.use(
+    '/weapons/api/',
+    createProxyMiddleware(proxy),
+  );
 };

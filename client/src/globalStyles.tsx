@@ -22,6 +22,14 @@ const GlobalStyles = createGlobalStyle<OverflowValue>`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  .error {
+    background-color: #e78f8f;
+    color: #811212;
+    width: 100%;
+    margin: 0 !important;
+    padding: 0.25rem;
+  }
 `;
 
 export default GlobalStyles;

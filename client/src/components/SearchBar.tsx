@@ -20,7 +20,7 @@ const SearchList = styled.ul`
   grid-auto-rows: 1fr;
   text-align: center;
   place-items: center;
-  position: relative;
+  position: absolute;
   z-index: 0;
 `;
 
@@ -57,7 +57,7 @@ const SearchButton = styled.button`
   }
 `;
 
-const SearchBar = forwardRef<HTMLDivElement>((_, ref) => {
+const SearchBar = forwardRef<HTMLInputElement>((_, ref) => {
   const [search, setSearch] = useState<string>('');
   const [queryItems, setQueryItems] = useState<QueryItem[]>([]);
 
@@ -86,9 +86,10 @@ const SearchBar = forwardRef<HTMLDivElement>((_, ref) => {
   }, [search]);
 
   return (
-    <div className="search-box" data-cy="full-search" ref={ref}>
+    <div className="search-box" data-cy="full-search">
       <div className="search-bar" role="search">
         <input
+          ref={ref}
           type="text"
           onChange={(ev) => setSearch(ev.target.value)}
           role="searchbox"
