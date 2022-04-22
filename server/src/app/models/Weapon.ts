@@ -22,7 +22,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
   }
 
   const attributes = {
-    name: DataTypes.STRING(50),
+    name: {
+      type: DataTypes.STRING(50),
+      unique: true,
+    },
     imagePath: DataTypes.STRING(50),
     summary: DataTypes.STRING(150),
     synonyms: DataTypes.ARRAY(DataTypes.TEXT),
