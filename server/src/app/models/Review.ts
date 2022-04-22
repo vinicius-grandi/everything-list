@@ -47,7 +47,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     item_id: {
       allowNull: false,
       primaryKey: true,
-      type: DataTypes.STRING(12),
+      type: DataTypes.INTEGER,
     },
     message: DataTypes.STRING(500),
     rating: DataTypes.DECIMAL(4, 2),
@@ -56,14 +56,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
   Review.init(attributes, {
     sequelize,
     tableName: 'reviews',
-    hooks: {
-      beforeSave: async (user: any) => {
-        if (user.item_id) {
-          const u = user;
-          u.item_id = String(user.item_id);
-        }
-      },
-    },
   });
   return Review;
 };

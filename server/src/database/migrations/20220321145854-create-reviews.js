@@ -22,7 +22,7 @@ module.exports = {
       item_id: {
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.STRING(12),
+        type: Sequelize.INTEGER,
       },
       message: {
         allowNull: false,

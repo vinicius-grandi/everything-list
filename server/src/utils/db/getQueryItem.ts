@@ -1,7 +1,7 @@
 import type { QueryItem } from '../../app/controllers/SearchController.d';
 
 export default function getQueryItem(
-  id: number | string,
+  id: number,
   rating: number,
   imagePath: string | null,
   listName: string,
@@ -9,7 +9,6 @@ export default function getQueryItem(
 ) {
   const qItem: QueryItem = {
     id,
-    rating,
     imagePath,
     list_name: listName,
     name,

@@ -13,7 +13,7 @@ import type {
 } from './SearchController.d';
 import { WeaponAttributes } from '../models/Weapon';
 
-const { Weapon, Anime } = db;
+const { Weapon } = db;
 
 const SearchController = {
   queryItem: {
@@ -51,21 +51,12 @@ const SearchController = {
         name: title,
       };
     }
-    const promiseRes: Promise<QueryItem[]> = Promise.all(
-      animeOrManga.map(async (elem) => ({
-        id: elem.mal_id,
-        rating: (
-          await db[meth === 'animes' ? 'Anime' : 'Manga'].findOrCreate({
-            where: { id: elem.mal_id },
-            defaults: { id: elem.mal_id, rating: 0 },
-          })
-        )[0].rating,
-        imagePath: elem.images.jpg.image_url,
-        list_name: meth,
-        name: elem.title,
-      })),
-    );
-    const res = await promiseRes;
+    const res: QueryItem[] = animeOrManga.map((elem) => ({
+      id: elem.mal_id,
+      imagePath: elem.images.jpg.image_url,
+      list_name: meth,
+      name: elem.title,
+    }));
     return animeOrManga === undefined ? null : res;
   },
 
