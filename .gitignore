@@ -27,6 +27,7 @@ server/.env
 server/.test.env
 server/node_modules
 server/dist
+server/tests-coverage
 
 client/build
 client/node_modules

@@ -13,15 +13,23 @@ describe('noapi', () => {
   afterAll(() => redisClient.disconnect());
   it('should get all weapons', async () => {
     const weapon1 = await factories.create<WeaponAttributes>('Weapon');
-    const weapon2 = await factories.create<WeaponAttributes>('Weapon');
-    const response = await request(app).get('/weapons/api/');
-    expect(response.body.data[0].name).toBe(weapon1.name);
-    expect(response.body.data[1].name).toBe(weapon2.name);
+    try {
+      const weapon2 = await factories.create<WeaponAttributes>('Weapon', {
+        name: 'jorge',
+      });
+      const response = await request(app).get('/weapons/api/');
+      expect(response.body.data[0].name).toBe(weapon1.name);
+      expect(response.body.data[1].name).toBe(weapon2.name);
+    } catch (error) {
+      console.error(error);
+    }
   });
   it('should get only 20 items per page', async () => {
     const maxItems = 41;
     const weapons = Array.from(Array(maxItems)).map(async () => {
-      await factories.create<WeaponAttributes>('Weapon');
+      await factories.create<WeaponAttributes>('Weapon', {
+        name: `${Math.random()}`,
+      });
     });
     await Promise.all(weapons);
     const response = await request(app).get('/weapons/api/');

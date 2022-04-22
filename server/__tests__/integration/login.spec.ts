@@ -127,4 +127,31 @@ describe('Login', () => {
 
     expect(response.body.auth).toBe(false);
   });
+  it('should validate username, password and email - sign up', async () => {
+    const user: UserAttributes = await factories.create('User');
+
+    // invalid email
+    const response = await request(app).post(signupRoute).send({
+      username: user.username,
+      email: 'jojo',
+      password: user.password,
+    });
+    expect(response.status).toBe(400);
+
+    // username - min length is 8 and max length is 15
+    const response2 = await request(app).post(signupRoute).send({
+      username: 'macho',
+      email: user.email,
+      password: user.password,
+    });
+    expect(response2.status).toBe(400);
+
+    // password - it must have at least 2 special characters(!@#$%&*()+_-), 2 uppercase letters, 2 lowercases and 2 numbers. Length - between 8 and 15 characters
+    const response3 = await request(app).post(signupRoute).send({
+      username: user.username,
+      email: 'jojo@gmail.com',
+      password: 'asf1',
+    });
+    expect(response3.status).toBe(400);
+  });
 });
