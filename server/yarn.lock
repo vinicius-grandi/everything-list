@@ -1495,6 +1495,11 @@
   "resolved" "https://registry.npmjs.org/@types/validator/-/validator-13.7.1.tgz"
   "version" "13.7.1"
 
+"@types/validatorjs@^3.15.0":
+  "integrity" "sha512-tqozguXICRdPQVGho1A+lYH4IzU3ggP82OmfFrmb6N6pxmWuXegpw4Th20hy5KtMfuyP+jXB466ABFMO9vma4Q=="
+  "resolved" "https://registry.npmjs.org/@types/validatorjs/-/validatorjs-3.15.0.tgz"
+  "version" "3.15.0"
+
 "@types/yargs-parser@*":
   "integrity" "sha512-iO9ZQHkZxHn4mSakYV0vFHAVDyEOIJQrV2uZ06HxEPcx+mt8swXoZHIbaaJ2crJYFfErySgktuTZ3BeLz+XmFA=="
   "resolved" "https://registry.npmjs.org/@types/yargs-parser/-/yargs-parser-21.0.0.tgz"
