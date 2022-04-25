@@ -96,6 +96,7 @@ function Signup(): JSX.Element {
           name="password"
           id="password"
           data-cy="password"
+          pattern="^(?=.*[A-Z].*[A-Z])(?=.*[!@#$%&*()+_-].*[!@#$%&*()+_-])(?=.*[\d].*[\d])(?=.*[a-z].*[a-z]).{8,15}$"
           minLength={8}
           maxLength={15}
           onInvalid={(ev) => {

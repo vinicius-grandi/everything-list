@@ -58,7 +58,7 @@ describe('Login', () => {
 
     const response = await request(app)
       .post(signupRoute)
-      .send({ username: 'jo', email: user.email, password: 'o' });
+      .send({ username: 'jo', email: user.email, password: 'ajAS12!@' });
 
     expect(response.status).toBe(409);
   });
@@ -98,18 +98,6 @@ describe('Login', () => {
 
     expect(response.status).toBe(401);
   });
-
-  it('/login should redirect to index if already logged in', async () => {
-    const user = userInputs();
-    const agent = request.agent(app);
-
-    await agent.post(signupRoute).send(user);
-
-    const response = await agent
-      .post(loginRoute)
-      .send({ email: user.email, password: user.password });
-    expect(response.redirect).toBe(true);
-  });
   it('/logout should logout user', async () => {
     const user = userInputs();
     const agent = request.agent(app);
@@ -138,9 +126,9 @@ describe('Login', () => {
     });
     expect(response.status).toBe(400);
 
-    // username - min length is 8 and max length is 15
+    // username - max length is 15.
     const response2 = await request(app).post(signupRoute).send({
-      username: 'macho',
+      username: 'abcdefghijklmnop',
       email: user.email,
       password: user.password,
     });

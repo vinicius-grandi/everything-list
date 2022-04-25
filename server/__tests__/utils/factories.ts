@@ -42,9 +42,9 @@ factory.define('Anime', Anime, {
 });
 
 export const userInputs = () => ({
-  username: faker.name.findName(),
+  username: faker.name.firstName(),
   email: faker.internet.email(),
-  password: faker.internet.password(),
+  password: 'asBF!@12',
 });
 
 export default factory;

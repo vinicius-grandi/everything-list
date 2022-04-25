@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import logger from 'jet-logger';
+import userValidator from '../../utils/validation/userValidator';
 import db from '../models';
 
 interface IUserCredentials {
@@ -22,6 +23,16 @@ const AuthController = {
     res: Response,
   ) {
     const { username, email, password } = req.body;
+
+    const isInfoValid = userValidator({
+      email,
+      password,
+      username,
+    });
+    if (!isInfoValid) {
+      return res.status(400).send({ error: 'bad request' });
+    }
+
     try {
       const [user, created] = await User.findOrCreate({
         where: { email },
@@ -54,33 +65,34 @@ const AuthController = {
 
   async login(req: Request, res: Response) {
     const { email, password } = req.body;
-    const user = await User.findOne({
-      where: { email },
-    });
 
-    if (req.session.authenticated) {
-      return res.redirect('/');
-    }
+    try {
+      const user = await User.findOne({
+        where: { email },
+      });
 
-    if (!user) {
+      if (!user) {
+        return res.status(401).json({ message: 'Invalid Username/Password' });
+      }
+
+      const isPasswordValid = await user.checkPassword(password);
+
+      if (email === user.email && isPasswordValid) {
+        const { session } = req;
+        session.authenticated = true;
+        session.userId = user.id;
+        session.user = {
+          ...user.dataValues,
+          password: undefined,
+          password_hash: undefined,
+        };
+
+        return res.json(session);
+      }
+    } catch (error) {
+      logger.err(error);
       return res.status(401).json({ message: 'Invalid Username/Password' });
     }
-
-    const isPasswordValid = await user.checkPassword(password);
-
-    if (email === user.email && isPasswordValid) {
-      const { session } = req;
-      session.authenticated = true;
-      session.userId = user.id;
-      session.user = {
-        ...user.dataValues,
-        password: undefined,
-        password_hash: undefined,
-      };
-
-      return res.json(session);
-    }
-
     return res.status(401).json({ message: 'Invalid Username/Password' });
   },
   logout(req: Request, res: Response) {
