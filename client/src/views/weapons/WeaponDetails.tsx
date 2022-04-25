@@ -4,6 +4,7 @@ import { Star } from 'react-feather';
 import { useParams, useNavigate } from 'react-router-dom';
 import Reviews from '../../components/itemDetails/Reviews';
 import SetReview from '../../components/itemDetails/SetReview';
+import useUser from '../../hooks/useUser';
 
 export type User = {
   id: number;
@@ -88,7 +89,7 @@ const WeaponSummary = styled.p`
 function WeaponDetails(): JSX.Element {
   const { id } = useParams();
   const [item, setItem] = useState<QueryItem>(null);
-  const [user, setUser] = useState<User | null>(null);
+  const user = useUser(false);
   const [comments, setComments] = useState<Comment[]>([]);
   const navigate = useNavigate();
 
@@ -104,19 +105,6 @@ function WeaponDetails(): JSX.Element {
     }
     getComments();
   }, [id]);
-
-  useEffect(() => {
-    async function getUser(): Promise<void> {
-      try {
-        const response = await fetch('/profiles/api/0?review=false');
-        const userFromResponse: User = await response.json();
-        setUser(userFromResponse);
-      } catch (_error) {
-        setUser(null);
-      }
-    }
-    getUser();
-  }, []);
 
   useEffect(() => {
     async function getItem(): Promise<void> {
