@@ -138,6 +138,7 @@ function SetReview({
               cols={10}
               rows={10}
               defaultValue={reviewExists ? reviewExists.message : ''}
+              maxLength={500}
             />
             <input
               type="submit"

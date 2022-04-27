@@ -25,7 +25,8 @@ const app = express();
 
 // creating sessions
 const RedisStore = connectRedis(sessions);
-const expirationTime = 1000 * 60 * 30;
+const expirationTime =
+  process.env.NODE_ENV === 'test' ? 1000 * 60 * 1000 : 1000 * 60 * 30;
 const session = sessions({
   secret: process.env.SESSION_SECRET ?? '',
   resave: false,

@@ -55,7 +55,7 @@ const UserController = {
     const { user, userId } = req.session;
     const { review } = req.query;
 
-    if (review !== undefined) {
+    if (review === 'false') {
       return res.json(user);
     }
 
@@ -86,6 +86,11 @@ const UserController = {
       // finding and updating user
       const user = await User.findByPk(req.session.userId);
       await user.update({ profile_picture: response.data.data.url });
+
+      req.session.user = {
+        ...req.session.user,
+        profile_picture: response.data.data.url,
+      };
 
       return res.json(response.data.data.url);
     } catch (error) {

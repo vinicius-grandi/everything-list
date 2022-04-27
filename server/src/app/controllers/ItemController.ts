@@ -18,6 +18,7 @@ const ItemController = {
   async getItem(req: Request, res: Response) {
     const listName = req.baseUrl.slice(1);
     const modelName = listName.charAt(0).toUpperCase() + listName.slice(1, -1);
+
     try {
       const item = await db[modelName].findByPk(req.params.id);
 

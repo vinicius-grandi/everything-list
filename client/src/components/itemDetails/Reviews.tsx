@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import type { Comment } from '../../views/weapons/WeaponDetails';
 
-const ReviewsContainer = styled.section`
+export const ReviewsContainer = styled.section`
   ul {
     list-style: none;
     list-style-type: none;
@@ -25,7 +25,7 @@ const ReviewsContainer = styled.section`
   }
 `;
 
-const CommentGrid = styled.div`
+export const CommentGrid = styled.div`
   a,
   img,
   p,
@@ -65,13 +65,19 @@ const CommentGrid = styled.div`
   }
 `;
 
-const CommentItem = styled.li`
+export const CommentItem = styled.li`
   display: flex;
   margin-top: 1.5rem !important;
   flex-direction: column;
 
   :nth-child(n) {
     flex-basis: 1 1 0;
+  }
+
+  p {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
   }
 `;
 
