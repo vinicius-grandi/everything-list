@@ -86,7 +86,7 @@ function Weapons(): JSX.Element {
 
   useEffect(() => {
     const p = Number(searchParams.get('page'));
-    setPage(p < 1 ? 1 : 0);
+    setPage(p < 1 ? 1 : p);
     async function weaponsFn(): Promise<void> {
       const response = await fetch(`/weapons/api?page=${p}`);
 
@@ -112,6 +112,7 @@ function Weapons(): JSX.Element {
               title={val.name}
               imagePath={val.imagePath}
               id={val.id ?? 0}
+              rating={val.rating ?? 0}
             />
           ))}
         </Main>

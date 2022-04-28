@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Star } from 'react-feather';
+import { Star, RefreshCcw } from 'react-feather';
 import { useParams, useNavigate } from 'react-router-dom';
 import Reviews from '../../components/itemDetails/Reviews';
 import SetReview from '../../components/itemDetails/SetReview';
@@ -20,6 +20,9 @@ export type Rate = {
   updated_at: string;
   createdAt?: string;
   updatedAt?: string;
+  item_id: number | string;
+  user_id: number;
+  list_name: string;
 };
 
 export type Comment = {
@@ -94,6 +97,8 @@ function WeaponDetails(): JSX.Element {
   const user = useUser(false);
   const [comments, setComments] = useState<Comment[]>([]);
   const navigate = useNavigate();
+  const [resp, setResp] = useState<string>('There are no new reviews');
+  const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {
     async function getComments(): Promise<void> {
@@ -106,7 +111,7 @@ function WeaponDetails(): JSX.Element {
       }
     }
     getComments();
-  }, [id]);
+  }, [id, refresh]);
 
   useEffect(() => {
     async function getItem(): Promise<void> {
@@ -126,7 +131,7 @@ function WeaponDetails(): JSX.Element {
       }
     }
     getItem();
-  }, [id, navigate]);
+  }, [id, navigate, refresh]);
   return (
     <WeaponDetailsContainer>
       {item && (
@@ -168,9 +173,21 @@ function WeaponDetails(): JSX.Element {
               listName="weapons"
               user={user}
               reviewExists={item.reviewExists}
+              setResponse={setResp}
             />
           )}
-          {comments.length >= 1 && <Reviews comments={comments} />}
+          <p style={{ backgroundColor: '#e26060' }} aria-label="">
+            <RefreshCcw
+              onClick={() => {
+                setResp('There are no new reviews');
+                setRefresh(!refresh);
+              }}
+            />
+            <strong>REFRESH REVIEWS</strong>
+          </p>
+          {comments.length >= 1 && (
+            <Reviews comments={comments} response={resp} />
+          )}
         </>
       )}
     </WeaponDetailsContainer>

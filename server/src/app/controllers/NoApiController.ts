@@ -21,6 +21,7 @@ const NoApiController = {
       const items = await db[modelName].findAll({
         limit: 20,
         offset: page <= 1 ? 0 : (page - 1) * 20,
+        order: [['name', 'ASC']],
       });
       if (!items) {
         return res.status(404).json({ error: 'no items' });

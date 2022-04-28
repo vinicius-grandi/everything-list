@@ -6,9 +6,27 @@ type Card = {
   title: string;
   imagePath: string | null;
   id: number | string;
+  rating: number;
 };
 
 const CardBody = styled.div`
+  position: relative;
+
+  span {
+    background-color: #f6f6f6;
+    position: absolute;
+    color: #181616;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    top: -2%;
+    text-align: center;
+    padding: 0.2rem;
+    border-radius: 5px;
+  }
+
   @media screen and (min-width: 1001px) {
     font-size: 2rem;
   }
@@ -48,10 +66,11 @@ const CardBody = styled.div`
   }
 `;
 
-function Card({ title, imagePath, id }: Card): JSX.Element {
+function Card({ title, imagePath, id, rating }: Card): JSX.Element {
   return (
     <CardBody>
       <Link to={`/weapons/${id}`} data-testid="weapon-link">
+        <span>⭐ {rating}</span>
         <p data-testid="card-title">{title}</p>
         <img
           data-testid="card-image"

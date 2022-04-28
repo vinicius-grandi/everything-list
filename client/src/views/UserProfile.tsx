@@ -91,15 +91,13 @@ function UserProfile(): JSX.Element {
                 {user.reviews.map((comment) => (
                   <CommentItem key={`${user.id}-${comment.createdAt}`}>
                     <CommentGrid>
-                      <Link to={`/profiles/${user.id}`}>
-                        <img
-                          src={
-                            user.profile_picture ??
-                            'https://via.placeholder.com/50X50.png'
-                          }
-                          alt={`${user.username} profile`}
-                        />
-                      </Link>
+                      <img
+                        src={
+                          user.profile_picture ??
+                          'https://via.placeholder.com/50X50.png'
+                        }
+                        alt={`${user.username} profile`}
+                      />
                       <p>
                         <strong>{user.username}</strong>
                       </p>
@@ -112,6 +110,9 @@ function UserProfile(): JSX.Element {
                       </p>
                     </CommentGrid>
                     <p className="comment-msg">{comment.message}</p>
+                    <Link to={`/${comment.list_name}/${comment.item_id}`}>
+                      <p>Go to item&apos;s page</p>
+                    </Link>
                   </CommentItem>
                 ))}
               </ul>

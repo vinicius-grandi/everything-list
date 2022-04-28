@@ -5,12 +5,25 @@ import app from './app';
 
 const port = process.env.PORT || 5001;
 const server = createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+  },
+});
 
 io.on('connection', (socket) => {
   logger.info('connection successful');
   socket.on('disconnect', () => {
     logger.imp('disconnection successful');
+  });
+
+  socket.on('review', (arg) => {
+    socket.join(arg);
+    io.to(arg).emit(
+      'review',
+      'There are new reviews, click the button above to refresh reviews',
+    );
   });
 });
 

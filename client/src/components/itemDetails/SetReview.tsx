@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import socketIOClient, { Socket } from 'socket.io-client';
 import { Rate, User } from '../../views/weapons/WeaponDetails';
+
+const ENDPOINT = `${window.location.hostname}:5001`;
 
 const WeaponReviewForm = styled.form`
   margin: 1rem;
@@ -76,13 +79,32 @@ function SetReview({
   listName,
   user,
   reviewExists,
+  setResponse,
 }: {
   id: string | number;
   listName: string;
   user: User;
   reviewExists: Rate | null;
+  setResponse: React.Dispatch<React.SetStateAction<string>>;
 }): JSX.Element {
   const [error, setError] = useState<string | null>(null);
+  const [socket, setSocket] = useState<Socket | null>(null);
+
+  useEffect(() => {
+    const s = socketIOClient(ENDPOINT);
+    setSocket(s);
+    s.on('error', () => {
+      setResponse('error');
+    });
+    s.on('review', (r) => {
+      setResponse(r);
+    });
+
+    return () => {
+      s.disconnect();
+    };
+  }, [setResponse]);
+
   const handleForm = async (
     e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -144,6 +166,11 @@ function SetReview({
             <input
               type="submit"
               value={reviewExists ? 'EDIT REVIEW' : 'SEND REVIEW'}
+              onClick={() => {
+                if (socket) {
+                  socket.emit('review', `${listName}-${id}`);
+                }
+              }}
             />
           </ReviewInput>
         </div>

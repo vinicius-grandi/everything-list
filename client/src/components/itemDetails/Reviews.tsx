@@ -1,11 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { RefreshCcw } from 'react-feather';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import styled from 'styled-components';
-import socketIOClient from 'socket.io-client';
 import type { Comment } from '../../views/weapons/WeaponDetails';
-
-const ENDPOINT = `${window.location.origin}:5001`;
 
 export const ReviewsContainer = styled.section`
   ul {
@@ -81,25 +76,21 @@ export const CommentItem = styled.li`
     overflow-wrap: break-word;
     word-wrap: break-word;
     hyphens: auto;
+    margin: 1rem 0 !important;
   }
 `;
 
-function Reviews({ comments }: { comments: Comment[] }): JSX.Element {
-  const [response, setResponse] = useState<string>('');
-  useEffect(() => {
-    const socket = socketIOClient(ENDPOINT);
-    socket.on('connect', () => {
-      setResponse('connected');
-    });
-    socket.on('error', (error) => {
-      console.log(error);
-    });
-  });
+function Reviews({
+  comments,
+  response,
+}: {
+  comments: Comment[];
+  response: string;
+}): JSX.Element {
   return (
     <>
-      {console.log(response)}
       <h1 style={{ margin: '1rem 0' }}>Reviews</h1>
-      <RefreshCcw />
+      <p>{response}</p>
       <ReviewsContainer>
         <ul>
           {comments.map((comment) => (
@@ -107,15 +98,13 @@ function Reviews({ comments }: { comments: Comment[] }): JSX.Element {
               key={`${comment.review_user.id}-${comment.created_at}`}
             >
               <CommentGrid>
-                <Link to={`/profiles/${comment.review_user.id}`}>
-                  <img
-                    src={
-                      comment.review_user.profile_picture ??
-                      'https://via.placeholder.com/50X50.png'
-                    }
-                    alt={`${comment.review_user.username} profile`}
-                  />
-                </Link>
+                <img
+                  src={
+                    comment.review_user.profile_picture ??
+                    'https://via.placeholder.com/100X100.png'
+                  }
+                  alt={`${comment.review_user.username} profile`}
+                />
                 <p>
                   <strong>{comment.review_user.username}</strong>
                 </p>

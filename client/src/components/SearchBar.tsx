@@ -21,7 +21,7 @@ const SearchList = styled.ul`
   text-align: center;
   place-items: center;
   position: absolute;
-  z-index: 0;
+  z-index: 5;
 `;
 
 const QueryCard = styled.li`
