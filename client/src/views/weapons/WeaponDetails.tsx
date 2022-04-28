@@ -18,6 +18,8 @@ export type Rate = {
   rating: number;
   created_at: string;
   updated_at: string;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type Comment = {

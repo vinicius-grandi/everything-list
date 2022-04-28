@@ -49,11 +49,10 @@ function UserProfile(): JSX.Element {
     ev.preventDefault();
     const form = ev.currentTarget;
     const formData = new FormData(form);
-    const response = await fetch('/profiles/api/0', {
+    await fetch('/profiles/api/0', {
       body: formData,
       method: 'put',
     });
-    console.log(response);
   };
 
   return (
@@ -90,7 +89,7 @@ function UserProfile(): JSX.Element {
             <ReviewsContainer>
               <ul>
                 {user.reviews.map((comment) => (
-                  <CommentItem key={`${user.id}-${comment.created_at}`}>
+                  <CommentItem key={`${user.id}-${comment.createdAt}`}>
                     <CommentGrid>
                       <Link to={`/profiles/${user.id}`}>
                         <img
@@ -108,8 +107,8 @@ function UserProfile(): JSX.Element {
                         ⭐rating<strong> {comment.rating}</strong>
                       </span>
                       <p className="date">
-                        {`created at - ${comment.created_at}`} <br />{' '}
-                        {`updated at - ${comment.updated_at}`}
+                        {`created at - ${comment.createdAt}`} <br />{' '}
+                        {`updated at - ${comment.updatedAt}`}
                       </p>
                     </CommentGrid>
                     <p className="comment-msg">{comment.message}</p>

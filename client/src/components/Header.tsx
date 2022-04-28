@@ -240,9 +240,14 @@ function Header({
             </>
           )}
           {auth && (
-            <Link to="/logout" onClick={menuHandle}>
-              Logout
-            </Link>
+            <>
+              <Link to="/logout" onClick={menuHandle}>
+                <li>Logout</li>
+              </Link>
+              <Link to="/my-profile" onClick={menuHandle}>
+                <li>My Profile</li>
+              </Link>
+            </>
           )}
         </ul>
         <X

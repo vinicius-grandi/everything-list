@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import FormData from 'form-data';
+import sharp from 'sharp';
 import type { Request, Response } from 'express';
 import logger from 'jet-logger';
 import db from '../models';
@@ -67,8 +68,32 @@ const UserController = {
   async updateProfilePicture(req: Request, res: Response) {
     const { profilePicture } = req.files as any;
     const body = new FormData();
+
+    const image = sharp(profilePicture.data);
+    const metadata = await image.metadata();
+
+    const width = Number(metadata.width);
+    const height = Number(metadata.height);
+    const r = width / 2;
+    const h = height / 2;
+    const circleShape = Buffer.from(
+      `<svg height="${height}" width="${width}"><circle cx="${r}" cy="${h}" r="${50}" /></svg>`,
+    );
+
+    const imageBuffer = await sharp(profilePicture.data)
+      .composite([
+        {
+          input: circleShape,
+          blend: 'dest-in',
+        },
+      ])
+      .png()
+      .toBuffer();
+
+    const lastBuffer = await sharp(imageBuffer).trim().png().toBuffer();
+
     body.append('key', process.env.IMGBB_API_KEY ?? '');
-    body.append('image', profilePicture.data.toString('base64'));
+    body.append('image', lastBuffer.toString('base64'));
 
     try {
       const response: AxiosResponse<ImgbbResponse> = await axios({

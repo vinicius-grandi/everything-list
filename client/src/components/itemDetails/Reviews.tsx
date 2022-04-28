@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { RefreshCcw } from 'react-feather';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import socketIOClient from 'socket.io-client';
 import type { Comment } from '../../views/weapons/WeaponDetails';
+
+const ENDPOINT = `${window.location.origin}:5001`;
 
 export const ReviewsContainer = styled.section`
   ul {
@@ -40,7 +43,7 @@ export const CommentGrid = styled.div`
     'pic date date';
 
   grid-template-rows: 1fr 1fr;
-  grid-template-columns: 60px 1fr 1fr;
+  grid-template-columns: 0fr 1fr 1fr;
   height: fit-content;
   margin: 0 !important;
 
@@ -82,8 +85,19 @@ export const CommentItem = styled.li`
 `;
 
 function Reviews({ comments }: { comments: Comment[] }): JSX.Element {
+  const [response, setResponse] = useState<string>('');
+  useEffect(() => {
+    const socket = socketIOClient(ENDPOINT);
+    socket.on('connect', () => {
+      setResponse('connected');
+    });
+    socket.on('error', (error) => {
+      console.log(error);
+    });
+  });
   return (
     <>
+      {console.log(response)}
       <h1 style={{ margin: '1rem 0' }}>Reviews</h1>
       <RefreshCcw />
       <ReviewsContainer>

@@ -5,10 +5,11 @@ import { Rate, User } from '../../views/weapons/WeaponDetails';
 const WeaponReviewForm = styled.form`
   margin: 1rem;
   position: relative;
-  margin-top: 1rem;
+  margin-top: 1rem !important;
   background-color: #543275;
   padding: 0.5rem;
   h1 {
+    margin: 1rem;
     color: #f6f6f6;
   }
 
@@ -45,7 +46,7 @@ const ReviewUserInfo = styled.div`
   margin: 1rem;
   color: #f6f6f6;
   display: grid;
-  grid-template-columns: 60px 1fr 1fr;
+  grid-template-columns: 0fr 1fr 1fr;
 `;
 
 const ReviewInput = styled.div`
