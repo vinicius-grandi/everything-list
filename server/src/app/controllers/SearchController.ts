@@ -3,7 +3,7 @@ import { Op, UpdateOptions } from 'sequelize';
 import logger from 'jet-logger';
 import * as jikanapi from '../../services/animes/jikanapi';
 import db from '../models';
-import type { Anime } from '../../services/animes/jikanapi.d';
+import type { DataAndPagination } from '../../services/animes/jikanapi.d';
 import type {
   IQueryParams,
   QueryItem,
@@ -13,7 +13,7 @@ import type {
 } from './SearchController.d';
 import { WeaponAttributes } from '../models/Weapon';
 
-const { Weapon, Anime } = db;
+const { Weapon } = db;
 
 const SearchController = {
   queryItem: {
@@ -34,16 +34,16 @@ const SearchController = {
   ) {
     const animeOrManga = (await jikanapi[method](
       `?q=${query}${additionalParams}`,
-    )) as Anime[];
+    )) as DataAndPagination;
     const meth = method === 'getMangaSearch' ? 'mangas' : 'animes';
-    if (animeOrManga.length === 1) {
+    if (animeOrManga.data.length === 1) {
       const {
         mal_id: malId,
         images: {
           jpg: { image_url: imageUrl },
         },
         title,
-      } = animeOrManga[0];
+      } = animeOrManga.data[0];
       return {
         id: malId,
         imagePath: imageUrl,
@@ -52,7 +52,7 @@ const SearchController = {
       };
     }
     const promiseRes: Promise<QueryItem[]> = Promise.all(
-      animeOrManga.map(async (elem) => ({
+      animeOrManga.data.map(async (elem) => ({
         id: elem.mal_id,
         rating: (
           await db[meth === 'animes' ? 'Anime' : 'Manga'].findOrCreate({

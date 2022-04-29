@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Animes, Anime } from './jikanapi.d';
+import type { Animes, Anime, DataAndPagination } from './jikanapi.d';
 
 export async function getSchedule(page: number): Promise<Animes> {
   const res = await axios.get(
@@ -11,20 +11,30 @@ export async function getSchedule(page: number): Promise<Animes> {
   return data;
 }
 
-export async function getAnimeSearch(queryParams: string): Promise<Anime[]> {
+export async function getAnimeSearch(
+  queryParams: string,
+): Promise<DataAndPagination | Anime> {
   const res = await axios.get(`https://api.jikan.moe/v4/anime${queryParams}`);
   const {
-    data: { data },
+    data: { data, pagination },
   } = res;
-  return data;
+  return {
+    pagination,
+    data,
+  };
 }
 
-export async function getMangaSearch(queryParams: string): Promise<Anime[]> {
+export async function getMangaSearch(
+  queryParams: string,
+): Promise<DataAndPagination | Anime> {
   const res = await axios.get(`https://api.jikan.moe/v4/manga${queryParams}`);
   const {
-    data: { data },
+    data: { data, pagination },
   } = res;
-  return data;
+  return {
+    pagination,
+    data,
+  };
 }
 
 export async function getAnimeById(id: number): Promise<{ data: Anime }> {

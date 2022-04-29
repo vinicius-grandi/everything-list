@@ -77,3 +77,8 @@ export declare type Animes = {
   };
   data: Anime[];
 };
+
+export type DataAndPagination = {
+  data: Animes['data'];
+  pagination: Animes['pagination'];
+};

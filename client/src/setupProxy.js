@@ -8,11 +8,9 @@ const proxy = {
   },
 };
 
+const routes = ['animes', 'mangas', 'books', 'movies'];
+
 module.exports = (app) => {
-  app.use(
-    '/search/api',
-    createProxyMiddleware(proxy),
-  );
   app.use(
     '/api/signup',
     createProxyMiddleware(proxy),
@@ -34,7 +32,14 @@ module.exports = (app) => {
     createProxyMiddleware(proxy),
   );
   app.use(
-    '/weapons/api/',
+    [
+      '/weapons/api',
+      '/animes/api',
+      '/books/api',
+      '/movies/api',
+      '/search/api',
+      '/mangas/api',
+    ],
     createProxyMiddleware(proxy),
-  );
+  )
 };

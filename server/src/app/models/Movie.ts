@@ -14,7 +14,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
   const attributes = {
     id: {
-      type: DataTypes.STRING(9),
+      type: DataTypes.STRING(12),
       primaryKey: true,
     },
     rating: {

@@ -12,6 +12,7 @@ import Footer from './components/Footer';
 import GlobalStyles from './globalStyles';
 import UserProfile from './views/UserProfile';
 import Logout from './components/Logout';
+import renderWithMultiplePath from './utils/renderWithMultiplePaths';
 
 function App(): JSX.Element {
   const { auth } = useAuth();
@@ -28,7 +29,10 @@ function App(): JSX.Element {
         <Header setHidden={setHidden} />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/weapons" element={<Weapons />} />
+          {renderWithMultiplePath(
+            ['animes', 'weapons', 'mangas', 'movies', 'books'],
+            <Weapons />,
+          )}
           <Route path="/weapons/:id" element={<WeaponDetails />} />
           {auth && (
             <>

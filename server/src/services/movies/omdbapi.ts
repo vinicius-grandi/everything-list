@@ -6,9 +6,8 @@ async function getMovieSearch(queryParams = 's=aaa&page=1'): Promise<
     maxPage: number;
   }
 > {
-  const res = await axios.get<OMDB>(
-    `https://omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&${queryParams}`,
-  );
+  const url = `https://omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&${queryParams}`;
+  const res = await axios.get<OMDB>(url);
   const { data } = res;
   return {
     maxPage: Math.ceil(Number(data.totalResults) / 10),

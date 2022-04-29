@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import Card from '../components/Card';
 import type {
@@ -68,6 +68,8 @@ const Buttons = styled.div`
 function Weapons(): JSX.Element {
   const [weapons, setWeapons] = useState<WeaponsType[]>([]);
   const [error, setError] = useState<boolean>(false);
+  const { pathname } = useLocation();
+  const listName = pathname.slice(1);
 
   // getting page
   const [searchParams, setSearchParams] = useSearchParams();
@@ -88,8 +90,7 @@ function Weapons(): JSX.Element {
     const p = Number(searchParams.get('page'));
     setPage(p < 1 ? 1 : p);
     async function weaponsFn(): Promise<void> {
-      const response = await fetch(`/weapons/api?page=${p}`);
-
+      const response = await fetch(`/${listName}/api?page=${p}`);
       if (response.status !== 200) {
         return setError(true);
       }
@@ -98,7 +99,7 @@ function Weapons(): JSX.Element {
       return setWeapons([...items.data]);
     }
     weaponsFn();
-  }, [page, searchParams]);
+  }, [page, searchParams, listName]);
 
   return (
     <div>
@@ -108,7 +109,7 @@ function Weapons(): JSX.Element {
         <Main>
           {weapons.map((val) => (
             <Card
-              key={val.name}
+              key={`${val.name}-${val.id}`}
               title={val.name}
               imagePath={val.imagePath}
               id={val.id ?? 0}
@@ -117,7 +118,7 @@ function Weapons(): JSX.Element {
           ))}
         </Main>
       ) : (
-        <p>Page not found</p>
+        <p>Loading</p>
       )}
       <Buttons>
         {page > 1 && (
