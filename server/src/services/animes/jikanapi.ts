@@ -13,32 +13,38 @@ export async function getSchedule(page: number): Promise<Animes> {
 
 export async function getAnimeSearch(
   queryParams: string,
-): Promise<DataAndPagination | Anime> {
+): Promise<DataAndPagination | { data: Anime } | null> {
   const res = await axios.get(`https://api.jikan.moe/v4/anime${queryParams}`);
+  if (res.status !== 200) return null;
   const {
     data: { data, pagination },
   } = res;
   return {
-    pagination,
+    pagination: pagination ?? 0,
     data,
   };
 }
 
 export async function getMangaSearch(
   queryParams: string,
-): Promise<DataAndPagination | Anime> {
+): Promise<DataAndPagination | { data: Anime } | null> {
   const res = await axios.get(`https://api.jikan.moe/v4/manga${queryParams}`);
+  if (res.status !== 200) return null;
   const {
     data: { data, pagination },
   } = res;
   return {
-    pagination,
+    pagination: pagination ?? 0,
     data,
   };
 }
 
-export async function getAnimeById(id: number): Promise<{ data: Anime }> {
-  const res = await axios.get(`https://api.jikan.moe/v4/anime/${id}`);
+export async function getAnimeOrMangaById(
+  id: number,
+  type: 'anime' | 'manga' = 'anime',
+): Promise<{ data: Anime } | null> {
+  const res = await axios.get(`https://api.jikan.moe/v4/${type}/${id}`);
+  if (res.status !== 200) return null;
   const {
     data: { data },
   } = res;

@@ -31,10 +31,12 @@ const ExpandedMenu = styled.div<TranslationValue>`
   }
 
   ul {
-    margin-top: 3rem;
+    margin-top: 10rem;
+    margin-bottom: 0;
     padding: 0;
     list-style-type: none;
     text-align: center;
+    text-transform: capitalize;
   }
 
   a,
@@ -167,6 +169,7 @@ function Header({
 }: {
   setHidden: React.Dispatch<React.SetStateAction<boolean>>;
 }): JSX.Element {
+  const routes = ['/animes', '/mangas', '/books', '/movies', '/weapons'];
   const [sbDisplay, setSbDisplay] = useState<Searchbox>('none');
   const { auth } = useAuth();
 
@@ -223,12 +226,11 @@ function Header({
       />
       <ExpandedMenu data-cy="expanded-menu" translation={translation}>
         <ul>
-          <Link to="/weapons" onClick={menuHandle}>
-            <li>Weapons</li>
-          </Link>
-          <Link to="/animes" onClick={menuHandle}>
-            <li>Animes</li>
-          </Link>
+          {routes.map((route) => (
+            <Link key={route} to={route} onClick={menuHandle}>
+              <li>{route.slice(1)}</li>
+            </Link>
+          ))}
           {!auth && (
             <>
               <Link to="/signup" onClick={menuHandle}>

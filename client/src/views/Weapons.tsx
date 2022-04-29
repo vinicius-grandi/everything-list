@@ -6,8 +6,10 @@ import type {
   WeaponInfo,
   weapons as WeaponsType,
 } from '../services/weapons/wikiapi.d';
+import Loading from '../components/Loading';
 
 const Title = styled.h1`
+  text-transform: capitalize;
   @media screen and (min-width: 1001px) {
     font-size: 3rem;
   }
@@ -16,7 +18,7 @@ const Title = styled.h1`
     font-size: 2.5rem;
   }
 
-  @media screen and (max-width: 250px) {
+  @media screen and (max-witdh: 250px) {
   }
   font-family: 'Pragati Narrow', sans-serif;
   text-align: center;
@@ -87,6 +89,7 @@ function Weapons(): JSX.Element {
   };
 
   useEffect(() => {
+    setWeapons([]);
     const p = Number(searchParams.get('page'));
     setPage(p < 1 ? 1 : p);
     async function weaponsFn(): Promise<void> {
@@ -102,9 +105,9 @@ function Weapons(): JSX.Element {
   }, [page, searchParams, listName]);
 
   return (
-    <div>
+    <main>
       {error && <h2 className="error">Item not found</h2>}
-      <Title data-testid="weapon-d-title">Weapons</Title>
+      <Title data-testid="weapon-d-title">{listName}</Title>
       {weapons.length >= 1 ? (
         <Main>
           {weapons.map((val) => (
@@ -118,17 +121,17 @@ function Weapons(): JSX.Element {
           ))}
         </Main>
       ) : (
-        <p>Loading</p>
+        <Loading size={100} />
       )}
       <Buttons>
         {page > 1 && (
           <button
             type="button"
             onClick={() => {
-              if (page > 1) {
-                // scrolls page to top
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }
+              setTimeout(
+                () => window.scrollTo({ top: 0, behavior: 'smooth' }),
+                1000,
+              );
               changePage('-');
             }}
           >
@@ -140,9 +143,10 @@ function Weapons(): JSX.Element {
             type="button"
             data-testid="weapons-next-page"
             onClick={() => {
-              if (page < lastPage) {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }
+              setTimeout(
+                () => window.scrollTo({ top: 0, behavior: 'smooth' }),
+                1000,
+              );
               changePage('+');
             }}
           >
@@ -150,7 +154,7 @@ function Weapons(): JSX.Element {
           </button>
         )}
       </Buttons>
-    </div>
+    </main>
   );
 }
 

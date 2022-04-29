@@ -993,7 +993,7 @@ type IndustryIdentifiers = {
   identifier: string;
 };
 
-type Book = {
+export type Book = {
   kind: '#books#volume';
   id: string;
   etag: string;

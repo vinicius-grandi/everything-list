@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Reviews from '../../components/itemDetails/Reviews';
 import SetReview from '../../components/itemDetails/SetReview';
 import useUser from '../../hooks/useUser';
+import { useAuth } from '../../contexts/AuthContext';
 
 export type User = {
   id: number;
@@ -99,6 +100,7 @@ function WeaponDetails(): JSX.Element {
   const navigate = useNavigate();
   const [resp, setResp] = useState<string>('There are no new reviews');
   const [refresh, setRefresh] = useState<boolean>(false);
+  const { auth } = useAuth();
 
   useEffect(() => {
     async function getComments(): Promise<void> {
@@ -167,7 +169,7 @@ function WeaponDetails(): JSX.Element {
               </>
             )}
           </WeaponInfoContainer>
-          {user && (
+          {user && auth && (
             <SetReview
               id={id ?? 0}
               listName="weapons"

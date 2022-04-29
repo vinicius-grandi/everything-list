@@ -1,8 +1,14 @@
 import { Request, Response } from 'express';
 import logger from 'jet-logger';
-import { getAnimeSearch, getMangaSearch } from '../../services/animes/jikanapi';
-import getBookSearch from '../../services/books/googlebooksapi';
-import getMovieSearch from '../../services/movies/omdbapi';
+import {
+  getAnimeOrMangaById,
+  getAnimeSearch,
+  getMangaSearch,
+} from '../../services/animes/jikanapi';
+import getBookSearch, {
+  getBookById,
+} from '../../services/books/googlebooksapi';
+import getMovieSearch, { getMovieById } from '../../services/movies/omdbapi';
 import getQueryItem from '../../utils/db/getQueryItem';
 import db from '../models';
 
@@ -16,8 +22,13 @@ type Lists = 'animes' | 'mangas' | 'books' | 'movies';
 const ApiController = {
   async animes(page = 1, query = `?order_by=title&limit=20&page=${page}`) {
     const animeOrAnimes = await getAnimeSearch(query);
-    const animes =
-      'data' in animeOrAnimes ? animeOrAnimes.data : [animeOrAnimes];
+
+    if (!animeOrAnimes) return null;
+
+    const animes = Array.isArray(animeOrAnimes.data)
+      ? animeOrAnimes.data
+      : [animeOrAnimes.data];
+
     const animesData = animes.map(async (anime) => {
       const [animeRating] = await Anime.findOrCreate({
         where: { id: anime.mal_id },
@@ -101,10 +112,14 @@ const ApiController = {
   },
 
   async mangas(page = 1, query = `?order_by=title&limit=20&page=${page}`) {
-    const mangas = await getMangaSearch(query);
+    const mangaOrMangas = await getMangaSearch(query);
+    if (!mangaOrMangas) return null;
+    const mangas = Array.isArray(mangaOrMangas.data)
+      ? mangaOrMangas.data
+      : [mangaOrMangas.data];
     const mangasData =
       'data' in mangas
-        ? mangas.data.map(async (manga) => {
+        ? mangas.map(async (manga) => {
             let rating = 0;
             if (db.Manga) {
               const [mangaFromDB] = await db.Manga.findOrCreate({
@@ -126,7 +141,9 @@ const ApiController = {
     const data = await Promise.all(mangasData);
     return {
       lastPage:
-        'pagination' in mangas ? mangas.pagination.last_visible_page : 1,
+        'pagination' in mangaOrMangas
+          ? mangaOrMangas.pagination.last_visible_page
+          : 1,
       data,
     };
   },
@@ -165,6 +182,9 @@ const ApiController = {
     const { page } = req.query;
     try {
       const items = await this[list](Number(page) === 0 ? 1 : page);
+      if (!items) {
+        return { data: [null] };
+      }
       const data = {
         pagination: {
           lastVisiblePage: items.lastPage,
@@ -178,19 +198,38 @@ const ApiController = {
     }
   },
 
-  async getAnimeOrManga(
+  item: {
+    animes: async (id: string) => {
+      const data = await getAnimeOrMangaById(Number(id));
+      return data;
+    },
+    mangas: async (id: string) => {
+      const data = await getAnimeOrMangaById(Number(id), 'manga');
+      return data;
+    },
+    books: async (id: string) => {
+      const data = await getBookById(id);
+      return data;
+    },
+    movies: async (id: string) => {
+      const data = await getMovieById(id);
+      return data;
+    },
+  },
+
+  async getOneItem(
     req: Request<{ id: string }, unknown, unknown, IQueryParams>,
     res: Response,
   ) {
     const list = req.baseUrl.slice(1) as Lists;
-    const { page } = req.query;
     const { id } = req.params;
-    if (list === 'animes' || list === 'mangas') {
-      const items = await this[list](page, `/${id}`);
-      res.json({ data: items });
+    try {
+      const item = await this.item[list](id);
+      return res.json({ data: item });
+    } catch (error) {
+      logger.err(error);
+      return res.status(500).json({ error: 'Internal server error' });
     }
-    const items = await this[list](page, `/${id}`);
-    return res.json({ data: items });
   },
 
   async getComments(req: Request, res: Response) {
