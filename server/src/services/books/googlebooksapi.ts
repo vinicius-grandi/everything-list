@@ -20,7 +20,6 @@ export async function getBookById(id: string) {
   const res = await axios.get<Book | null>(
     `https://www.googleapis.com/books/v1/volumes/${id}`,
   );
-  if (res.status !== 200) return null;
   const { data } = res;
   return data;
 }

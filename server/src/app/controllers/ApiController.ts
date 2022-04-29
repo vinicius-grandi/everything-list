@@ -228,7 +228,7 @@ const ApiController = {
       return res.json({ data: item });
     } catch (error) {
       logger.err(error);
-      return res.status(500).json({ error: 'Internal server error' });
+      return res.json({ data: null });
     }
   },
 

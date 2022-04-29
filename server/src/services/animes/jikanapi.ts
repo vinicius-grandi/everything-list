@@ -15,7 +15,6 @@ export async function getAnimeSearch(
   queryParams: string,
 ): Promise<DataAndPagination | { data: Anime } | null> {
   const res = await axios.get(`https://api.jikan.moe/v4/anime${queryParams}`);
-  if (res.status !== 200) return null;
   const {
     data: { data, pagination },
   } = res;
@@ -29,7 +28,6 @@ export async function getMangaSearch(
   queryParams: string,
 ): Promise<DataAndPagination | { data: Anime } | null> {
   const res = await axios.get(`https://api.jikan.moe/v4/manga${queryParams}`);
-  if (res.status !== 200) return null;
   const {
     data: { data, pagination },
   } = res;
@@ -44,7 +42,6 @@ export async function getAnimeOrMangaById(
   type: 'anime' | 'manga' = 'anime',
 ): Promise<{ data: Anime } | null> {
   const res = await axios.get(`https://api.jikan.moe/v4/${type}/${id}`);
-  if (res.status !== 200) return null;
   const {
     data: { data },
   } = res;
