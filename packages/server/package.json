@@ -1,7 +1,8 @@
 {
-  "name": "express-gen-ts",
-  "version": "0.0.0",
+  "name": "@everything-list/server",
+  "version": "1.0.0",
   "main": "src/index.ts",
+  "private": true,
   "scripts": {
     "build": "tsc --project .",
     "db:migrate": "tsc && cross-env NODE_ENV=test sequelize db:migrate",

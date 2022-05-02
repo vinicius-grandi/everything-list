@@ -1,12 +1,12 @@
 {
-  "name": "everything-list-client",
+  "name": "@everything-list/client",
   "version": "1.0.0",
-  "private": true,
   "browser": {
     "fs": false,
     "path": false,
     "os": false
   },
+  "private": true,
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.js",
@@ -28,8 +28,7 @@
     "transformIgnorePatterns": []
   },
   "resolutions": {
-    "nth-check": "^1.0.2",
-    "node-fetch": "^3.2.3"
+    "nth-check": "^1.0.2"
   },
   "scripts": {
     "build": "npm run lint && react-scripts build",
@@ -42,6 +41,7 @@
     "cypress": "cypress open-ct --browser firefox"
   },
   "dependencies": {
+    "@everything-list/server": "^1.0.0",
     "ajv": "^7.2.3",
     "ajv-errors": "^2.0.1",
     "ajv-formats": "^2.1.1",
@@ -52,7 +52,6 @@
     "history": "^5.3.0",
     "http-proxy-middleware": "^2.0.4",
     "jest-fetch-mock": "^3.0.3",
-    "node-fetch": "^3.2.4",
     "querystring": "^0.2.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -73,7 +72,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.4.1",
     "@types/mocha": "^9.1.0",
-    "@types/react": "^17.0.40",
+    "@types/react": "^17.0.44",
     "@types/react-dom": "^17.0.13",
     "@types/styled-components": "^5.1.24",
     "@typescript-eslint/eslint-plugin": "^5.15.0",

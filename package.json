@@ -2,6 +2,10 @@
   "name": "everything-list",
   "version": "1.0.0",
   "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "start": "cd express-gen-ts && npm start",
     "build:client": "cd client && npm run build",
@@ -13,6 +17,7 @@
   },
   "devDependencies": {
     "concurrently": "^3.5.0",
+    "lerna": "^4.0.0",
     "ts-jest": "^27.1.3"
   },
   "dependencies": {
