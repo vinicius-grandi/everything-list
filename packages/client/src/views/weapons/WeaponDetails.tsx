@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Star, RefreshCcw } from 'react-feather';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Reviews from '../../components/itemDetails/Reviews';
 import SetReview from '../../components/itemDetails/SetReview';
 import useUser from '../../hooks/useUser';
 import { useAuth } from '../../contexts/AuthContext';
+import useComments from '../../hooks/useComments';
+import useItem from '../../hooks/useItem';
 
 export type User = {
   id: number;
@@ -93,47 +95,12 @@ const WeaponSummary = styled.p`
 `;
 
 function WeaponDetails(): JSX.Element {
-  const { id } = useParams();
-  const [item, setItem] = useState<QueryItem>(null);
-  const user = useUser(false);
-  const [comments, setComments] = useState<Comment[]>([]);
-  const navigate = useNavigate();
-  const [resp, setResp] = useState<string>('There are no new reviews');
-  const [refresh, setRefresh] = useState<boolean>(false);
   const { auth } = useAuth();
+  const [refresh, setRefresh] = useState<boolean>(false);
+  const comments = useComments(refresh);
+  const item = useItem<QueryItem>(refresh);
+  const [resp, setResp] = useState<string>('There are no new reviews');
 
-  useEffect(() => {
-    async function getComments(): Promise<void> {
-      try {
-        const response = await fetch(`/weapons/api/${id}/comments`);
-        const commentsFromResponse: Comment[] = await response.json();
-        setComments(commentsFromResponse);
-      } catch (_error) {
-        setComments([]);
-      }
-    }
-    getComments();
-  }, [id, refresh]);
-
-  useEffect(() => {
-    async function getItem(): Promise<void> {
-      try {
-        const response = await fetch(`/weapons/api/${id}`);
-        if (response.status !== 200) {
-          navigate('/weapons', {
-            replace: true,
-          });
-        }
-        const itemFromResponse: QueryItem = await response.json();
-        setItem(itemFromResponse);
-      } catch (_err) {
-        navigate('/weapons', {
-          replace: true,
-        });
-      }
-    }
-    getItem();
-  }, [id, navigate, refresh]);
   return (
     <WeaponDetailsContainer>
       {item && (
@@ -169,16 +136,14 @@ function WeaponDetails(): JSX.Element {
               </>
             )}
           </WeaponInfoContainer>
-          {user && auth && (
+          {auth && (
             <SetReview
-              id={id ?? 0}
               listName="weapons"
-              user={user}
               reviewExists={item.reviewExists}
               setResponse={setResp}
             />
           )}
-          <p style={{ backgroundColor: '#e26060' }} aria-label="">
+          <p style={{ backgroundColor: '#e26060' }}>
             <RefreshCcw
               onClick={() => {
                 setResp('There are no new reviews');

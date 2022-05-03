@@ -5,9 +5,7 @@ import {
   getAnimeSearch,
   getMangaSearch,
 } from '../../services/animes/jikanapi';
-import getBookSearch, {
-  getBookById,
-} from '../../services/books/googlebooksapi';
+import getBookSearch, { getBookById } from '../../services/books/googlebooksapi';
 import getMovieSearch, { getMovieById } from '../../services/movies/omdbapi';
 import getQueryItem from '../../utils/db/getQueryItem';
 import db from '../models';
@@ -17,7 +15,7 @@ type IQueryParams = {
   page: number;
 };
 
-type Lists = 'animes' | 'mangas' | 'books' | 'movies';
+export type Lists = 'animes' | 'mangas' | 'books' | 'movies';
 
 const ApiController = {
   async animes(page = 1, query = `?order_by=title&limit=20&page=${page}`) {

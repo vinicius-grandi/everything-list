@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import socketIOClient, { Socket } from 'socket.io-client';
-import { Rate, User } from '../../views/weapons/WeaponDetails';
+import { useParams } from 'react-router-dom';
+import useUser from '../../hooks/useUser';
+import { Rate } from '../../views/weapons/WeaponDetails';
 
 const ENDPOINT = `${window.location.hostname}:5001`;
 
@@ -75,20 +77,18 @@ const ReviewInput = styled.div`
 `;
 
 function SetReview({
-  id,
   listName,
-  user,
   reviewExists,
   setResponse,
 }: {
-  id: string | number;
   listName: string;
-  user: User;
   reviewExists: Rate | null;
   setResponse: React.Dispatch<React.SetStateAction<string>>;
 }): JSX.Element {
+  const { id } = useParams();
   const [error, setError] = useState<string | null>(null);
   const [socket, setSocket] = useState<Socket | null>(null);
+  const user = useUser(false);
 
   useEffect(() => {
     const s = socketIOClient(ENDPOINT);
@@ -125,56 +125,59 @@ function SetReview({
   return (
     <>
       {error && <h2 className="error">{error}</h2>}
-      <WeaponReviewForm onSubmit={handleForm}>
-        <h1>Rate this item</h1>
-        <Seal>{reviewExists ? 'EDITING' : 'CREATING'}</Seal>
-        <div>
-          <ReviewUserInfo>
-            <img
-              src={
-                user.profile_picture ?? 'https://via.placeholder.com/50X50.png'
-              }
-              alt="your profile"
-            />
-            <p>
-              <strong>{user.username}</strong>
-            </p>
-            <span>
-              ⭐
-              <label htmlFor="rating">
-                Rating
-                <input
-                  type="number"
-                  step={0.1}
-                  max={10}
-                  min={0}
-                  name="rating"
-                  id="rating"
-                  defaultValue={reviewExists ? reviewExists.rating : 0}
-                />
-              </label>
-            </span>
-          </ReviewUserInfo>
-          <ReviewInput>
-            <textarea
-              name="message"
-              cols={10}
-              rows={10}
-              defaultValue={reviewExists ? reviewExists.message : ''}
-              maxLength={500}
-            />
-            <input
-              type="submit"
-              value={reviewExists ? 'EDIT REVIEW' : 'SEND REVIEW'}
-              onClick={() => {
-                if (socket) {
-                  socket.emit('review', `${listName}-${id}`);
+      {user && (
+        <WeaponReviewForm onSubmit={handleForm}>
+          <h1>Rate this item</h1>
+          <Seal>{reviewExists ? 'EDITING' : 'CREATING'}</Seal>
+          <div>
+            <ReviewUserInfo>
+              <img
+                src={
+                  user.profile_picture ??
+                  'https://via.placeholder.com/50X50.png'
                 }
-              }}
-            />
-          </ReviewInput>
-        </div>
-      </WeaponReviewForm>
+                alt="your profile"
+              />
+              <p>
+                <strong>{user.username}</strong>
+              </p>
+              <span>
+                ⭐
+                <label htmlFor="rating">
+                  Rating
+                  <input
+                    type="number"
+                    step={0.1}
+                    max={10}
+                    min={0}
+                    name="rating"
+                    id="rating"
+                    defaultValue={reviewExists ? reviewExists.rating : 0}
+                  />
+                </label>
+              </span>
+            </ReviewUserInfo>
+            <ReviewInput>
+              <textarea
+                name="message"
+                cols={10}
+                rows={10}
+                defaultValue={reviewExists ? reviewExists.message : ''}
+                maxLength={500}
+              />
+              <input
+                type="submit"
+                value={reviewExists ? 'EDIT REVIEW' : 'SEND REVIEW'}
+                onClick={() => {
+                  if (socket) {
+                    socket.emit('review', `${listName}-${id}`);
+                  }
+                }}
+              />
+            </ReviewInput>
+          </div>
+        </WeaponReviewForm>
+      )}
     </>
   );
 }
