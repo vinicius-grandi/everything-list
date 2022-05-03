@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import type { Lists } from '@everything-list/server/src/app/controllers/ApiController';
 import type { Comment } from '../views/weapons/WeaponDetails';
+import useListName from './useListName';
 
 const useComments = (refresh: boolean): Comment[] => {
   const { id } = useParams();
   const [comments, setComments] = useState<Comment[]>([]);
-  const { pathname } = useLocation();
-  const listName: Lists | 'weapons' = pathname.slice(1);
+  const listName = useListName();
 
   useEffect(() => {
     async function getComments(): Promise<void> {

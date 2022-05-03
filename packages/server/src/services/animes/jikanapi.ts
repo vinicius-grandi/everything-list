@@ -40,7 +40,7 @@ export async function getMangaSearch(
 export async function getAnimeOrMangaById(
   id: number,
   type: 'anime' | 'manga' = 'anime',
-): Promise<{ data: Anime } | null> {
+): Promise<Anime | null> {
   const res = await axios.get(`https://api.jikan.moe/v4/${type}/${id}`);
   const {
     data: { data },

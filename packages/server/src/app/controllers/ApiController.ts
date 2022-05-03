@@ -5,7 +5,9 @@ import {
   getAnimeSearch,
   getMangaSearch,
 } from '../../services/animes/jikanapi';
-import getBookSearch, { getBookById } from '../../services/books/googlebooksapi';
+import getBookSearch, {
+  getBookById,
+} from '../../services/books/googlebooksapi';
 import getMovieSearch, { getMovieById } from '../../services/movies/omdbapi';
 import getQueryItem from '../../utils/db/getQueryItem';
 import db from '../models';
@@ -16,6 +18,18 @@ type IQueryParams = {
 };
 
 export type Lists = 'animes' | 'mangas' | 'books' | 'movies';
+type ModelName = 'Anime' | 'Manga' | 'Book' | 'Movie';
+
+async function findOrCreateItem(id: string | number, list: ModelName) {
+  const [itemFromDb] = await db[list].findOrCreate({
+    where: { id },
+    defaults: {
+      id,
+      rating: 0,
+    },
+  });
+  return itemFromDb;
+}
 
 const ApiController = {
   async animes(page = 1, query = `?order_by=title&limit=20&page=${page}`) {
@@ -195,22 +209,41 @@ const ApiController = {
       return res.json({ data: null });
     }
   },
-
   item: {
     animes: async (id: string) => {
       const data = await getAnimeOrMangaById(Number(id));
+      if (data) {
+        const animeFromDb = await findOrCreateItem(id, 'Anime');
+        data.rating = animeFromDb.rating;
+        return data;
+      }
       return data;
     },
     mangas: async (id: string) => {
       const data = await getAnimeOrMangaById(Number(id), 'manga');
+      if (data) {
+        const mangaFromDb = await findOrCreateItem(id, 'Manga');
+        data.rating = mangaFromDb.rating;
+        return data;
+      }
       return data;
     },
     books: async (id: string) => {
       const data = await getBookById(id);
+      if (data) {
+        const bookFromDb = await findOrCreateItem(id, 'Book');
+        const modifiedData = { ...data, rating: bookFromDb.rating };
+        return modifiedData;
+      }
       return data;
     },
     movies: async (id: string) => {
       const data = await getMovieById(id);
+      if (data) {
+        const movieFromDb = await findOrCreateItem(id, 'Movie');
+        data.imdbRating = movieFromDb.rating;
+        return data;
+      }
       return data;
     },
   },
@@ -223,6 +256,19 @@ const ApiController = {
     const { id } = req.params;
     try {
       const item = await this.item[list](id);
+      if (req.session.authenticated) {
+        const verifyReview = await db.Review.findOne({
+          where: {
+            item_id: req.params.id,
+            list_name: list,
+            user_id: Number(req.session.user?.id),
+          },
+        });
+        return res.json({
+          data: item,
+          reviewExists: verifyReview,
+        });
+      }
       return res.json({ data: item });
     } catch (error) {
       logger.err(error);

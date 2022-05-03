@@ -35,6 +35,7 @@ const WeaponReviewForm = styled.form`
 const Seal = styled.span`
   background-color: #53c278;
   position: absolute;
+  border: 1px solid black;
   top: 0px;
   margin: 0 !important;
   padding: 0.3rem !important;

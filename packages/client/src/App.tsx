@@ -13,6 +13,7 @@ import GlobalStyles from './globalStyles';
 import UserProfile from './views/UserProfile';
 import Logout from './components/Logout';
 import renderWithMultiplePath from './utils/renderWithMultiplePaths';
+import AnimeDetails from './views/animes/AnimeDetails';
 
 function App(): JSX.Element {
   const { auth } = useAuth();
@@ -34,6 +35,7 @@ function App(): JSX.Element {
             <Weapons />,
           )}
           <Route path="/weapons/:id" element={<WeaponDetails />} />
+          <Route path="/animes/:id" element={<AnimeDetails />} />
           {auth && (
             <>
               <Route path="/my-profile" element={<UserProfile />} />

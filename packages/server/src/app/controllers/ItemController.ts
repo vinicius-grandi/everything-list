@@ -35,12 +35,12 @@ const ItemController = {
           },
         });
         return res.json({
-          ...item.dataValues,
+          data: item.dataValues,
           reviewExists: verifyReview,
         });
       }
 
-      return res.json(item);
+      return res.json({ data: item });
     } catch (err) {
       logger.err(err);
       if (err instanceof Error) {
@@ -80,7 +80,7 @@ const ItemController = {
     const { rating, message } = req.body;
     const { id } = req.params;
     const { userId } = req.session;
-    const item = await db[modelName].findByPk(id);
+    const item = await db[modelName].findOne({ where: { id } });
 
     if (!item) {
       return res.status(404).json({ error: 'item not found' });
@@ -96,7 +96,7 @@ const ItemController = {
       await this.setItemRating(item, id, listName);
       return res.json({ review, item });
     } catch (err) {
-      logger.err(err.message);
+      logger.err(err);
       return res.status(405).send({ error: 'Internal server error' });
     }
   },

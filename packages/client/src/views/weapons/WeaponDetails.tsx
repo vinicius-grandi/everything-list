@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Star, RefreshCcw } from 'react-feather';
-import { useParams } from 'react-router-dom';
+import { RefreshCcw, Star } from 'react-feather';
 import Reviews from '../../components/itemDetails/Reviews';
 import SetReview from '../../components/itemDetails/SetReview';
-import useUser from '../../hooks/useUser';
 import { useAuth } from '../../contexts/AuthContext';
-import useComments from '../../hooks/useComments';
 import useItem from '../../hooks/useItem';
 
 export type User = {
@@ -96,39 +93,46 @@ const WeaponSummary = styled.p`
 
 function WeaponDetails(): JSX.Element {
   const { auth } = useAuth();
-  const [refresh, setRefresh] = useState<boolean>(false);
-  const comments = useComments(refresh);
-  const item = useItem<QueryItem>(refresh);
+  const [refreshItem, setRefreshItem] = useState<boolean>(false);
   const [resp, setResp] = useState<string>('There are no new reviews');
+  const item = useItem<QueryItem>(refreshItem);
 
   return (
     <WeaponDetailsContainer>
-      {item && (
+      {item && item.data && (
         <>
           <WeaponInfoContainer>
-            <h1>{item.name}</h1>
+            <h1>{item.data.name}</h1>
             <Rating>
               <Star fill="#faea5a" />
-              <strong>Rating:</strong> <span>{item.rating}</span>
+              <strong>Rating:</strong> <span>{item.data.rating}</span>
             </Rating>
+            <p>
+              <RefreshCcw
+                onClick={() => {
+                  setRefreshItem(!refreshItem);
+                }}
+              />
+              UPDATE RATING
+            </p>
             <Container>
               <img
                 src={
-                  item.imagePath ??
+                  item.data.imagePath ??
                   'https://via.placeholder.com/500x500?text=No+Image'
                 }
-                alt={`${item.name}-weapons`}
+                alt={`${item.data.name}-weapons`}
               />
-              <WeaponSummary>{item.summary}</WeaponSummary>
+              <WeaponSummary>{item.data.summary}</WeaponSummary>
             </Container>
-            {item.synonyms && (
+            {item.data.synonyms && (
               <>
                 <h2>Synonyms</h2>
-                {typeof item.synonyms === 'string' ? (
-                  <p>{item.synonyms}</p>
+                {typeof item.data.synonyms === 'string' ? (
+                  <p>{item.data.synonyms}</p>
                 ) : (
                   <ul>
-                    {item.synonyms.map((val) => (
+                    {item.data.synonyms.map((val) => (
                       <li key={`${val}-weapons`}>{val}</li>
                     ))}
                   </ul>
@@ -143,20 +147,9 @@ function WeaponDetails(): JSX.Element {
               setResponse={setResp}
             />
           )}
-          <p style={{ backgroundColor: '#e26060' }}>
-            <RefreshCcw
-              onClick={() => {
-                setResp('There are no new reviews');
-                setRefresh(!refresh);
-              }}
-            />
-            <strong>REFRESH REVIEWS</strong>
-          </p>
-          {comments.length >= 1 && (
-            <Reviews comments={comments} response={resp} />
-          )}
         </>
       )}
+      <Reviews response={resp} setResponse={setResp} />
     </WeaponDetailsContainer>
   );
 }

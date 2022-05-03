@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import useListName from '../hooks/useListName';
 
 type Card = {
   title: string;
@@ -67,9 +68,10 @@ const CardBody = styled.div`
 `;
 
 function Card({ title, imagePath, id, rating }: Card): JSX.Element {
+  const listName = useListName();
   return (
     <CardBody>
-      <Link to={`/weapons/${id}`} data-testid="weapon-link">
+      <Link to={`/${listName}/${id}`} data-testid="weapon-link">
         <span>⭐ {rating}</span>
         <p data-testid="card-title">{title}</p>
         <img

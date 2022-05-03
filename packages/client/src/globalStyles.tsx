@@ -5,6 +5,14 @@ type OverflowValue = {
 };
 
 const GlobalStyles = createGlobalStyle<OverflowValue>`
+  :root {
+    --darkG: #3b8955;
+    --lightG: #53c278;
+    --lightestG: #b5c5bb;
+    --lightP: #543275;
+    --darkP: #332164;
+  }
+
   body {
     margin: 0;
     padding: 0;

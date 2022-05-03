@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { RefreshCcw } from 'react-feather';
 import styled from 'styled-components';
-import type { Comment } from '../../views/weapons/WeaponDetails';
+import useComments from '../../hooks/useComments';
 
 export const ReviewsContainer = styled.section`
   ul {
@@ -81,47 +82,64 @@ export const CommentItem = styled.li`
 `;
 
 function Reviews({
-  comments,
   response,
+  setResponse,
 }: {
-  comments: Comment[];
   response: string;
+  setResponse: React.Dispatch<React.SetStateAction<string>>;
 }): JSX.Element {
+  const [refresh, setRefresh] = useState<boolean>(false);
+  const comments = useComments(refresh);
   return (
-    <>
-      <h1 style={{ margin: '1rem 0' }}>Reviews</h1>
-      <p>{response}</p>
-      <ReviewsContainer>
-        <ul>
-          {comments.map((comment) => (
-            <CommentItem
-              key={`${comment.review_user.id}-${comment.created_at}`}
-            >
-              <CommentGrid>
-                <img
-                  src={
-                    comment.review_user.profile_picture ??
-                    'https://via.placeholder.com/100X100.png'
-                  }
-                  alt={`${comment.review_user.username} profile`}
-                />
-                <p>
-                  <strong>{comment.review_user.username}</strong>
-                </p>
-                <span>
-                  ⭐rating<strong> {comment.rating}</strong>
-                </span>
-                <p className="date">
-                  {`created at - ${comment.created_at}`} <br />{' '}
-                  {`updated at - ${comment.updated_at}`}
-                </p>
-              </CommentGrid>
-              <p className="comment-msg">{comment.message}</p>
-            </CommentItem>
-          ))}
-        </ul>
-      </ReviewsContainer>
-    </>
+    <div>
+      {comments.length >= 1 ? (
+        <>
+          <h1 style={{ margin: '1rem 0' }}>Reviews</h1>
+          <p style={{ backgroundColor: '#e26060' }}>
+            <RefreshCcw
+              onClick={() => {
+                setResponse('There are no new reviews');
+                setRefresh(!refresh);
+              }}
+            />
+            <strong>REFRESH REVIEWS</strong>
+          </p>
+          <p>{response}</p>
+          <ReviewsContainer>
+            <ul>
+              {comments.map((comment) => (
+                <CommentItem
+                  key={`${comment.review_user.id}-${comment.created_at}`}
+                >
+                  <CommentGrid>
+                    <img
+                      src={
+                        comment.review_user.profile_picture ??
+                        'https://via.placeholder.com/100X100.png'
+                      }
+                      alt={`${comment.review_user.username} profile`}
+                    />
+                    <p>
+                      <strong>{comment.review_user.username}</strong>
+                    </p>
+                    <span>
+                      ⭐rating<strong> {comment.rating}</strong>
+                    </span>
+                    <p className="date">
+                      {`created at - ${comment.created_at}`} <br />{' '}
+                      {`updated at - ${comment.updated_at}`}
+                    </p>
+                  </CommentGrid>
+                  <p className="comment-msg">{comment.message}</p>
+                </CommentItem>
+              ))}
+            </ul>
+          </ReviewsContainer>
+        </>
+      ) : (
+        <h1>No reviews</h1>
+      )}
+    </div>
   );
 }
 
