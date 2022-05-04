@@ -5,7 +5,10 @@
     "allowJs": true,
     "checkJs": false,
     "outDir": "dist",
-    "rootDir": "./",
+    "rootDir": "./src",
+    "paths": {
+      "~/*": ["packages/*"]
+    },
     "strict": true,
     "baseUrl": "./",
     "typeRoots": [

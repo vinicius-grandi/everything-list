@@ -10,6 +10,9 @@ import { Rate } from '../weapons/WeaponDetails';
 
 const AnimeContainer = styled.main`
   background-color: var(--lightG);
+  *:not(section, form) {
+    margin: 0 1rem;
+  }
 `;
 
 const Trailer = styled.div`
@@ -26,7 +29,7 @@ function AnimeDetails(): JSX.Element {
   return (
     <AnimeContainer>
       {item && item.data && (
-        <i>
+        <>
           <BasicInfo
             cover={
               item.data.images.jpg.image_url ??
@@ -49,11 +52,11 @@ function AnimeDetails(): JSX.Element {
               />
             </Trailer>
           )}
-        </i>
+        </>
       )}
       {auth && item && (
         <SetReview
-          listName="weapons"
+          listName="animes"
           reviewExists={item.reviewExists}
           setResponse={setResp}
         />
