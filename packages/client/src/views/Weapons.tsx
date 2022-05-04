@@ -39,7 +39,7 @@ const Main = styled.main`
 
   @media screen and (max-width: 599px) {
     font-size: 1.5rem;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0px, 1fr));
   }
 
   @media screen and (max-width: 250px) {

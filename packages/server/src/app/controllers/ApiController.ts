@@ -3,7 +3,6 @@ import logger from 'jet-logger';
 import {
   getAnimeOrMangaById,
   getAnimeSearch,
-  getMangaSearch,
 } from '../../services/animes/jikanapi';
 import getBookSearch, {
   getBookById,
@@ -11,14 +10,9 @@ import getBookSearch, {
 import getMovieSearch, { getMovieById } from '../../services/movies/omdbapi';
 import getQueryItem from '../../utils/db/getQueryItem';
 import db from '../models';
+import type { IQueryParams, Lists, ModelName } from './ApiController.d';
 
 const { Anime } = db;
-type IQueryParams = {
-  page: number;
-};
-
-export type Lists = 'animes' | 'mangas' | 'books' | 'movies';
-type ModelName = 'Anime' | 'Manga' | 'Book' | 'Movie';
 
 async function findOrCreateItem(id: string | number, list: ModelName) {
   const [itemFromDb] = await db[list].findOrCreate({
@@ -124,33 +118,38 @@ const ApiController = {
   },
 
   async mangas(page = 1, query = `?order_by=title&limit=20&page=${page}`) {
-    const mangaOrMangas = await getMangaSearch(query);
+    const mangaOrMangas = await getAnimeSearch(query, 'manga');
+
     if (!mangaOrMangas) return null;
+
     const mangas = Array.isArray(mangaOrMangas.data)
       ? mangaOrMangas.data
       : [mangaOrMangas.data];
-    const mangasData =
-      'data' in mangas
-        ? mangas.map(async (manga) => {
-            let rating = 0;
-            if (db.Manga) {
-              const [mangaFromDB] = await db.Manga.findOrCreate({
-                where: { id: manga.mal_id },
-                defaults: { id: manga.mal_id },
-              });
-              rating = mangaFromDB.rating;
-            }
-            const {
-              mal_id: id,
-              images: {
-                jpg: { image_url: imagePath },
-              },
-              title,
-            } = manga;
-            return getQueryItem(id, rating, imagePath, 'animes', title);
-          })
-        : [mangas];
-    const data = await Promise.all(mangasData);
+
+    const animesData = mangas.map(async (manga) => {
+      const [mangaRating] = await db.Manga.findOrCreate({
+        where: { id: manga.mal_id },
+        defaults: {
+          id: manga.mal_id,
+          rating: 0,
+        },
+      });
+      const {
+        mal_id: id,
+        images: {
+          jpg: { image_url: imagePath },
+        },
+        title,
+      } = manga;
+      return getQueryItem(
+        id,
+        mangaRating === null ? 0 : mangaRating.rating,
+        imagePath,
+        'animes',
+        title,
+      );
+    });
+    const data = await Promise.all(animesData);
     return {
       lastPage:
         'pagination' in mangaOrMangas

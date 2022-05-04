@@ -10,10 +10,14 @@ type Basic = {
 };
 
 const Container = styled.div`
+  @media screen and (min-width: 1001px) {
+    justify-content: flex-start;
+  }
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   img {
-    width: 100px;
-    height: auto;
+    width: fit-content;
     margin: 0.7rem;
   }
 `;
@@ -47,6 +51,7 @@ const InfoContainer = styled.div`
     background-color: var(--lightestG);
     padding: 0.2rem;
     margin-right: 1rem;
+    max-width: 700px;
     text-align: justify;
   }
 `;
@@ -54,6 +59,11 @@ const InfoContainer = styled.div`
 function BasicInfo({ cover, title, synopsis, rating }: Basic): JSX.Element {
   return (
     <>
+      <Rating>
+        <Star fill="#faea5a" size={50} />
+        <p className="rating">RATING</p>
+        <p className="rating-val">{rating}</p>
+      </Rating>
       <Container>
         <img src={cover} alt={title} />
         <InfoContainer>
@@ -61,11 +71,6 @@ function BasicInfo({ cover, title, synopsis, rating }: Basic): JSX.Element {
           <p>{synopsis}</p>
         </InfoContainer>
       </Container>
-      <Rating>
-        <Star fill="#faea5a" size={50} />
-        <p className="rating">RATING</p>
-        <p className="rating-val">{rating}</p>
-      </Rating>
     </>
   );
 }

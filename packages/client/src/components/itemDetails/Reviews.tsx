@@ -3,6 +3,16 @@ import { RefreshCcw } from 'react-feather';
 import styled from 'styled-components';
 import useComments from '../../hooks/useComments';
 
+type SetResponse = React.Dispatch<React.SetStateAction<string>>;
+
+const ResponseMsg = styled.p`
+  margin: 0 !important;
+  padding: 1rem;
+  font-size: 1.2rem;
+  background-color: var(--lightP);
+  color: #f6f6f6;
+`;
+
 export const ReviewsContainer = styled.section`
   ul {
     list-style: none;
@@ -39,7 +49,7 @@ export const CommentGrid = styled.div`
     'pic date date';
 
   grid-template-rows: 1fr 1fr;
-  grid-template-columns: 0fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   height: fit-content;
   margin: 0 !important;
 
@@ -81,12 +91,34 @@ export const CommentItem = styled.li`
   }
 `;
 
+function Refresh({
+  setResponse,
+  setRefresh,
+  refresh,
+}: {
+  setResponse: SetResponse;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  refresh: boolean;
+}): JSX.Element {
+  return (
+    <p style={{ backgroundColor: '#e26060', margin: 0 }}>
+      <RefreshCcw
+        onClick={() => {
+          setResponse('There are no new reviews');
+          setRefresh(!refresh);
+        }}
+      />
+      <strong>REFRESH REVIEWS</strong>
+    </p>
+  );
+}
+
 function Reviews({
   response,
   setResponse,
 }: {
   response: string;
-  setResponse: React.Dispatch<React.SetStateAction<string>>;
+  setResponse: SetResponse;
 }): JSX.Element {
   const [refresh, setRefresh] = useState<boolean>(false);
   const comments = useComments(refresh);
@@ -95,16 +127,12 @@ function Reviews({
       {comments.length >= 1 ? (
         <>
           <h1 style={{ margin: '1rem 0' }}>Reviews</h1>
-          <p style={{ backgroundColor: '#e26060' }}>
-            <RefreshCcw
-              onClick={() => {
-                setResponse('There are no new reviews');
-                setRefresh(!refresh);
-              }}
-            />
-            <strong>REFRESH REVIEWS</strong>
-          </p>
-          <p>{response}</p>
+          <Refresh
+            refresh={refresh}
+            setRefresh={setRefresh}
+            setResponse={setResponse}
+          />
+          <ResponseMsg>{response}</ResponseMsg>
           <ReviewsContainer>
             <ul>
               {comments.map((comment) => (
@@ -137,7 +165,15 @@ function Reviews({
           </ReviewsContainer>
         </>
       ) : (
-        <h1>No reviews</h1>
+        <>
+          <h1>Reviews</h1>
+          <Refresh
+            refresh={refresh}
+            setRefresh={setRefresh}
+            setResponse={setResponse}
+          />
+          <ResponseMsg>{response}</ResponseMsg>
+        </>
       )}
     </div>
   );

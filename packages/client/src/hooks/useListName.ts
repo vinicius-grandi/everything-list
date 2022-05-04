@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import type { Lists } from '@everything-list/server/src/app/controllers/ApiController';
+import type { Lists } from '@everything-list/server/src/app/controllers/ApiController.d';
 
 const useListName = (): string => {
   const { pathname } = useLocation();

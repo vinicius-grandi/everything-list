@@ -13,8 +13,11 @@ export async function getSchedule(page: number): Promise<Animes> {
 
 export async function getAnimeSearch(
   queryParams: string,
+  mangaOrAnime = 'anime',
 ): Promise<DataAndPagination | { data: Anime } | null> {
-  const res = await axios.get(`https://api.jikan.moe/v4/anime${queryParams}`);
+  const res = await axios.get(
+    `https://api.jikan.moe/v4/${mangaOrAnime}${queryParams}`,
+  );
   const {
     data: { data, pagination },
   } = res;

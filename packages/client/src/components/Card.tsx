@@ -64,6 +64,11 @@ const CardBody = styled.div`
     color: white;
     font-weight: bold;
     text-decoration: none;
+    max-width: 100%;
+  }
+
+  p {
+    overflow: hidden !important;
   }
 `;
 

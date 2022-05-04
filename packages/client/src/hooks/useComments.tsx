@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import type { Lists } from '@everything-list/server/src/app/controllers/ApiController';
+import { useParams } from 'react-router-dom';
 import type { Comment } from '../views/weapons/WeaponDetails';
 import useListName from './useListName';
 
