@@ -19,7 +19,7 @@ const useItem = <T,>(
       try {
         const response = await fetch(`/${listName}/api/${id}`);
         if (response.status !== 200) {
-          navigate('/weapons', {
+          navigate(`/${listName}`, {
             replace: true,
           });
         }

@@ -5,7 +5,7 @@ import { RegisterForm } from './Signup';
 import submit from './utils';
 
 function Login(): JSX.Element {
-  const [error, setError] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -38,7 +38,7 @@ function Login(): JSX.Element {
           data-cy="password"
           id="password"
         />
-        {error && <p>Incorrect email/password</p>}
+        {error.length > 1 && <p>{error}</p>}
         <input type="submit" data-testid="submit" value="Login" />
       </label>
     </RegisterForm>

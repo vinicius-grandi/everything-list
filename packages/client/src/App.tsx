@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
+import styled from 'styled-components';
 import Weapons from './views/Weapons';
 import Header from './components/Header';
 import Home from './views/Home';
@@ -16,13 +17,14 @@ import WeaponDetails from './views/weapons/WeaponDetails';
 import AnimeDetails from './views/animes/AnimeDetails';
 import MovieDetails from './views/movies/MoviesDetails';
 import BooksDetails from './views/books/BooksDetails';
+import Loading from './components/Loading';
 
 function App(): JSX.Element {
   const { auth } = useAuth();
   const [hidden, setHidden] = useState(false);
 
   if (auth === 'standby') {
-    return <h1>loading</h1>;
+    return <Loading size={200} />;
   }
 
   return (

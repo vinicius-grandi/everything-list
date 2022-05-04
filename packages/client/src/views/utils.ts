@@ -7,23 +7,24 @@ type Methods = AuthContextType['login'] | AuthContextType['signup'];
 const submit = async (
   e: React.FormEvent<HTMLFormElement>,
   method: Methods,
-  setError: React.Dispatch<React.SetStateAction<boolean>>,
+  setError: React.Dispatch<React.SetStateAction<string>>,
   navigate: NavigateFunction,
-): Promise<void> => {
+): Promise<void | null> => {
   e.preventDefault();
   const form = e.currentTarget;
   if (method !== undefined) {
     const response = await method(form);
     if (response) {
       if (response.status !== 200) {
-        setError(true);
-      } else {
-        navigate('/', {
-          replace: true,
-        });
+        const err = await response.json();
+        setError(err.msg);
+        return null;
       }
     }
   }
+  return navigate('/', {
+    replace: true,
+  });
 };
 
 export default submit;

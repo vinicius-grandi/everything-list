@@ -271,7 +271,7 @@ const ApiController = {
       return res.json({ data: item });
     } catch (error) {
       logger.err(error);
-      return res.json({ data: null });
+      return res.status(404).json({ data: null });
     }
   },
 
