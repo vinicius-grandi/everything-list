@@ -56,6 +56,6 @@ app.use(noApiListRoutes, noApiListRouter);
 app.use(apiListRoutes, apiListRouter);
 app.use('/profiles', userRouter);
 app.use('/api', authRouter);
-// app.use('/', express.static(resolve('..', 'myapp', 'build')));
+// app.use('/', express.static(resolve('..', 'client', 'build')));
 
 export default app;

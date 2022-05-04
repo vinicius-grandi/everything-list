@@ -1008,6 +1008,7 @@ export type Book = {
       text: boolean;
       image: boolean;
     };
+    description?: string;
     pageCount: number;
     printType: 'BOOK';
     categories: string[];

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import Weapons from './views/Weapons';
-import WeaponDetails from './views/weapons/WeaponDetails';
 import Header from './components/Header';
 import Home from './views/Home';
 import Signup from './views/Signup';
@@ -13,7 +12,10 @@ import GlobalStyles from './globalStyles';
 import UserProfile from './views/UserProfile';
 import Logout from './components/Logout';
 import renderWithMultiplePath from './utils/renderWithMultiplePaths';
+import WeaponDetails from './views/weapons/WeaponDetails';
 import AnimeDetails from './views/animes/AnimeDetails';
+import MovieDetails from './views/movies/MoviesDetails';
+import BooksDetails from './views/books/BooksDetails';
 
 function App(): JSX.Element {
   const { auth } = useAuth();
@@ -36,6 +38,9 @@ function App(): JSX.Element {
           )}
           <Route path="/weapons/:id" element={<WeaponDetails />} />
           <Route path="/animes/:id" element={<AnimeDetails />} />
+          <Route path="/mangas/:id" element={<AnimeDetails />} />
+          <Route path="/movies/:id" element={<MovieDetails />} />
+          <Route path="/books/:id" element={<BooksDetails />} />
           {auth && (
             <>
               <Route path="/my-profile" element={<UserProfile />} />

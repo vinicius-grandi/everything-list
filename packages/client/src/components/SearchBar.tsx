@@ -27,6 +27,7 @@ const SearchList = styled.ul`
 const QueryCard = styled.li`
   background-color: #663a8f;
   padding: 0.3rem;
+  width: 100%;
 
   a {
     text-decoration: none;
