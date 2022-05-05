@@ -10,8 +10,7 @@ To install this project in your own machine:
 - Clone this repository
 - Go to project's root directory
 - Run `npm install` command
-- Run `npm install` in both folders **`client`** and **`server`**
-- Go again to project's root directory and run `npm start:dev`
+- Now you can run `npm start:dev`
 - Access whichever URL your app is running on, generally https://localhost:3000
 ## Contributing
 ------
