@@ -1,13 +1,7 @@
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-
-type QueryItem = {
-  list_name: string;
-  id: number;
-  name: string;
-  imagePath: string | null;
-} | null;
+import { useQuery } from '../contexts/SearchContext';
 
 const SearchList = styled.ul<{ w: string }>`
   margin: inherit;
@@ -61,32 +55,35 @@ const SearchButton = styled.button`
 
 const SearchBar = forwardRef<HTMLInputElement>((_, ref) => {
   const [search, setSearch] = useState<string>('');
-  const [queryItems, setQueryItems] = useState<QueryItem[]>([]);
   const elem = useRef<HTMLDivElement>(null);
+  const { setQueryRes, queryRes, filter } = useQuery();
 
   useEffect(() => {
     const timeout = 3000;
     if (search.length === 0) {
-      return setQueryItems([]);
+      return setQueryRes([]);
     }
 
     async function handleSearch(): Promise<void> {
       try {
-        const response = await fetch(`/search/api?q=${search}`, {
-          referrerPolicy: 'no-referrer',
-        });
+        const response = await fetch(
+          `/search/api?q=${search}${filter ? `&f=${filter}` : ''}`,
+          {
+            referrerPolicy: 'no-referrer',
+          },
+        );
         const searchResult = await response.json();
-        setQueryItems(searchResult);
+        setQueryRes(searchResult);
       } catch (error) {
         if (error instanceof Error) {
-          setQueryItems([]);
+          setQueryRes([]);
         }
       }
     }
 
     const to = setTimeout(() => handleSearch(), timeout);
     return () => clearTimeout(to);
-  }, [search]);
+  }, [filter, search, setQueryRes]);
 
   return (
     <div className="search-box" data-cy="full-search">
@@ -99,24 +96,19 @@ const SearchBar = forwardRef<HTMLInputElement>((_, ref) => {
           data-cy="searchbox"
           value={search}
         />
-        <Link
-          to={`/search?q=${search}`}
-          onClick={() => {
-            setTimeout(() => setSearch(''), 500);
-          }}
-        >
+        <Link to={`/search?q=${search}`}>
           <SearchButton type="button" data-testid="search-btn">
             Search
           </SearchButton>
         </Link>
       </div>
-      {queryItems.length !== 0 && (
+      {queryRes.length !== 0 && (
         <SearchList
           data-testid="search-list"
           className="search-list"
           w={(elem.current && String(elem.current.clientWidth)) ?? 'initial'}
         >
-          {queryItems.map((val) => (
+          {queryRes.map((val) => (
             <QueryCard key={`${val?.list_name}-${val?.id}`}>
               <p>
                 {'List: '}
