@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { RegisterForm } from './Signup';
+import { RegisterForm as LoggingForm, Signing } from './Signup';
 import submit from './utils';
-import { Signing } from './Signup';
+import Loading from '../components/Loading';
 
 function Login(): JSX.Element {
   const [error, setError] = useState<string>('');
@@ -22,7 +22,7 @@ function Login(): JSX.Element {
   };
 
   return (
-    <RegisterForm onSubmit={handleSubmit}>
+    <LoggingForm onSubmit={handleSubmit}>
       {loading && (
         <Signing>
           LOGGING IN...
@@ -53,7 +53,7 @@ function Login(): JSX.Element {
         {error.length > 1 && <p>{error}</p>}
         <input type="submit" data-testid="submit" value="Login" />
       </label>
-    </RegisterForm>
+    </LoggingForm>
   );
 }
 

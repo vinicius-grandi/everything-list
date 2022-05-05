@@ -72,7 +72,13 @@ const CardBody = styled.div`
   }
 `;
 
-function Card({ title, imagePath, id, rating }: Card): JSX.Element {
+function Card({
+  title,
+  imagePath,
+  id,
+  rating,
+  isLazyLoading,
+}: Card & { isLazyLoading: boolean }): JSX.Element {
   const listName = useListName();
   return (
     <CardBody>
@@ -81,7 +87,9 @@ function Card({ title, imagePath, id, rating }: Card): JSX.Element {
         <p data-testid="card-title">{title}</p>
         <img
           data-testid="card-image"
-          loading="lazy"
+          height={200}
+          width={100}
+          loading={isLazyLoading ? 'lazy' : 'eager'}
           src={imagePath ?? 'https://via.placeholder.com/500x500?text=No+Image'}
           data-src="https://via.placeholder.com/500x500?text=No+Image"
           onError={({ target }) => {

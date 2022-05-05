@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
-import styled from 'styled-components';
-import Weapons from './views/Weapons';
+import Items from './views/Items';
 import Header from './components/Header';
 import Home from './views/Home';
 import Signup from './views/Signup';
@@ -36,7 +35,7 @@ function App(): JSX.Element {
           <Route path="/" element={<Home />} />
           {renderWithMultiplePath(
             ['animes', 'weapons', 'mangas', 'movies', 'books'],
-            <Weapons />,
+            <Items />,
           )}
           <Route path="/weapons/:id" element={<WeaponDetails />} />
           <Route path="/animes/:id" element={<AnimeDetails />} />

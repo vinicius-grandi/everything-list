@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import type { QueryItem } from '@everything-list/server/src/app/controllers/SearchController.d';
 import Card from '../components/Card';
-import type {
-  WeaponInfo,
-  weapons as WeaponsType,
-} from '../services/weapons/wikiapi.d';
 import Loading from '../components/Loading';
 
 const Title = styled.h1`
@@ -67,8 +64,8 @@ const Buttons = styled.div`
   }
 `;
 
-function Weapons(): JSX.Element {
-  const [weapons, setWeapons] = useState<WeaponsType[]>([]);
+function Items(): JSX.Element {
+  const [items, setItems] = useState<QueryItem[]>([]);
   const [error, setError] = useState<boolean>(false);
   const { pathname } = useLocation();
   const listName = pathname.slice(1);
@@ -89,36 +86,42 @@ function Weapons(): JSX.Element {
   };
 
   useEffect(() => {
-    setWeapons([]);
+    setItems([]);
     const p = Number(searchParams.get('page'));
     setPage(p < 1 ? 1 : p);
-    async function weaponsFn(): Promise<void> {
+    async function itemsFn(): Promise<void> {
       const response = await fetch(`/${listName}/api?page=${p}`);
       if (response.status !== 200) {
         return setError(true);
       }
-      const items: WeaponInfo = await response.json();
-      setLastPage(items.pagination.lastVisiblePage);
-      return setWeapons([...items.data]);
+      const i: {
+        data: QueryItem[];
+        pagination: { lastVisiblePage: number };
+      } = await response.json();
+      setLastPage(i.pagination.lastVisiblePage);
+      return setItems([...i.data]);
     }
-    weaponsFn();
+    itemsFn();
   }, [page, searchParams, listName]);
 
   return (
     <main>
       {error && <h2 className="error">Item not found</h2>}
       <Title data-testid="weapon-d-title">{listName}</Title>
-      {weapons.length >= 1 ? (
+      {items.length >= 1 ? (
         <Main>
-          {weapons.map((val) => (
-            <Card
-              key={`${val.name}-${val.id}`}
-              title={val.name}
-              imagePath={val.imagePath}
-              id={val.id ?? 0}
-              rating={val.rating ?? 0}
-            />
-          ))}
+          {items.map((val, i) => {
+            return (
+              <Card
+                key={`${val?.name}-${val?.id}`}
+                title={val?.name ?? 'no title'}
+                imagePath={val?.imagePath ?? ''}
+                id={val?.id ?? 0}
+                rating={val?.rating ?? 0}
+                isLazyLoading={i > 7}
+              />
+            );
+          })}
         </Main>
       ) : (
         <Loading size={100} />
@@ -141,7 +144,7 @@ function Weapons(): JSX.Element {
         {page < lastPage && (
           <button
             type="button"
-            data-testid="weapons-next-page"
+            data-testid="items-next-page"
             onClick={() => {
               setTimeout(
                 () => window.scrollTo({ top: 0, behavior: 'smooth' }),
@@ -158,4 +161,4 @@ function Weapons(): JSX.Element {
   );
 }
 
-export default Weapons;
+export default Items;

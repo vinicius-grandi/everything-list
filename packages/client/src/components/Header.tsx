@@ -15,28 +15,29 @@ type TranslationValue = {
 };
 
 const ExpandedMenu = styled.div<TranslationValue>`
-  height: 201vh;
-  flex-grow: 1!;
+  height: 100vh;
+  flex-grow: 2 !important;
   width: 90%;
   position: absolute;
   z-index: 4;
-  transform: translate(${({ translation }) => translation}%, 5%);
+  transform: translate(${({ translation }) => translation}%, 0);
   background-color: #332164;
   transition: 0.5s;
   box-shadow: -20vw -2px #000000d9;
 
   svg {
-    margin-top: 2rem;
+    margin-top: 0.5rem;
     padding: 0.5rem;
   }
 
   ul {
-    margin-top: 10rem;
+    margin-top: 1rem;
     margin-bottom: 0;
     padding: 0;
     list-style-type: none;
     text-align: center;
     text-transform: capitalize;
+    overflow-y: auto;
   }
 
   a,
@@ -55,9 +56,9 @@ const ExpandedMenu = styled.div<TranslationValue>`
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   text-align: center;
+  top: 0;
 `;
 
 const StyledHeader = styled.header<DisplayValue>`
@@ -169,7 +170,7 @@ function Header({
 }: {
   setHidden: React.Dispatch<React.SetStateAction<boolean>>;
 }): JSX.Element {
-  const routes = ['/animes', '/mangas', '/books', '/movies', '/weapons'];
+  const routes = ['/animes', '/books', '/mangas', '/movies', '/weapons'];
   const [sbDisplay, setSbDisplay] = useState<Searchbox>('none');
   const { auth } = useAuth();
 
@@ -202,28 +203,39 @@ function Header({
     setTranslation(dVTranslation);
   };
   return (
-    <StyledHeader sbDisplay={sbDisplay}>
-      <Link to="/" id="logo">
-        <img
-          src="images/EverythingList-logo.png"
-          alt="header-logo"
-          className="logo"
-        />
-      </Link>
-      <SearchBar ref={searchInput} />
-      <Search
-        color="#f6f6f6"
-        className="search-icon"
-        data-cy="search-icon"
-        onClick={() => {
-          if (window.innerWidth < 599) {
-            setSbDisplay('initial');
-            if (searchInput.current) {
-              setTimeout(() => searchInput.current?.focus(), 1);
+    <>
+      <StyledHeader sbDisplay={sbDisplay}>
+        <Link to="/" id="logo">
+          <img
+            src="images/EverythingList-logo.png"
+            alt="header-logo"
+            className="logo"
+          />
+        </Link>
+        <SearchBar ref={searchInput} />
+        <Search
+          color="#f6f6f6"
+          className="search-icon"
+          data-cy="search-icon"
+          onClick={() => {
+            if (window.innerWidth < 599) {
+              setSbDisplay('initial');
+              if (searchInput.current) {
+                setTimeout(() => searchInput.current?.focus(), 1);
+              }
             }
-          }
-        }}
-      />
+          }}
+        />
+        <Menu
+          color="#f6f6f6"
+          className="menu-icon"
+          data-cy="menu-icon"
+          onClick={() => {
+            setTranslation(12);
+            setHidden(true);
+          }}
+        />
+      </StyledHeader>
       <ExpandedMenu data-cy="expanded-menu" translation={translation}>
         <ul>
           {routes.map((route) => (
@@ -261,16 +273,7 @@ function Header({
           }}
         />
       </ExpandedMenu>
-      <Menu
-        color="#f6f6f6"
-        className="menu-icon"
-        data-cy="menu-icon"
-        onClick={() => {
-          setTranslation(11);
-          setHidden(true);
-        }}
-      />
-    </StyledHeader>
+    </>
   );
 }
 

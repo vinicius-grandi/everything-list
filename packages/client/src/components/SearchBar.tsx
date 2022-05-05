@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -9,7 +9,7 @@ type QueryItem = {
   imagePath: string | null;
 } | null;
 
-const SearchList = styled.ul`
+const SearchList = styled.ul<{ w: string }>`
   margin: inherit;
   padding: 1rem;
   list-style-type: none;
@@ -22,6 +22,7 @@ const SearchList = styled.ul`
   place-items: center;
   position: absolute;
   z-index: 5;
+  min-width: ${({ w }) => w}px;
 `;
 
 const QueryCard = styled.li`
@@ -61,6 +62,7 @@ const SearchButton = styled.button`
 const SearchBar = forwardRef<HTMLInputElement>((_, ref) => {
   const [search, setSearch] = useState<string>('');
   const [queryItems, setQueryItems] = useState<QueryItem[]>([]);
+  const elem = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const timeout = 3000;
@@ -88,7 +90,7 @@ const SearchBar = forwardRef<HTMLInputElement>((_, ref) => {
 
   return (
     <div className="search-box" data-cy="full-search">
-      <div className="search-bar" role="search">
+      <div className="search-bar" role="search" ref={elem}>
         <input
           ref={ref}
           type="text"
@@ -97,14 +99,23 @@ const SearchBar = forwardRef<HTMLInputElement>((_, ref) => {
           data-cy="searchbox"
           value={search}
         />
-        <Link to={`/search?q=${search}`}>
+        <Link
+          to={`/search?q=${search}`}
+          onClick={() => {
+            setTimeout(() => setSearch(''), 500);
+          }}
+        >
           <SearchButton type="button" data-testid="search-btn">
             Search
           </SearchButton>
         </Link>
       </div>
       {queryItems.length !== 0 && (
-        <SearchList data-testid="search-list" className="search-list">
+        <SearchList
+          data-testid="search-list"
+          className="search-list"
+          w={(elem.current && String(elem.current.clientWidth)) ?? 'initial'}
+        >
           {queryItems.map((val) => (
             <QueryCard key={`${val?.list_name}-${val?.id}`}>
               <p>
@@ -121,7 +132,9 @@ const SearchBar = forwardRef<HTMLInputElement>((_, ref) => {
               <p>
                 <Link
                   to={`${val?.list_name}/${val?.id}`}
-                  onClick={() => setSearch('')}
+                  onClick={() => {
+                    setTimeout(() => setSearch(''), 500);
+                  }}
                 >
                   {val?.name}
                 </Link>

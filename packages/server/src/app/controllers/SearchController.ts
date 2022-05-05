@@ -128,10 +128,11 @@ const SearchController = {
     }
     const methodsMap = new Map();
 
+    const { getAnimeOrManga: getAnOrMn, getWeapon: getWp } = this;
     // filters
-    methodsMap.set('mg', this.getAnimeOrManga);
-    methodsMap.set('an', this.getAnimeOrManga);
-    methodsMap.set('wp', this.getWeapon);
+    methodsMap.set('mg', getAnOrMn);
+    methodsMap.set('an', getAnOrMn);
+    methodsMap.set('wp', getWp);
 
     const queryItems: QueryItem[] = await this.queryItem[filter](
       methodsMap.get(filter),
