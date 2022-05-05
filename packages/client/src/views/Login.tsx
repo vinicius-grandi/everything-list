@@ -3,20 +3,32 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { RegisterForm } from './Signup';
 import submit from './utils';
+import { Signing } from './Signup';
 
 function Login(): JSX.Element {
   const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
-    await submit(e, login, setError, navigate);
+    setLoading(true);
+    const response = await submit(e, login, setError, navigate);
+    if (response === null) {
+      setLoading(false);
+    }
   };
 
   return (
     <RegisterForm onSubmit={handleSubmit}>
+      {loading && (
+        <Signing>
+          LOGGING IN...
+          <Loading size={50} />
+        </Signing>
+      )}
       <label htmlFor="email">
         Email:
         <input
