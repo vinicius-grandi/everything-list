@@ -1,7 +1,17 @@
 import type { QueryItem } from '@everything-list/server/src/app/controllers/SearchController.d';
 import React, { createContext, useContext, useState } from 'react';
 
-type Filters = 'an' | 'mn' | 'wp';
+export const filters: Readonly<{
+  [key in string]: null;
+}> = {
+  an: null,
+  bo: null,
+  ma: null,
+  mo: null,
+  we: null,
+};
+
+export type Filters = keyof typeof filters;
 
 interface ISearch {
   queryRes: QueryItem[];

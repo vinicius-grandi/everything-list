@@ -1,22 +1,36 @@
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
+import { X } from 'react-feather';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useQuery } from '../contexts/SearchContext';
+import DefaultImg from './DefaultImg';
+import SearchLoading from './Search/SearchLoading';
 
-const SearchList = styled.ul<{ w: string }>`
+const SearchList = styled.ul<{ w: string; d: string }>`
   margin: inherit;
-  padding: 1rem;
+  width: 355px;
   list-style-type: none;
   background-color: #331e47;
   color: #f6f6f6;
-  display: grid;
+  display: ${({ d }) => d};
   grid-auto-flow: row;
-  grid-auto-rows: 1fr;
   text-align: center;
   place-items: center;
   position: absolute;
-  z-index: 5;
-  min-width: ${({ w }) => w}px;
+  z-index: 1;
+  min-width: ${({ w }) => `calc(${w}px - 10%)`};
+
+  li {
+    margin: 0.5rem;
+  }
+
+  svg {
+    cursor: pointer;
+  }
+
+  .search-loading {
+    margin: 3rem;
+  }
 `;
 
 const QueryCard = styled.li`
@@ -53,11 +67,35 @@ const SearchButton = styled.button`
   }
 `;
 
-const SearchBar = forwardRef<HTMLInputElement>((_, ref) => {
+const SearchBar = forwardRef<
+  HTMLInputElement,
+  {
+    elem: null | HTMLInputElement;
+  }
+>((_, ref) => {
   const [search, setSearch] = useState<string>('');
+  const searchButtonRef = useRef<HTMLButtonElement>(null);
+  const [listWidth, setListWidth] = useState<string>('0');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [searchListDisplay, setSearchListDisplay] = useState<'grid' | 'none'>(
+    'none',
+  );
   const elem = useRef<HTMLDivElement>(null);
   const { setQueryRes, queryRes, filter } = useQuery();
 
+  useEffect(() => {
+    const handleResize = (): void => {
+      if (elem.current) {
+        setListWidth(String(elem.current.clientWidth));
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [elem]);
   useEffect(() => {
     const timeout = 3000;
     if (search.length === 0) {
@@ -66,6 +104,7 @@ const SearchBar = forwardRef<HTMLInputElement>((_, ref) => {
 
     async function handleSearch(): Promise<void> {
       try {
+        setLoading(true);
         const response = await fetch(
           `/search/api?q=${search}${filter ? `&f=${filter}` : ''}`,
           {
@@ -74,9 +113,11 @@ const SearchBar = forwardRef<HTMLInputElement>((_, ref) => {
         );
         const searchResult = await response.json();
         setQueryRes(searchResult);
+        setLoading(false);
       } catch (error) {
         if (error instanceof Error) {
           setQueryRes([]);
+          setLoading(false);
         }
       }
     }
@@ -92,35 +133,55 @@ const SearchBar = forwardRef<HTMLInputElement>((_, ref) => {
           ref={ref}
           type="text"
           onChange={(ev) => setSearch(ev.target.value)}
+          onClick={() => setSearchListDisplay('grid')}
+          onKeyDown={(ev) => {
+            if (ev.key === 'Enter' && searchButtonRef.current) {
+              searchButtonRef.current.click();
+            }
+          }}
           role="searchbox"
           data-cy="searchbox"
           value={search}
         />
         <Link to={`/search?q=${search}`}>
-          <SearchButton type="button" data-testid="search-btn">
+          <SearchButton
+            type="button"
+            data-testid="search-btn"
+            ref={searchButtonRef}
+            onClick={() => setSearchListDisplay('none')}
+          >
             Search
           </SearchButton>
         </Link>
       </div>
-      {queryRes.length !== 0 && (
-        <SearchList
-          data-testid="search-list"
-          className="search-list"
-          w={(elem.current && String(elem.current.clientWidth)) ?? 'initial'}
-        >
-          {queryRes.map((val) => (
+      <SearchList
+        data-testid="search-list"
+        className="search-list"
+        w={
+          Number(listWidth) === 0
+            ? String(elem.current?.clientWidth)
+            : listWidth
+        }
+        d={searchListDisplay}
+      >
+        {queryRes.length >= 1 && (
+          <li>
+            <X onClick={() => setSearchListDisplay('none')} />
+          </li>
+        )}
+        {loading && (
+          <li className="search-loading">
+            <SearchLoading />
+          </li>
+        )}
+        {queryRes.length >= 1 &&
+          queryRes.map((val) => (
             <QueryCard key={`${val?.list_name}-${val?.id}`}>
               <p>
                 {'List: '}
                 <Link to={`${val?.list_name}`}>{val?.list_name}</Link>
               </p>
-              <img
-                src={
-                  val?.imagePath ??
-                  'https://via.placeholder.com/140x200?text=no+image'
-                }
-                alt={val?.name}
-              />
+              <DefaultImg src={val?.imagePath ?? ''} alt={val?.name ?? ''} />
               <p>
                 <Link
                   to={`${val?.list_name}/${val?.id}`}
@@ -133,8 +194,7 @@ const SearchBar = forwardRef<HTMLInputElement>((_, ref) => {
               </p>
             </QueryCard>
           ))}
-        </SearchList>
-      )}
+      </SearchList>
     </div>
   );
 });

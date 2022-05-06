@@ -1,20 +1,3 @@
-import type { Anime } from '../../services/animes/jikanapi.d';
-
-export type getAnimeOrManga = (
-  query: string,
-  method: 'getAnimeSearch' | 'getMangaSearch',
-  additionalParams: string,
-) => Promise<
-  | Anime[]
-  | {
-      id: number;
-      imagePath: string | null;
-      list_name: string;
-      name: string;
-    }
-  | null
->;
-
 export type QueryItem = {
   list_name: string;
   rating: number;
@@ -23,14 +6,25 @@ export type QueryItem = {
   imagePath: string | null;
 } | null;
 
+export type getAnimeOrManga = (
+  query: string,
+  method: 'getAnimeSearch' | 'getMangaSearch',
+  additionalParams: string,
+) => Promise<QueryItem | QueryItem[]>;
+
 export type QueryResult = QueryItem[];
 
 export interface IQueryParams {
   q: string;
-  f: 'an' | 'mg' | 'wp';
+  f: 'an' | 'ma' | 'we';
 }
 
 export type getWeapon = (
   query: string,
   options?: Partial<UpdateOptions>,
-) => Promise<any>;
+) => Promise<QueryItem | QueryItem[]>;
+
+export type getMovieOrBook = (
+  query: string,
+  isJustOneMovie: boolean,
+) => Promise<QueryItem | QueryItem[]>;

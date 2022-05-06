@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import List from '../components/List';
-import { useQuery } from '../contexts/SearchContext';
+import { Filters, filters, useQuery } from '../contexts/SearchContext';
 import { routes } from '../components/Header';
 
-const Filters = styled.form`
+const FiltersForm = styled.form`
   display: grid;
   padding: 1rem;
   color: #f6f6f6;
@@ -25,6 +25,10 @@ const Filters = styled.form`
     font-size: 1rem;
     padding: 0.236rem;
   }
+  button:hover {
+    background-color: var(--darkG);
+    cursor: pointer;
+  }
 `;
 
 const Title = styled.h1`
@@ -33,16 +37,19 @@ const Title = styled.h1`
 
 function Search(): JSX.Element {
   const { queryRes, setFilter } = useQuery();
+  const [fil, setFil] = useState<Filters>('');
+
+  const handleForm = (ev: React.FormEvent<HTMLFormElement>): void => {
+    ev.preventDefault();
+    setFilter(fil);
+  };
 
   return queryRes.length >= 1 ? (
     <main>
       <Title>Filters</Title>
-      <Filters>
+      <FiltersForm onSubmit={handleForm}>
         {routes.map((route) => {
           const f = route.slice(1, 3);
-          const testObj = {
-            an: '',
-          };
           return (
             <label htmlFor={route} key={route}>
               <input
@@ -51,8 +58,11 @@ function Search(): JSX.Element {
                 id={route}
                 name="filter"
                 onChange={({ target: { value } }) => {
-                  if (value.match(/(an)/)) {
-                    setFilter(value);
+                  const checkKey = (val: string): val is Filters =>
+                    val in filters;
+
+                  if (checkKey(value)) {
+                    setFil(value);
                   }
                 }}
               />
@@ -61,7 +71,7 @@ function Search(): JSX.Element {
           );
         })}
         <button type="submit">SET FILTER</button>
-      </Filters>
+      </FiltersForm>
       <List items={queryRes} />
     </main>
   ) : (

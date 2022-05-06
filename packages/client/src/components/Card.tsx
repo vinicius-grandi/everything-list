@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import useListName from '../hooks/useListName';
 
 type Card = {
   title: string;
   imagePath: string | null;
   id: number | string;
   rating: number;
+  listName: string;
 };
 
 const CardBody = styled.div`
@@ -57,7 +57,7 @@ const CardBody = styled.div`
     height: auto;
     max-height: 400px;
     border-radius: 4px;
-    image-rendering: pixelated;
+    image-rendering: auto;
   }
   a {
     text-shadow: -1px 2px 3px rgba(0, 0, 0, 0.208);
@@ -76,10 +76,10 @@ function Card({
   title,
   imagePath,
   id,
+  listName,
   rating,
   isLazyLoading,
 }: Card & { isLazyLoading: boolean }): JSX.Element {
-  const listName = useListName();
   return (
     <CardBody>
       <Link to={`/${listName}/${id}`} data-testid="weapon-link">

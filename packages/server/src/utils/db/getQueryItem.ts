@@ -1,10 +1,11 @@
+import { Lists } from '../../app/controllers/ApiController.d';
 import type { QueryItem } from '../../app/controllers/SearchController.d';
 
 export default function getQueryItem(
   id: number | string,
   rating: number,
   imagePath: string | null,
-  listName: string,
+  listName: Lists | 'weapons',
   name: string,
 ) {
   const qItem: QueryItem = {

@@ -10,20 +10,8 @@ import getBookSearch, {
 import getMovieSearch, { getMovieById } from '../../services/movies/omdbapi';
 import getQueryItem from '../../utils/db/getQueryItem';
 import db from '../models';
-import type { IQueryParams, Lists, ModelName } from './ApiController.d';
-
-const { Anime } = db;
-
-async function findOrCreateItem(id: string | number, list: ModelName) {
-  const [itemFromDb] = await db[list].findOrCreate({
-    where: { id },
-    defaults: {
-      id,
-      rating: 0,
-    },
-  });
-  return itemFromDb;
-}
+import findOrCreateItem from '../../utils/db/findOrCreateItem';
+import type { IQueryParams, Lists } from './ApiController.d';
 
 const ApiController = {
   async animes(page = 1, query = `?order_by=title&limit=20&page=${page}`) {
@@ -35,29 +23,24 @@ const ApiController = {
       ? animeOrAnimes.data
       : [animeOrAnimes.data];
 
-    const animesData = animes.map(async (anime) => {
-      const [animeRating] = await Anime.findOrCreate({
-        where: { id: anime.mal_id },
-        defaults: {
-          id: anime.mal_id,
-          rating: 0,
-        },
-      });
-      const {
+    const animesData = animes.map(
+      async ({
         mal_id: id,
         images: {
           jpg: { image_url: imagePath },
         },
         title,
-      } = anime;
-      return getQueryItem(
-        id,
-        animeRating === null ? 0 : animeRating.rating,
-        imagePath,
-        'animes',
-        title,
-      );
-    });
+      }) => {
+        const animeFromDb = await findOrCreateItem(id, 'Anime');
+        return getQueryItem(
+          id,
+          animeFromDb === null ? 0 : animeFromDb.rating,
+          imagePath,
+          'animes',
+          title,
+        );
+      },
+    );
     const data = await Promise.all(animesData);
     return {
       lastPage:
@@ -75,41 +58,24 @@ const ApiController = {
     const books = await getBookSearch(query);
     if (books.items === undefined) {
       const id = query.slice(1);
-      const [bookFromDB] = await db.Book.findOrCreate({
-        where: { id },
-        defaults: {
-          id,
-          rating: 0,
-        },
-      });
+      const bookFromDb = await findOrCreateItem(id, 'Book');
       return {
         ...books,
-        rating: Number(bookFromDB.rating),
+        rating: bookFromDb.rating,
       };
     }
-    const booksData = books.items.map(async (book) => {
-      const [bookFromDB] = await db.Book.findOrCreate({
-        where: { id: book.id },
-        defaults: {
-          id: book.id,
-          rating: 0,
-        },
-      });
-      const {
+    const booksData = books.items.map(
+      async ({
         id,
         volumeInfo: {
           imageLinks: { thumbnail },
           title,
         },
-      } = book;
-      return getQueryItem(
-        id,
-        Number(bookFromDB.rating),
-        thumbnail,
-        'books',
-        title,
-      );
-    });
+      }) => {
+        const bookFromDb = await findOrCreateItem(id, 'Book');
+        return getQueryItem(id, bookFromDb.rating, thumbnail, 'books', title);
+      },
+    );
     const data = await Promise.all(booksData);
     return {
       lastPage: books.maxPage,
@@ -126,29 +92,24 @@ const ApiController = {
       ? mangaOrMangas.data
       : [mangaOrMangas.data];
 
-    const animesData = mangas.map(async (manga) => {
-      const [mangaRating] = await db.Manga.findOrCreate({
-        where: { id: manga.mal_id },
-        defaults: {
-          id: manga.mal_id,
-          rating: 0,
-        },
-      });
-      const {
+    const animesData = mangas.map(
+      async ({
         mal_id: id,
         images: {
           jpg: { image_url: imagePath },
         },
         title,
-      } = manga;
-      return getQueryItem(
-        id,
-        mangaRating === null ? 0 : mangaRating.rating,
-        imagePath,
-        'animes',
-        title,
-      );
-    });
+      }) => {
+        const mangaFromDb = await findOrCreateItem(id, 'Manga');
+        return getQueryItem(
+          id,
+          mangaFromDb === null ? '0.00' : mangaFromDb.rating,
+          imagePath,
+          'animes',
+          title,
+        );
+      },
+    );
     const data = await Promise.all(animesData);
     return {
       lastPage:
@@ -161,23 +122,12 @@ const ApiController = {
 
   async movies(page = 1, query = `s=aaa&page=${page}`) {
     const movies = await getMovieSearch(query);
-    const moviesData = movies.Search.map(async (movie) => {
-      const [movieFromDB] = await db.Movie.findOrCreate({
-        where: { id: movie.imdbID },
-        defaults: {
-          id: movie.imdbID,
-          rating: 0,
-        },
-      });
-      const { Title: title, imdbID: id, Poster: imagePath } = movie;
-      return getQueryItem(
-        id,
-        Number(movieFromDB.rating),
-        imagePath,
-        'movies',
-        title,
-      );
-    });
+    const moviesData = movies.Search.map(
+      async ({ Title: title, imdbID: id, Poster: imagePath }) => {
+        const movieFromDb = await findOrCreateItem(id, 'Movie');
+        return getQueryItem(id, movieFromDb.rating, imagePath, 'movies', title);
+      },
+    );
     const data = await Promise.all(moviesData);
     return {
       lastPage: movies.maxPage,

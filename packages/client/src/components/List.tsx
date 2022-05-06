@@ -34,9 +34,13 @@ function List({ items }: { items: QueryItem[] }): JSX.Element {
           <Card
             key={`${val?.name}-${val?.id}`}
             title={val?.name ?? 'no title'}
-            imagePath={val?.imagePath ?? ''}
+            imagePath={
+              val?.imagePath ??
+              'https://via.placeholder.com/100x200.png?text=no-image'
+            }
             id={val?.id ?? 0}
             rating={val?.rating ?? 0}
+            listName={val?.list_name ?? ''}
             isLazyLoading={i > 7}
           />
         );
