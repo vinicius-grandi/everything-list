@@ -42,7 +42,6 @@ const session = sessions({
 const fileSize = 50 * 1024 * 1024;
 
 // helmet configs
-app.use(helmet.crossOriginEmbedderPolicy());
 app.use(helmet.crossOriginOpenerPolicy());
 app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }));
 app.use(helmet.dnsPrefetchControl());
