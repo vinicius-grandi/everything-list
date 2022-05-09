@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import useUser from '../../hooks/useUser';
 import { Rate } from '../../views/weapons/WeaponDetails';
 
-const ENDPOINT = `${window.location.hostname}:5001`;
+const ENDPOINT = `${window.location.hostname}`;
 
 const WeaponReviewForm = styled.form`
   margin: 1rem;
