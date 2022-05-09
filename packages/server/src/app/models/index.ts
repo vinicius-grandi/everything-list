@@ -11,12 +11,9 @@ const config = require('../../database/config/config.js');
 
 const db: any = {};
 
-const sequelize = new Sequelize(
-  config.database,
-  config.username,
-  config.password,
-  config,
-);
+const sequelize = process.env.DATABASE_URL
+  ? new Sequelize(process.env.DATABASE_URL, config)
+  : new Sequelize(config.database, config.username, config.password, config);
 fs.readdirSync(__dirname)
   .filter(
     (file: string) =>
