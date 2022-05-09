@@ -13,7 +13,6 @@
     "baseUrl": "./",
     "typeRoots": [
       "./src/typeRoots",
-      "./node_modules/@types"
     ],
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -21,18 +20,21 @@
     "useUnknownInCatchVariables": false
   },
   "include": [
-    "src/**/*.js",
-    "src/**/*.ts",
-    "spec/**/*.ts",
-    "src/Session.d.ts"
+    "./src/**/*.js",
+    "./src/**/*.ts",
+    "./spec/**/*.ts",
+    "./src/Session.d.ts"
   ],
   "files": [
-    "src/typeRoots/Session.d.ts"
+    "./src/typeRoots/Session.d.ts"
   ],
   "exclude": [
     "node_modules",
+    "./node_modules",
+    "./node_modules/*",
+    "./node_modules/@types/node/index.d.ts",
     "build",
     "dist",
-    "src/**/*.jsx"
+    "./src/**/*.jsx"
   ],
 }
