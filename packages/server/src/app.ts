@@ -41,10 +41,10 @@ const session = sessions({
 // handling upload
 const fileSize = 50 * 1024 * 1024;
 
-app.disable('cross-origin-embedder-policy');
 // helmet configs
 app.use(
   helmet({
+    crossOriginEmbedderPolicy: false,
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
