@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { User } from '../views/UserProfile';
 
-const useUser = (showReviews: boolean): User | null => {
+const useUser = (showReviews: boolean, refresh?: boolean): User | null => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -15,7 +15,7 @@ const useUser = (showReviews: boolean): User | null => {
       }
     }
     getUser();
-  }, [showReviews]);
+  }, [showReviews, refresh]);
 
   return user;
 };

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Edit } from 'react-feather';
 import styled from 'styled-components';
@@ -40,7 +40,8 @@ const ProfileInfo = styled.div`
 `;
 
 function UserProfile(): JSX.Element {
-  const user = useUser(true);
+  const [refresh, setRefresh] = useState<boolean>(false);
+  const user = useUser(true, refresh);
   const buttonRef = useRef<HTMLInputElement>(null);
 
   const handleForm = async (
@@ -53,6 +54,7 @@ function UserProfile(): JSX.Element {
       body: formData,
       method: 'put',
     });
+    setRefresh(true);
   };
 
   return (

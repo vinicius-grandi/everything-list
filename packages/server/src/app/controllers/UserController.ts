@@ -119,7 +119,7 @@ const UserController = {
 
       return res.json(response.data.data.url);
     } catch (error) {
-      logger.err(error.response.data);
+      logger.err(error);
     }
 
     return res.status(400).json({ error: 'could not upload picture image' });

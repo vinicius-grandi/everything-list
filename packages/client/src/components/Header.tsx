@@ -80,9 +80,16 @@ const StyledHeader = styled.header<DisplayValue>`
     .search-bar input {
       font-size: 1.2rem;
     }
+
+    #logo {
+      display: initial !important;
+    }
   }
 
   @media screen and (min-width: 600px) and (max-width: 1000px) {
+    #logo {
+      display: initial;
+    }
     .search-icon {
       display: none;
     }
@@ -208,12 +215,12 @@ function Header({
       <StyledHeader sbDisplay={sbDisplay}>
         <Link to="/" id="logo">
           <img
-            src="images/EverythingList-logo.png"
+            src="/images/EverythingList-logo.png"
             alt="header-logo"
             className="logo"
           />
         </Link>
-        <SearchBar ref={searchInput} elem={searchInput.current} />
+        <SearchBar ref={searchInput} elem={searchInput} />
         <Search
           color="#f6f6f6"
           className="search-icon"

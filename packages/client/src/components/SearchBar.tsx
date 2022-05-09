@@ -72,7 +72,7 @@ const SearchButton = styled.button`
 const SearchBar = forwardRef<
   HTMLInputElement,
   {
-    elem: null | HTMLInputElement;
+    elem: React.RefObject<HTMLInputElement>;
   }
 >(({ elem }, ref) => {
   const [search, setSearch] = useState<string>('');
@@ -86,8 +86,8 @@ const SearchBar = forwardRef<
 
   useEffect(() => {
     const handleResize = (): void => {
-      if (elem) {
-        setListWidth(String(elem.clientWidth));
+      if (elem.current) {
+        setListWidth(String(elem.current.clientWidth));
       }
     };
 
@@ -158,7 +158,11 @@ const SearchBar = forwardRef<
       <SearchList
         data-testid="search-list"
         className="search-list"
-        w={Number(listWidth) === 0 ? String(elem?.clientWidth) : listWidth}
+        w={
+          Number(listWidth) === 0
+            ? String(elem.current?.clientWidth)
+            : listWidth
+        }
         d={searchListDisplay}
       >
         {queryRes.length >= 1 && (
