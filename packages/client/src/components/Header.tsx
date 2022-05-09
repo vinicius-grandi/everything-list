@@ -213,7 +213,7 @@ function Header({
             className="logo"
           />
         </Link>
-        <SearchBar ref={searchInput} />
+        <SearchBar ref={searchInput} elem={searchInput.current} />
         <Search
           color="#f6f6f6"
           className="search-icon"

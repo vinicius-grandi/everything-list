@@ -8,7 +8,6 @@ import SearchLoading from './Search/SearchLoading';
 
 const SearchList = styled.ul<{ w: string; d: string }>`
   margin: inherit;
-  width: 355px;
   list-style-type: none;
   background-color: #331e47;
   color: #f6f6f6;
@@ -31,12 +30,15 @@ const SearchList = styled.ul<{ w: string; d: string }>`
   .search-loading {
     margin: 3rem;
   }
+
+  max-width: 50%;
 `;
 
 const QueryCard = styled.li`
   background-color: #663a8f;
   padding: 0.3rem;
   width: 100%;
+  box-shadow: -3px 6px 3px #00000045;
 
   a {
     text-decoration: none;
@@ -72,7 +74,7 @@ const SearchBar = forwardRef<
   {
     elem: null | HTMLInputElement;
   }
->((_, ref) => {
+>(({ elem }, ref) => {
   const [search, setSearch] = useState<string>('');
   const searchButtonRef = useRef<HTMLButtonElement>(null);
   const [listWidth, setListWidth] = useState<string>('0');
@@ -80,13 +82,12 @@ const SearchBar = forwardRef<
   const [searchListDisplay, setSearchListDisplay] = useState<'grid' | 'none'>(
     'none',
   );
-  const elem = useRef<HTMLDivElement>(null);
   const { setQueryRes, queryRes, filter } = useQuery();
 
   useEffect(() => {
     const handleResize = (): void => {
-      if (elem.current) {
-        setListWidth(String(elem.current.clientWidth));
+      if (elem) {
+        setListWidth(String(elem.clientWidth));
       }
     };
 
@@ -128,7 +129,7 @@ const SearchBar = forwardRef<
 
   return (
     <div className="search-box" data-cy="full-search">
-      <div className="search-bar" role="search" ref={elem}>
+      <div className="search-bar" role="search">
         <input
           ref={ref}
           type="text"
@@ -157,11 +158,7 @@ const SearchBar = forwardRef<
       <SearchList
         data-testid="search-list"
         className="search-list"
-        w={
-          Number(listWidth) === 0
-            ? String(elem.current?.clientWidth)
-            : listWidth
-        }
+        w={Number(listWidth) === 0 ? String(elem?.clientWidth) : listWidth}
         d={searchListDisplay}
       >
         {queryRes.length >= 1 && (
