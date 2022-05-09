@@ -1,12 +1,12 @@
-// import { resolve } from 'path';
+import { resolve } from 'path';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import sessions from 'express-session';
 import fileUpload from 'express-fileupload';
 import connectRedis from 'connect-redis';
+import helmet from 'helmet';
 import redisClient from './redisConfig';
 import './app/models';
-// import helmet from 'helmet';
 
 // importing routes and setting routes
 import authRouter from './routes/auth';
@@ -41,6 +41,7 @@ const session = sessions({
 // handling upload
 const fileSize = 50 * 1024 * 1024;
 
+app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 app.use(session);
@@ -56,6 +57,6 @@ app.use(noApiListRoutes, noApiListRouter);
 app.use(apiListRoutes, apiListRouter);
 app.use('/profiles', userRouter);
 app.use('/api', authRouter);
-// app.use('/', express.static(resolve('..', 'client', 'build')));
+app.use('/', express.static(resolve('..', 'client', 'build')));
 
 export default app;

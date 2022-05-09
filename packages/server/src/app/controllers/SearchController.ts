@@ -208,11 +208,14 @@ const SearchController = {
       methodsMap.set('mo', getMo);
       methodsMap.set('bo', getBo);
 
-      const queryItems: QueryItem[] = (await this.queryItem[filter](
+      const queryItems = await this.queryItem[filter](
         methodsMap.get(filter),
         query,
-      )) as QueryItem[];
-      return res.json(queryItems.filter((val) => val?.id !== undefined));
+      );
+      if (Array.isArray(queryItems)) {
+        return res.json(queryItems.filter((val) => val?.id !== undefined));
+      }
+      return res.json(queryItems);
     } catch (error) {
       logger.err(error);
       return res.status(500).json({ msg: 'Internal Server Error' });
