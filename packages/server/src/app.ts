@@ -35,6 +35,7 @@ const session = sessions({
   cookie: {
     httpOnly: process.env.NODE_ENV !== 'test',
     maxAge: expirationTime,
+    sameSite: 'lax',
   },
 });
 
@@ -69,8 +70,6 @@ app.use(
         imgSrc: [`'self'`, `data:`, 'https://*'],
       },
     },
-    // Will work for most, but did not work for me:
-    // crossOriginEmbedderPolicy: false,
   }),
 );
 
