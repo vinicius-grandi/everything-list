@@ -2,7 +2,6 @@ const { resolve } = require('path');
 
 module.exports = {
   "extends": [
-    "plugin:react/recommended",
     "airbnb",
     "plugin:@typescript-eslint/recommended",
     "prettier",

@@ -9,7 +9,7 @@
   "scripts": {
     "start": "cd packages/server && npm start",
     "build:client": "cd packages/client && npm install && npm run build",
-    "build:server": "cd packages/server && npm run build",
+    "build:server": "cd packages/server && npm install && npm run build",
     "build": "npm run build:client && npm run build:server",
     "client": "cd packages/client && npm start",
     "server": "cd packages/server && npm run start:dev",
