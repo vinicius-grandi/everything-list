@@ -2,6 +2,7 @@ const { resolve } = require('path');
 
 module.exports = {
   "extends": [
+    "plugin:react/recommended",
     "airbnb",
     "plugin:@typescript-eslint/recommended",
     "prettier",
@@ -18,7 +19,6 @@ module.exports = {
     "sourceType": "module"
   },
   "plugins": [
-    "react",
     "react-hooks",
     "@typescript-eslint",
     "prettier"
