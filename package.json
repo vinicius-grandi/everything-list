@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "start": "cd packages/server && npm start",
+    "start": "node packages/server/dist/src/index.js",
     "build:client": "cd packages/client && npm install && npm run build",
     "build:server": "cd packages/server && npm install && npm run build",
     "build": "npm run build:client && npm run build:server",
