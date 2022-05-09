@@ -7,12 +7,12 @@
     "packages/*"
   ],
   "scripts": {
-    "start": "node ./packages/server/dist/src/index.js",
-    "build:client": "cd ./packages/client && npm install && npm run build",
-    "build:server": "cd ./packages/server && npm install && npm run build",
+    "start": "cd packages/server && npm start",
+    "build:client": "cd packages/client && npm install && npm run build",
+    "build:server": "cd packages/server && npm install && npm run build",
     "build": "npm run build:client && npm run build:server",
-    "client": "cd ./packages/client && npm start",
-    "server": "cd ./packages/server && npm run start:dev",
+    "client": "cd packages/client && npm start",
+    "server": "cd packages/server && npm run start:dev",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
   "devDependencies": {
