@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import type { QueryItem } from '@everything-list/server/src/app/controllers/SearchController.d';
-import Card from '../components/Card';
-import Loading from '../components/Loading';
+import List from '../components/List';
 
 const Title = styled.h1`
   text-transform: capitalize;
@@ -20,28 +19,6 @@ const Title = styled.h1`
   font-family: 'Pragati Narrow', sans-serif;
   text-align: center;
   text-shadow: -1px 2px 3px rgba(0, 0, 0, 0.208);
-`;
-
-const Main = styled.main`
-  display: grid;
-  @media screen and (min-width: 1001px) {
-    font-size: 2rem;
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  @media screen and (min-width: 600px) and (max-width: 1000px) {
-    font-size: 1.5rem;
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  @media screen and (max-width: 599px) {
-    font-size: 1.5rem;
-    grid-template-columns: repeat(2, minmax(0px, 1fr));
-  }
-
-  @media screen and (max-width: 250px) {
-    grid-template-columns: 1fr;
-  }
 `;
 
 const Buttons = styled.div`
@@ -108,24 +85,7 @@ function Items(): JSX.Element {
     <main>
       {error && <h2 className="error">Item not found</h2>}
       <Title data-testid="weapon-d-title">{listName}</Title>
-      {items.length >= 1 ? (
-        <Main>
-          {items.map((val, i) => {
-            return (
-              <Card
-                key={`${val?.name}-${val?.id}`}
-                title={val?.name ?? 'no title'}
-                imagePath={val?.imagePath ?? ''}
-                id={val?.id ?? 0}
-                rating={val?.rating ?? 0}
-                isLazyLoading={i > 7}
-              />
-            );
-          })}
-        </Main>
-      ) : (
-        <Loading size={100} />
-      )}
+      <List items={items} />
       <Buttons>
         {page > 1 && (
           <button

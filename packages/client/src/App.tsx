@@ -17,6 +17,8 @@ import AnimeDetails from './views/animes/AnimeDetails';
 import MovieDetails from './views/movies/MoviesDetails';
 import BooksDetails from './views/books/BooksDetails';
 import Loading from './components/Loading';
+import SearchProvider from './contexts/SearchContext';
+import Search from './views/Search';
 
 function App(): JSX.Element {
   const { auth } = useAuth();
@@ -30,32 +32,37 @@ function App(): JSX.Element {
     <>
       <GlobalStyles overflowHidden={hidden} />
       <BrowserRouter>
-        <Header setHidden={setHidden} />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          {renderWithMultiplePath(
-            ['animes', 'weapons', 'mangas', 'movies', 'books'],
-            <Items />,
-          )}
-          <Route path="/weapons/:id" element={<WeaponDetails />} />
-          <Route path="/animes/:id" element={<AnimeDetails />} />
-          <Route path="/mangas/:id" element={<AnimeDetails />} />
-          <Route path="/movies/:id" element={<MovieDetails />} />
-          <Route path="/books/:id" element={<BooksDetails />} />
-          {auth && (
-            <>
-              <Route path="/my-profile" element={<UserProfile />} />
-              <Route path="/logout" element={<Logout />} />
-            </>
-          )}
-          {!auth && (
-            <>
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-            </>
-          )}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <SearchProvider>
+          <>
+            <Header setHidden={setHidden} />
+            <Routes>
+              <Route path="/search" element={<Search />} />
+              <Route path="/" element={<Home />} />
+              {renderWithMultiplePath(
+                ['animes', 'weapons', 'mangas', 'movies', 'books'],
+                <Items />,
+              )}
+              <Route path="/weapons/:id" element={<WeaponDetails />} />
+              <Route path="/animes/:id" element={<AnimeDetails />} />
+              <Route path="/mangas/:id" element={<AnimeDetails />} />
+              <Route path="/movies/:id" element={<MovieDetails />} />
+              <Route path="/books/:id" element={<BooksDetails />} />
+              {auth && (
+                <>
+                  <Route path="/my-profile" element={<UserProfile />} />
+                  <Route path="/logout" element={<Logout />} />
+                </>
+              )}
+              {!auth && (
+                <>
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
+                </>
+              )}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </>
+        </SearchProvider>
         <Footer />
       </BrowserRouter>
     </>

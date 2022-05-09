@@ -31,6 +31,7 @@ const Trailer = styled.div`
     margin: 0rem;
   }
   justify-content: center;
+  background-color: black;
 `;
 
 function BasicDetails({

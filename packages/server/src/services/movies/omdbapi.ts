@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { MovieById, OMDB } from './omdbapi.d';
+import type { Movie, MovieById, OMDB } from './omdbapi.d';
 
 async function getMovieSearch(queryParams = 's=aaa&page=1'): Promise<
   OMDB & {
@@ -13,6 +13,13 @@ async function getMovieSearch(queryParams = 's=aaa&page=1'): Promise<
     maxPage: Math.ceil(Number(data.totalResults) / 10),
     ...data,
   };
+}
+
+export async function getMovieByTitle(query: string) {
+  const url = `https://omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&type=movie&${query}`;
+  const res = await axios.get<Movie>(url);
+  const { data } = res;
+  return data;
 }
 
 export async function getMovieById(id: string) {

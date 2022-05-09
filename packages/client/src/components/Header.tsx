@@ -5,6 +5,8 @@ import { Search, Menu, X } from 'react-feather';
 import SearchBar from './SearchBar';
 import { useAuth } from '../contexts/AuthContext';
 
+export const routes = ['/animes', '/books', '/mangas', '/movies', '/weapons'];
+
 type Searchbox = 'initial' | 'none';
 type DisplayValue = {
   sbDisplay: Searchbox;
@@ -170,7 +172,6 @@ function Header({
 }: {
   setHidden: React.Dispatch<React.SetStateAction<boolean>>;
 }): JSX.Element {
-  const routes = ['/animes', '/books', '/mangas', '/movies', '/weapons'];
   const [sbDisplay, setSbDisplay] = useState<Searchbox>('none');
   const { auth } = useAuth();
 
@@ -212,7 +213,7 @@ function Header({
             className="logo"
           />
         </Link>
-        <SearchBar ref={searchInput} />
+        <SearchBar ref={searchInput} elem={searchInput.current} />
         <Search
           color="#f6f6f6"
           className="search-icon"

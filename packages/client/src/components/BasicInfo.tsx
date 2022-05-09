@@ -1,6 +1,7 @@
 import React from 'react';
 import { Star } from 'react-feather';
 import styled from 'styled-components';
+import DefaultImg from './DefaultImg';
 
 type Basic = {
   cover: string;
@@ -49,7 +50,7 @@ const InfoContainer = styled.div`
   flex-direction: column;
   p {
     background-color: var(--lightestG);
-    padding: 0.2rem;
+    padding: 0.5rem;
     margin-right: 1rem;
     max-width: 700px;
     text-align: justify;
@@ -65,7 +66,7 @@ function BasicInfo({ cover, title, synopsis, rating }: Basic): JSX.Element {
         <p className="rating-val">{rating}</p>
       </Rating>
       <Container>
-        <img src={cover} alt={title} />
+        <DefaultImg src={cover} alt={title} />
         <InfoContainer>
           <h1>{title}</h1>
           <p>{synopsis}</p>
