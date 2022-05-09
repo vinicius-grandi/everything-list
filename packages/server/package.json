@@ -4,8 +4,8 @@
   "main": "src/index.ts",
   "private": true,
   "scripts": {
-    "tsc": "tsc",
     "build": "tsc --project .",
+    "tsc": "tsc",
     "db:migrate": "tsc && cross-env NODE_ENV=test sequelize db:migrate",
     "lint": "eslint . --ext .ts",
     "start": "node ./dist/src/index.js --env=production",
@@ -50,7 +50,6 @@
     "sequelize": "^6.18.0",
     "sharp": "^0.30.4",
     "socket.io": "^4.5.0",
-    "tsc": "^2.0.4",
     "typescript": "^4.6.4",
     "validatorjs": "^3.22.1"
   },
