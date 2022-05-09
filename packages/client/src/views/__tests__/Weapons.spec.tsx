@@ -1,11 +1,10 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
 import renderWithRouter from './utils/renderWithRouter';
 import App from '../../App';
 
 describe('App', () => {
   it("should render weapon's details with title, image and rating", async () => {
-    const { findByTestId, findByRole } = renderWithRouter(<App />, {
+    const { findByTestId } = renderWithRouter(<App />, {
       route: '/weapons/Bolas',
     });
     // {

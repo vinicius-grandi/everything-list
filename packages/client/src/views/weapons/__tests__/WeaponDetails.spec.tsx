@@ -1,5 +1,5 @@
 import React from 'react';
-import { getByAltText, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { FetchMock } from 'jest-fetch-mock';
 import WeaponsDetails from '../WeaponDetails';
 import { data } from '../../../data/weapons';
