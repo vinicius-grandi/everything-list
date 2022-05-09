@@ -31,7 +31,7 @@
     "nth-check": "^1.0.2"
   },
   "scripts": {
-    "build": "npm run lint && react-scripts build",
+    "build": "react-scripts build",
     "eject": "react-scripts eject",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "npm run lint -- --fix",
