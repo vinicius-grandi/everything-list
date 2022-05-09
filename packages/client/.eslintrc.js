@@ -64,5 +64,6 @@ module.exports = {
   },
   "globals": {
     "cy": true
-  }
+  },
+  "root": true
 }
