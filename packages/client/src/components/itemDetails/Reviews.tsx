@@ -143,7 +143,7 @@ function Reviews({
                     <img
                       src={
                         comment.review_user.profile_picture ??
-                        'https://via.placeholder.com/100X100.png'
+                        '/images/100x100.jpg'
                       }
                       alt={`${comment.review_user.username} profile`}
                     />

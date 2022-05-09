@@ -7,7 +7,7 @@ function DefaultImg({ src, alt }: { src: string; alt: string }): JSX.Element {
       alt={alt}
       onError={(ev) => {
         const { currentTarget } = ev;
-        currentTarget.src = 'https://via.placeholder.com/140x200?text=no+image';
+        currentTarget.src = '/images/100x200.jpg';
       }}
     />
   );

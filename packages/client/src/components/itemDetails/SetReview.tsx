@@ -133,10 +133,7 @@ function SetReview({
           <div>
             <ReviewUserInfo>
               <img
-                src={
-                  user.profile_picture ??
-                  'https://via.placeholder.com/50X50.png'
-                }
+                src={user.profile_picture ?? '/images/50x50.jpg'}
                 alt="your profile"
               />
               <p>

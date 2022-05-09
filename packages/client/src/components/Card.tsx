@@ -90,8 +90,7 @@ function Card({
           height={200}
           width={100}
           loading={isLazyLoading ? 'lazy' : 'eager'}
-          src={imagePath ?? 'https://via.placeholder.com/500x500?text=No+Image'}
-          data-src="https://via.placeholder.com/500x500?text=No+Image"
+          src={imagePath ?? '/images/500x500.jpg'}
           onError={({ target }) => {
             const image = target as HTMLImageElement;
             const {

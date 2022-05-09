@@ -50,9 +50,7 @@ function BasicDetails({
     <BasicContainer>
       <Container>
         <BasicInfo
-          cover={
-            imagePath ?? 'https://via.placeholder.com/100x200.png?text=no-image'
-          }
+          cover={imagePath ?? '/images/100x200.jpg'}
           rating={rating ?? '0.00'}
           title={title ?? 'Probably Something has gone wrong with BACKEND'}
           synopsis={synopys ?? 'no synopsis'}

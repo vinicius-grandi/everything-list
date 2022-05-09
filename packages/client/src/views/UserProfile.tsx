@@ -94,10 +94,7 @@ function UserProfile(): JSX.Element {
                   <CommentItem key={`${user.id}-${comment.createdAt}`}>
                     <CommentGrid>
                       <img
-                        src={
-                          user.profile_picture ??
-                          'https://via.placeholder.com/50X50.png'
-                        }
+                        src={user.profile_picture ?? '/images/50x50.jpg'}
                         alt={`${user.username} profile`}
                       />
                       <p>

@@ -117,10 +117,7 @@ function WeaponDetails(): JSX.Element {
             </p>
             <Container>
               <img
-                src={
-                  item.data.imagePath ??
-                  'https://via.placeholder.com/500x500?text=No+Image'
-                }
+                src={item.data.imagePath ?? '/images/500x500jpg'}
                 alt={`${item.data.name}-weapons`}
               />
               <WeaponSummary>{item.data.summary}</WeaponSummary>
