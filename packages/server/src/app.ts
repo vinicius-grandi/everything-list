@@ -35,7 +35,8 @@ const session = sessions({
   cookie: {
     httpOnly: process.env.NODE_ENV !== 'test',
     maxAge: expirationTime,
-    sameSite: 'lax',
+    sameSite: process.env.NODE_ENV === 'test' ? 'none' : 'lax',
+    secure: process.env.NODE_ENV !== 'test',
   },
 });
 
