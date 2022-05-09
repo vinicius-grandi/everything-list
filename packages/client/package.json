@@ -41,10 +41,10 @@
     "cypress": "cypress open-ct --browser firefox"
   },
   "dependencies": {
-    "ajv": "^8.10.0",
+    "ajv": "^7.0.3",
     "ajv-errors": "^2.0.1",
     "ajv-formats": "^2.1.1",
-    "ajv-keywords": "^5.1.0",
+    "ajv-keywords": "^4.0.1",
     "buffer": "^6.0.3",
     "data-uri-to-buffer": "^4.0.0",
     "fetch-blob": "^3.1.5",
