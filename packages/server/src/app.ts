@@ -51,15 +51,6 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: [
-          "'self'",
-          "'unsafe-inline'",
-          'https://*.google.com',
-          'https://*.google-analytics.com',
-          'https://*.googletagmanager.com',
-          'https://*.hotjar.com',
-          'https://*.mollie.com',
-        ],
         connectSrc: [
           "'self'",
           "'unsafe-inline'",
