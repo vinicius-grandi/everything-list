@@ -92,7 +92,7 @@ app.use('/profiles', userRouter);
 app.use('/api', authRouter);
 app.use(express.static(resolve('..', 'client', 'build')));
 app.get('*', (_, response) => {
-  response.sendFile(resolve('..', 'client', 'build'));
+  response.sendFile(resolve('..', 'client', 'build', 'index.html'));
 });
 
 export default app;
