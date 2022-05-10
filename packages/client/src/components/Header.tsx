@@ -249,21 +249,30 @@ function Header({
             setTranslation(12);
             setHidden(true);
           }}
+          onTouchEnd={() => {
+            setTranslation(12);
+            setHidden(true);
+          }}
         />
       </StyledHeader>
       <ExpandedMenu data-cy="expanded-menu" translation={translation}>
         <ul>
           {routes.map((route) => (
-            <Link key={route} to={route} onClick={menuHandle}>
+            <Link
+              key={route}
+              to={route}
+              onClick={menuHandle}
+              onTouchEnd={menuHandle}
+            >
               <li>{route.slice(1)}</li>
             </Link>
           ))}
           {!auth && (
             <>
-              <Link to="/signup" onClick={menuHandle}>
+              <Link to="/signup" onClick={menuHandle} onTouchEnd={menuHandle}>
                 <li>Sign Up</li>
               </Link>
-              <Link to="/login" onClick={menuHandle}>
+              <Link to="/login" onClick={menuHandle} onTouchEnd={menuHandle}>
                 <li>Login</li>
               </Link>
             </>
@@ -283,6 +292,10 @@ function Header({
           data-cy="menu-close-btn"
           color="#f6f6f6"
           onClick={() => {
+            setTranslation(dVTranslation);
+            setHidden(false);
+          }}
+          onTouchEnd={() => {
             setTranslation(dVTranslation);
             setHidden(false);
           }}
