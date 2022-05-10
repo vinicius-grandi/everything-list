@@ -234,6 +234,14 @@ function Header({
               }
             }
           }}
+          onTouchStart={() => {
+            if (window.innerWidth < 599) {
+              setSbDisplay('initial');
+              if (searchInput.current) {
+                setTimeout(() => searchInput.current?.focus(), 1);
+              }
+            }
+          }}
         />
         <Menu
           color="#f6f6f6"
