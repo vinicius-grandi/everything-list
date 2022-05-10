@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, useLocation } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import type { QueryItem } from '@everything-list/server/src/app/controllers/SearchController.d';
 import List from '../components/List';
+import useListName from '../hooks/useListName';
 
 const Title = styled.h1`
   text-transform: capitalize;
@@ -44,8 +45,7 @@ const Buttons = styled.div`
 function Items(): JSX.Element {
   const [items, setItems] = useState<QueryItem[]>([]);
   const [error, setError] = useState<boolean>(false);
-  const { pathname } = useLocation();
-  const listName = pathname.slice(1);
+  const listName = useListName();
 
   // getting page
   const [searchParams, setSearchParams] = useSearchParams();
