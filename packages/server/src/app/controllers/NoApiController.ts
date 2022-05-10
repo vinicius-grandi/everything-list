@@ -19,6 +19,7 @@ const NoApiController = {
     try {
       const lastPage = Math.ceil((await db[modelName].count()) / 20);
       const items = await db[modelName].findAll({
+        raw: true,
         limit: 20,
         offset: page <= 1 ? 0 : (page - 1) * 20,
         order: [['name', 'ASC']],
