@@ -32,6 +32,7 @@ const session = sessions({
   resave: false,
   saveUninitialized: false,
   store: new RedisStore({ client: redisClient }),
+  proxy: true,
   cookie: {
     httpOnly: process.env.NODE_ENV !== 'test',
     maxAge: expirationTime,
