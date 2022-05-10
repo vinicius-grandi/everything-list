@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import logger from 'jet-logger';
-import { literal } from 'sequelize';
 import getModelName from '../../utils/db/getModelName';
 import db from '../models';
 
@@ -23,26 +22,21 @@ const NoApiController = {
         limit: 20,
         offset: page <= 1 ? 0 : (page - 1) * 20,
         order: [['name', 'ASC']],
-        attributes: {
-          include: [
-            [
-              literal(`(
-            SELECT ${baseUrl.slice(1)} AS list
-        )`),
-              'list_name',
-            ],
-          ],
-        },
       });
       if (!items) {
         return res.status(404).json({ error: 'no items' });
       }
 
+      const data = items.map((val: object) => ({
+        ...val,
+        list_name: baseUrl.slice(1),
+      }));
+
       return res.json({
         pagination: {
           lastVisiblePage: lastPage,
         },
-        data: items,
+        data,
       });
     } catch (error) {
       logger.err(error);
