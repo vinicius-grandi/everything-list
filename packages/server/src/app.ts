@@ -45,6 +45,7 @@ const session = sessions({
 const fileSize = 50 * 1024 * 1024;
 
 app.use(express.static(resolve('..', 'client', 'build')));
+
 app.set('Feature-Policy', [
   "layout-animations 'none'",
   "unoptimized-images 'none'",
