@@ -279,10 +279,14 @@ function Header({
           )}
           {auth && (
             <>
-              <Link to="/logout" onClick={menuHandle}>
+              <Link to="/logout" onClick={menuHandle} onTouchEnd={menuHandle}>
                 <li>Logout</li>
               </Link>
-              <Link to="/my-profile" onClick={menuHandle}>
+              <Link
+                to="/my-profile"
+                onClick={menuHandle}
+                onTouchEnd={menuHandle}
+              >
                 <li>My Profile</li>
               </Link>
             </>
