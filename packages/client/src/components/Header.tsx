@@ -211,6 +211,18 @@ function Header({
     setHidden(false);
     setTranslation(dVTranslation);
   };
+
+  const searchHandle = (
+    e: React.MouseEvent<SVGElement, MouseEvent> | React.TouchEvent<SVGElement>,
+  ): void => {
+    e.preventDefault();
+    if (window.innerWidth < 599) {
+      setSbDisplay('initial');
+      if (searchInput.current) {
+        setTimeout(() => searchInput.current?.focus(), 1);
+      }
+    }
+  };
   return (
     <>
       <StyledHeader sbDisplay={sbDisplay}>
@@ -226,22 +238,8 @@ function Header({
           color="#f6f6f6"
           className="search-icon"
           data-cy="search-icon"
-          onClick={() => {
-            if (window.innerWidth < 599) {
-              setSbDisplay('initial');
-              if (searchInput.current) {
-                setTimeout(() => searchInput.current?.focus(), 1);
-              }
-            }
-          }}
-          onTouchStart={() => {
-            if (window.innerWidth < 599) {
-              setSbDisplay('initial');
-              if (searchInput.current) {
-                setTimeout(() => searchInput.current?.focus(), 1);
-              }
-            }
-          }}
+          onClick={searchHandle}
+          onTouchEnd={searchHandle}
         />
         <Menu
           color="#f6f6f6"
