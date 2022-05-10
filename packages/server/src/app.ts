@@ -44,6 +44,7 @@ const session = sessions({
 // handling upload
 const fileSize = 50 * 1024 * 1024;
 
+app.use(express.static(resolve('..', 'client', 'build')));
 app.set('Feature-Policy', [
   "layout-animations 'none'",
   "unoptimized-images 'none'",
@@ -105,9 +106,8 @@ app.use(noApiListRoutes, noApiListRouter);
 app.use(apiListRoutes, apiListRouter);
 app.use('/profiles', userRouter);
 app.use('/api', authRouter);
-app.use(express.static(resolve('..', 'client', 'build')));
-app.get('*', (_, response) => {
-  response.sendFile(resolve('..', 'client', 'build', 'index.html'));
+app.get('*', (_, res) => {
+  res.sendFile(resolve('..', 'client', 'build', 'index.html'));
 });
 
 export default app;
