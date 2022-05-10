@@ -50,6 +50,12 @@ app.use(
     crossOriginEmbedderPolicy: false,
     contentSecurityPolicy: {
       directives: {
+        frameSrc: [
+          'youtube.com',
+          'www.youtube.com',
+          'https://youtube.com',
+          'https://www.youtube.com',
+        ],
         defaultSrc: ["'self'"],
         scriptSrc: [
           "'self'",
