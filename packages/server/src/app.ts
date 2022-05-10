@@ -44,6 +44,15 @@ const session = sessions({
 // handling upload
 const fileSize = 50 * 1024 * 1024;
 
+app.set('Feature-Policy', [
+  "layout-animations 'none'",
+  "unoptimized-images 'none'",
+  "oversized-images 'none'",
+  "sync-script 'none'",
+  "sync-xhr 'none'",
+  "unsized-media 'none'",
+]);
+
 // helmet configs
 app.use(
   helmet({

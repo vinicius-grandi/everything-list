@@ -7,7 +7,7 @@ const port = process.env.PORT || 5001;
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: 'https://googleads.g.doubleclick.net/pagead/id',
     methods: ['GET', 'POST'],
   },
 });
