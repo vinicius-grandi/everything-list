@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import logger from 'jet-logger';
+import { literal } from 'sequelize';
 import getModelName from '../../utils/db/getModelName';
 import db from '../models';
 
@@ -22,6 +23,9 @@ const NoApiController = {
         limit: 20,
         offset: page <= 1 ? 0 : (page - 1) * 20,
         order: [['name', 'ASC']],
+        attributes: {
+          include: [[literal('weapons'), 'list_name']],
+        },
       });
       if (!items) {
         return res.status(404).json({ error: 'no items' });
