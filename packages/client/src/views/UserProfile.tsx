@@ -37,6 +37,10 @@ const ProfileInfo = styled.div`
     position: absolute;
     right: 0;
   }
+
+  svg {
+    cursor: pointer;
+  }
 `;
 
 function UserProfile(): JSX.Element {
