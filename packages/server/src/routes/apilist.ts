@@ -24,7 +24,8 @@ routes.get('/api/:id', ApiController.getOneItem.bind(ApiController));
 routes.get('/api/:id/comments', ApiController.getComments.bind(ApiController));
 
 // you must authenticate before review
-routes.use(auth);
+routes.post('*', auth);
+routes.put('*', auth);
 routes.post('/api/:id', ItemController.sendRating.bind(ItemController));
 routes.put('/api/:id', ItemController.updateRating.bind(ItemController));
 
