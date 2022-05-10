@@ -146,7 +146,7 @@ const StyledHeader = styled.header<DisplayValue>`
   .search-icon {
     margin: 0.5rem;
     display: 'none';
-    padding: 1rem;
+    padding: 1rem !important;
     &:hover {
       cursor: pointer;
       transform: rotate(90deg) scale(1.1);

@@ -149,14 +149,8 @@ const SearchBar = forwardRef<
             type="button"
             data-testid="search-btn"
             ref={searchButtonRef}
-            onClick={(e) => {
-              e.preventDefault();
-              setSearchListDisplay('none');
-            }}
-            onTouchStart={(e) => {
-              e.preventDefault();
-              setSearchListDisplay('none');
-            }}
+            onClick={() => setSearchListDisplay('none')}
+            onTouchStart={() => setSearchListDisplay('none')}
           >
             Search
           </SearchButton>
