@@ -153,7 +153,7 @@ const SearchBar = forwardRef<
               e.preventDefault();
               setSearchListDisplay('none');
             }}
-            onTouchEnd={(e) => {
+            onTouchStart={(e) => {
               e.preventDefault();
               setSearchListDisplay('none');
             }}
