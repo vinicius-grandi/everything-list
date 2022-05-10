@@ -51,7 +51,7 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        "'script-src'": [
+        scriptSrc: [
           "'self'",
           "'unsafe-inline'",
           'https://*.google.com',
