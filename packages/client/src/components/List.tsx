@@ -37,7 +37,7 @@ function List({ items }: { items: QueryItem[] }): JSX.Element {
             imagePath={val?.imagePath ?? '/images/100x200.jpg'}
             id={val?.id ?? 0}
             rating={val?.rating ?? 0}
-            listName={val?.list_name ?? ''}
+            listName={val?.list_name ?? 'weapons'}
             isLazyLoading={i > 7}
           />
         );
