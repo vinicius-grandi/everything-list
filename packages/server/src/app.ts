@@ -91,5 +91,8 @@ app.use(apiListRoutes, apiListRouter);
 app.use('/profiles', userRouter);
 app.use('/api', authRouter);
 app.use(express.static(resolve('..', 'client', 'build')));
+app.get('*', (_, response) => {
+  response.sendFile(resolve('..', 'client', 'build'));
+});
 
 export default app;
