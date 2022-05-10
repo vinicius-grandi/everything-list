@@ -24,7 +24,14 @@ const NoApiController = {
         offset: page <= 1 ? 0 : (page - 1) * 20,
         order: [['name', 'ASC']],
         attributes: {
-          include: [[literal(baseUrl.slice(1)), 'list_name']],
+          include: [
+            [
+              literal(`(
+            SELECT ${baseUrl.slice(1)} AS list
+        )`),
+              'list_name',
+            ],
+          ],
         },
       });
       if (!items) {
