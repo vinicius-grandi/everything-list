@@ -24,7 +24,6 @@ const formHandler = (
   formError: FormError,
   setFormError: React.Dispatch<React.SetStateAction<FormError>>,
 ): void => {
-  console.log('test');
   switch (name) {
     case 'password':
       setFormError({
