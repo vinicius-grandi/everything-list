@@ -30,7 +30,7 @@ const AuthController = {
       username,
     });
     if (!isInfoValid) {
-      return res.status(400).send({ error: 'bad request' });
+      return res.status(400).send({ message: 'bad request' });
     }
 
     try {
@@ -91,9 +91,9 @@ const AuthController = {
       }
     } catch (error) {
       logger.err(error);
-      return res.status(401).json({ error: 'Invalid Username/Password' });
+      return res.status(401).json({ message: 'Invalid Username/Password' });
     }
-    return res.status(401).json({ error: 'Invalid Username/Password' });
+    return res.status(401).json({ message: 'Invalid Username/Password' });
   },
   logout(req: Request, res: Response) {
     return req.session.destroy(() =>
