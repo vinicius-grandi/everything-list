@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { EyeOff } from 'react-feather';
 import Loading from '../components/Loading';
 import { useAuth } from '../contexts/AuthContext';
 import submit from './utils';
+import formHandler from '../components/users/formHandler';
 
 export const RegisterForm = styled.form`
   margin: 1rem;
@@ -68,16 +69,30 @@ const PasswordLabel = styled.label`
   }
 `;
 
+const ErrorMsg = styled.p`
+  background-color: #b93f3fe2;
+  text-align: center;
+  align-self: center;
+  width: 100%;
+  padding: 0;
+`;
+
 export const Signing = styled.p`
   color: #f6f6f6;
 `;
 
 function Signup(): JSX.Element {
   const [error, setError] = useState<string>('');
+  const passRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [formError, setFormError] = useState({
+    isPasswordValid: false,
+    isEmailValid: false,
+  });
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
   const { signup } = useAuth();
+  const [query, setQuery] = useState<string>('');
 
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>,
@@ -88,6 +103,14 @@ function Signup(): JSX.Element {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fn = setTimeout(() => {
+      if (passRef.current) passRef.current.blur();
+    }, 1000);
+
+    return () => clearTimeout(fn);
+  }, [query]);
 
   return (
     <RegisterForm onSubmit={handleSubmit}>
@@ -113,6 +136,9 @@ function Signup(): JSX.Element {
       </label>
       <label htmlFor="email">
         Email:
+        {!formError.isEmailValid && (
+          <ErrorMsg>Your email is invalid! </ErrorMsg>
+        )}
         <input
           placeholder="type your email here"
           type="email"
@@ -120,10 +146,18 @@ function Signup(): JSX.Element {
           data-cy="email"
           name="email"
           id="email"
+          onBlur={(ev) => formHandler(ev.target, formError, setFormError)}
         />
       </label>
       <PasswordLabel htmlFor="password">
         Password:
+        {!formError.isPasswordValid && (
+          <ErrorMsg>
+            Your password is too weak! Please be sure it has at least 2 special
+            characters(!@#$%&*()+_-), 2 uppercase letters, 2 lowercases and 2
+            numbers. Length - between 8 and 15 characters
+          </ErrorMsg>
+        )}
         <div>
           <input
             placeholder="type your password here"
@@ -132,15 +166,11 @@ function Signup(): JSX.Element {
             name="password"
             id="password"
             data-cy="password"
-            pattern="^(?=.*[A-Z].*[A-Z])(?=.*[!@#$%&*()+_-].*[!@#$%&*()+_-])(?=.*[\d].*[\d])(?=.*[a-z].*[a-z]).{8,15}$"
+            onBlur={(ev) => formHandler(ev.target, formError, setFormError)}
+            ref={passRef}
+            onChange={(ev) => setQuery(ev.target.value)}
             minLength={8}
             maxLength={15}
-            onInvalid={(ev) => {
-              const elem = ev.target as HTMLInputElement;
-              elem.setCustomValidity(
-                'Your password is too weak! Please be sure it has at least 2 special characters(!@#$%&*()+_-), 2 uppercase letters, 2 lowercases and 2 numbers. Length - between 8 and 15 characters',
-              );
-            }}
           />
           <EyeOff
             color="black"
@@ -149,7 +179,12 @@ function Signup(): JSX.Element {
         </div>
       </PasswordLabel>
       {error.length > 1 && <p id="error-msg">{error}</p>}
-      <input type="submit" data-testid="submit" value="Sign Up" />
+      <input
+        type="submit"
+        data-testid="submit"
+        value="Sign Up"
+        disabled={!Object.values(formError).every(Boolean)}
+      />
     </RegisterForm>
   );
 }

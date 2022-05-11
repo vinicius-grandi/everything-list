@@ -16,8 +16,12 @@ const submit = async (
     const response = await method(form);
     if (response) {
       if (response.status !== 200) {
-        const err = await response.json();
-        setError(err.msg);
+        try {
+          const err = await response.json();
+          setError(err.message);
+        } catch (error) {
+          setError(error instanceof Error ? error.message : '');
+        }
         return null;
       }
     }

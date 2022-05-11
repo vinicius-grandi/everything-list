@@ -49,8 +49,10 @@ function Login(): JSX.Element {
           name="password"
           data-cy="password"
           id="password"
+          minLength={8}
+          maxLength={15}
         />
-        {error.length > 1 && <p>{error}</p>}
+        {error && error.length > 1 && <p>{error}</p>}
         <input type="submit" data-testid="submit" value="Login" />
       </label>
     </LoggingForm>
