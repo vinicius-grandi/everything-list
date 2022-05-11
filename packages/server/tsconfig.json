@@ -6,6 +6,7 @@
     "checkJs": false,
     "outDir": "dist",
     "rootDir": "./src",
+    "types": ["jest", "node"],
     "paths": {
       "~/*": ["packages/*"]
     },
@@ -13,17 +14,18 @@
     "baseUrl": "./",
     "typeRoots": [
       "./src/typeRoots",
+      "./node_modules/@types"
     ],
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "useUnknownInCatchVariables": false
+    "useUnknownInCatchVariables": false,
   },
   "include": [
     "./src/**/*.js",
     "./src/**/*.ts",
     "./spec/**/*.ts",
-    "./src/Session.d.ts"
+    "./src/Session.d.ts",
   ],
   "files": [
     "./src/typeRoots/Session.d.ts"

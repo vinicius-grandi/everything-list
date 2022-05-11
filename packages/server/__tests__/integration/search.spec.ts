@@ -13,11 +13,11 @@ describe('search', () => {
   afterAll(() => redisClient.disconnect());
   it('should return items that is like the query', async () => {
     await factories.create('Weapon', {
-      name: 'jojo',
+      name: 'spy x family',
     });
 
-    const response = await request(app).get(`${searchRoute}?q=jojo`);
-    expect(response.body[0].name).toBe('jojo');
+    const response = await request(app).get(`${searchRoute}?q=spy x family`);
+    expect(response.body[0].name).toBe('spy x family');
   });
   it('should return only animes when a filter is active', async () => {
     await factories.create('Weapon', {

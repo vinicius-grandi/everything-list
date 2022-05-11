@@ -124,6 +124,7 @@ const SearchController = {
   async getWeapon(query: string, options: Partial<UpdateOptions> = {}) {
     try {
       const weapon = await Weapon.findAll({
+        raw: true,
         where: {
           name: {
             [Op.iLike]: `%${query}%`,
@@ -149,7 +150,9 @@ const SearchController = {
 
   async getMovie(query: string, isJustOne: boolean) {
     if (isJustOne) {
-      const { Poster, Title, imdbID } = await getMovieByTitle(`t=${query}`);
+      const movie = await getMovieByTitle(`t=${query}`);
+      if (!movie) return null;
+      const { Poster, Title, imdbID } = movie;
       const movieFromDb = await findOrCreateItem(imdbID, 'Movie');
 
       return getQueryItem(imdbID, movieFromDb.rating, Poster, 'movies', Title);
