@@ -87,6 +87,7 @@ function SetReview({
   setResponse: React.Dispatch<React.SetStateAction<string>>;
 }): JSX.Element {
   const { id } = useParams();
+  const [revExists, setRevExists] = useState(Boolean(reviewExists));
   const [error, setError] = useState<string | null>(null);
   const [socket, setSocket] = useState<Socket | null>(null);
   const user = useUser(false);
@@ -113,9 +114,14 @@ function SetReview({
     const form = e.currentTarget;
     const formData = new FormData(form);
     const response = await fetch(`/${listName}/api/${id}`, {
-      method: reviewExists ? 'put' : 'post',
+      method: revExists ? 'put' : 'post',
       body: formData,
     });
+
+    if (!revExists) {
+      setRevExists(true);
+    }
+
     if (response.status !== 200) {
       const body: { error: string } = await response.json();
       return setError(body.error);
