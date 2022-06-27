@@ -31,6 +31,13 @@ const GlobalStyles = createGlobalStyle<OverflowValue>`
     -moz-osx-font-smoothing: grayscale;
   }
 
+  #root {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+
   .error {
     background-color: #e78f8f;
     color: #811212;

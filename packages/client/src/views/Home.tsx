@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { routes } from '../components/Header';
 
 const Main = styled.main`
-  margin: '2rem auto';
+  margin: 'auto';
   width: 'fit-content';
   text-align: center;
 `;
