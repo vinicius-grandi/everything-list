@@ -41,6 +41,9 @@
     "cypress": "cypress open-ct --browser firefox"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "@fortawesome/free-solid-svg-icons": "^6.1.1",
+    "@fortawesome/react-fontawesome": "^0.1.18",
     "ajv": "^7.0.3",
     "ajv-errors": "^2.0.1",
     "ajv-formats": "^2.1.1",
