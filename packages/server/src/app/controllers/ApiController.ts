@@ -105,7 +105,7 @@ const ApiController = {
           id,
           mangaFromDb === null ? '0.00' : mangaFromDb.rating,
           imagePath,
-          'animes',
+          'mangas',
           title,
         );
       },
