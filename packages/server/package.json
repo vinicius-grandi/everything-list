@@ -13,7 +13,8 @@
     "start:dev": "nodemon --delay 500ms",
     "pretest": "tsc && cross-env NODE_ENV=test sequelize db:migrate",
     "test": "cross-env NODE_ENV=test jest --detectOpenHandles",
-    "test:no-reloading": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./spec"
+    "test:no-reloading": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./spec",
+    "cross-env": "cross-env"
   },
   "nodemonConfig": {
     "watch": [

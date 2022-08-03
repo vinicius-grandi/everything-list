@@ -123,7 +123,7 @@ function Reviews({
   const [refresh, setRefresh] = useState<boolean>(false);
   const comments = useComments(refresh);
   return (
-    <div>
+    <div style={{ margin: 0 }}>
       {comments.length >= 1 ? (
         <>
           <h1 style={{ margin: '1rem 0' }}>Reviews</h1>

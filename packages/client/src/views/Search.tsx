@@ -75,7 +75,7 @@ function Search(): JSX.Element {
       <List items={queryRes} />
     </main>
   ) : (
-    <p className="error">Type something on search bar</p>
+    <p className="error">Loading...</p>
   );
 }
 

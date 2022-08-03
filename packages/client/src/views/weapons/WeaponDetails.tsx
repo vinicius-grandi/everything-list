@@ -60,7 +60,8 @@ const WeaponInfoContainer = styled.section`
   padding: 1rem 0;
 
   img {
-    max-width: 100%;
+    width: 100%;
+    max-width: 300px;
   }
 `;
 
